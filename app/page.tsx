@@ -29,12 +29,12 @@ export default function Home() {
       </a>
 
       {/* Website link */}
-      <a
+      {/* <a
         href="https://sliceblaze.com"
         className="mt-8 text-white underline"
       >
         www.sliceblaze.com
-      </a>
+      </a> */}
     </div>
   );
 }
