@@ -22,7 +22,7 @@ export default function Home() {
 
       {/* Explore Business button */}
       <a
-        href="https://sliceblaze.com"
+        href="/business"
         className="mt-6 rounded-full border border-white px-6 py-2 text-white hover:bg-white hover:text-[#ED1D33] transition-colors"
       >
         Explore Business →

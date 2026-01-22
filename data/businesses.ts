@@ -1,0 +1,58 @@
+export const businesses = [
+  {
+    id: 1,
+    name: "Ujamaa Koffie & Bakery With Library",
+    location: "Shankamul, Kathmandu",
+    category: "Restaurant & Cafe",
+    image: "/ujamaakoffie.jpg",
+  },
+  {
+    id: 2,
+    name: "Parikarma Restro",
+    location: "Kathmandu",
+    category: "Food & Beverage",
+    image: "/parikarmarestro.png",
+  },
+  {
+    id: 3,
+    name: "Kaveri Inn",
+    location: " Gyaneshwor, Kathmandu",
+    category: "Hotel",
+    image: "/kaveriinn.png",
+  },
+  {
+    id: 4,
+    name: "KTEAM",
+    location: "Kathmandu",
+    category: "Food & Beverage",
+    image: "/kteam.png",
+  },
+  {
+    id: 4,
+    name: "Aaha Newa Spice",
+    location: "Baneshwor Kathmandu",
+    category: "Food & Beverage",
+    image: "/aahanewaSpice.jpg",
+  },
+  {
+    id: 4,
+    name: "Mellow Garden",
+    location: "Kathmandu",
+    category: "Food & Beverage",
+    image: "/mellowgarden.png",
+  },
+  {
+    id: 4,
+    name: "Sheel Sekuwa & Kitchen",
+    location: "Kathmandu",
+    category: "Food & Beverage",
+    image: "/sheelsekuwa.jpg",
+  },
+  {
+    id: 4,
+    name: "Umoja Coffee",
+    location: "Kathmandu",
+    category: "Food & Beverage",
+    image: "/umojacoffee.jpg",
+  },
+];
