@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-interface ProfilecardProps {
+interface BusinesscardProps {
   username: string;
   name: string;
   location: string;
@@ -12,13 +12,13 @@ interface ProfilecardProps {
   image: string;
 }
 
-export default function Profilecard({
+export default function Businesscard({
   username,
   name,
   location,
   category,
   image,
-}: ProfilecardProps) {
+}: BusinesscardProps) {
   const [imgSrc, setImgSrc] = useState(image || "/sample.svg");
 
   return (

@@ -31,7 +31,7 @@ export default function Header() {
 
   return (
     <header
-      className={`w-full ${isHomePage ? "fixed" : "sticky"} top-0 h-25 flex items-center justify-center border-b border-gray-200 bg-white-900 bg-blur-5 backdrop-blur-md z-50 transition-transform duration-15 ${
+      className={`w-full ${isHomePage ? "fixed" : "sticky"} top-0 h-25 flex items-center justify-center border-b border-gray-200 bg-white-900 bg-blur-5 backdrop-blur-md z-50 transition-transform duration-100 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
