@@ -1,13 +1,18 @@
 export const businesses = [
   {
     id: 1,
+    username: "ujamaakoffie",
     name: "Ujamaa Koffie & Bakery With Library",
     location: "Shankamul, Kathmandu",
     category: "Restaurant & Cafe",
     image: "/ujamaakoffie.jpg",
+    description: "A popular restaurant serving fast food.",
+    contact: "9851357358",
+    openingHours: "9 AM - 10 PM",
   },
   {
     id: 2,
+    username: "parikarmarestro",
     name: "Parikarma Restro",
     location: "Kathmandu",
     category: "Food & Beverage",
@@ -15,6 +20,7 @@ export const businesses = [
   },
   {
     id: 3,
+    username: "kaveriinn",
     name: "Kaveri Inn",
     location: " Gyaneshwor, Kathmandu",
     category: "Hotel",

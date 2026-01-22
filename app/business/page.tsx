@@ -1,5 +1,6 @@
 
-import Businesscard from '@/components/Businesscard';
+
+import BusinessCard from '@/components/BusinessCard';
 import { businesses } from '@/data/businesses';
 import React from 'react'
 
@@ -13,12 +14,13 @@ const page = () => {
       </p>
       <div className="flex flex-wrap m-auto justify-center gap-5 my-10">
         {businesses.map((business) => (
-          <Businesscard
+          <BusinessCard
             key={business.id}
+            username={business.username} // ✅ pass this
             name={business.name}
             location={business.location}
             category={business.category}
-            image={business.image || '/sample.svg'}
+            image={business.image || "/sample.svg"}
           />
         ))}
       </div>
