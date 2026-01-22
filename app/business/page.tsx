@@ -1,6 +1,5 @@
-import BusinessCard from "@/components/BusinessCard";
+import BusinessCard from "../../components/BusinessCard";
 import { businesses } from "@/data/businesses";
-
 
 const business = () => {
   return (
