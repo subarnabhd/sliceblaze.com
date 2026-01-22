@@ -20,9 +20,8 @@ export default function BusinessCard({
   image,
 }: BusinessCardProps) {
   const [imgSrc, setImgSrc] = useState("/sample.svg");
-
   useEffect(() => {
-    setImgSrc(image || "/sample.svg");
+    if (image) setImgSrc(image);
   }, [image]);
 
   return (
