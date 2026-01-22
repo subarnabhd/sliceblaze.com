@@ -1,9 +1,8 @@
-// app/business/page.tsx
-import React from "react";
-import { businesses } from "@/data/businesses";
 import BusinessCard from "@/components/BusinessCard";
+import { businesses } from "@/data/businesses";
 
-const BusinessListPage = () => {
+
+const business = () => {
   return (
     <div className="container mx-auto my-12 flex flex-col items-center justify-center">
       <h1 className="text-2xl font-bold text-center">Explore Business</h1>
@@ -27,4 +26,4 @@ const BusinessListPage = () => {
   );
 };
 
-export default BusinessListPage;
+export default business;
