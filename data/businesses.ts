@@ -2,7 +2,7 @@ export const businesses = [
   {
     id: 1,
     username: "ujamaakoffie",
-    name: "Ujamaakoffie",
+    name: "Ujamaa Koffie & Bakery with Library",
     location: "Kathmandu",
     category: "Cafe",
     image: "/ujamaakoffie.jpg",
