@@ -46,7 +46,7 @@ export default function AdminDashboard() {
     // Check if user is admin
     const session = localStorage.getItem('session')
     if (!session) {
-      router.push('/sliceblaze/login')
+      router.push('/login')
       return
     }
 
@@ -138,7 +138,7 @@ export default function AdminDashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem('session')
-    router.push('/sliceblaze/login')
+    router.push('/login')
   }
 
   if (loading) {

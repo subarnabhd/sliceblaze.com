@@ -37,7 +37,7 @@ export default function UserDashboard() {
     // Check if user is logged in
     const session = localStorage.getItem('session')
     if (!session) {
-      router.push('/sliceblaze/login')
+      router.push('/login')
       return
     }
 
@@ -64,7 +64,7 @@ export default function UserDashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem('session')
-    router.push('/sliceblaze/login')
+    router.push('/login')
   }
 
   if (loading) {

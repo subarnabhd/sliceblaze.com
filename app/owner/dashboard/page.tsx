@@ -47,7 +47,7 @@ export default function OwnerDashboard() {
     // Check if user is logged in
     const sessionData = localStorage.getItem("session");
     if (!sessionData) {
-      router.push("/sliceblaze/login");
+      router.push("/login");
       return;
     }
 
@@ -106,7 +106,7 @@ export default function OwnerDashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem("session");
-    router.push("/sliceblaze/login");
+    router.push("/login");
   };
 
   if (loading) {
