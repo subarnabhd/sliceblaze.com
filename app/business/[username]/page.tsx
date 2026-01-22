@@ -3,7 +3,7 @@ import Image from "next/image";
 
 
 interface BusinessPageProps {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }
 
 // For SSG: pre-generate pages for all businesses
@@ -13,11 +13,11 @@ export function generateStaticParams() {
   }));
 }
 
-export default function BusinessProfile({ params }: BusinessPageProps) {
-  const { username } = params;
+export default async function BusinessProfile({ params }: BusinessPageProps) {
+  const { username } = await params;
 
-  // Direct match since username is always lowercase
-  const business = businesses.find((b) => b.username === username);
+  // Convert to lowercase for matching
+  const business = businesses.find((b) => b.username === username.toLowerCase());
 
   if (!business) {
     return (

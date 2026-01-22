@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -19,7 +19,11 @@ export default function BusinessCard({
   category,
   image,
 }: BusinessCardProps) {
-  const [imgSrc, setImgSrc] = useState(image || "/sample.svg");
+  const [imgSrc, setImgSrc] = useState("/sample.svg");
+
+  useEffect(() => {
+    setImgSrc(image || "/sample.svg");
+  }, [image]);
 
   return (
     <Link
