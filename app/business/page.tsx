@@ -1,22 +1,21 @@
+// app/business/page.tsx
+import React from "react";
+import BusinessCard from "@/components/BusinessCard";
+import { businesses } from "@/data/businesses";
 
-
-import BusinessCard from '@/components/BusinessCard';
-import { businesses } from '@/data/businesses';
-import React from 'react'
-
-
-const page = () => {
+const BusinessListPage = () => {
   return (
-    <div className="container my-15 flex flex-col m-auto justify-center">
-      <h1 className="text-2xl font-bold m-auto">Explore Business</h1>
-      <p className="text-lg m-auto text-gray-500">
-        Business digitize with sliceblaze
+    <div className="container mx-auto my-12 flex flex-col items-center justify-center">
+      <h1 className="text-2xl font-bold text-center">Explore Business</h1>
+      <p className="text-lg text-gray-500 text-center mt-2">
+        Business digitized with SliceBlaze
       </p>
-      <div className="flex flex-wrap m-auto justify-center gap-5 my-10">
+
+      <div className="flex flex-wrap justify-center gap-5 mt-10">
         {businesses.map((business) => (
           <BusinessCard
             key={business.id}
-            username={business.username} // ✅ pass this
+            username={business.username} // important
             name={business.name}
             location={business.location}
             category={business.category}
@@ -26,6 +25,6 @@ const page = () => {
       </div>
     </div>
   );
-}
+};
 
-export default page
+export default BusinessListPage;

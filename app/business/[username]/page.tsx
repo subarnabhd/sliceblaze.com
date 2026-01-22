@@ -1,20 +1,26 @@
-// app/business/[username]/page.tsx
 import Image from "next/image";
-import { businesses } from "@/data/businesses"; // adjust path to your file
+import { businesses } from "@/data/businesses";
 
 interface BusinessPageProps {
   params: { username: string };
 }
 
-export default function BusinessPage({ params }: BusinessPageProps) {
+// For SSG: pre-generate pages for all businesses
+export function generateStaticParams() {
+  return businesses.map((b) => ({
+    username: b.username, // usernames are lowercase
+  }));
+}
+
+export default function BusinessProfile({ params }: BusinessPageProps) {
   const { username } = params;
 
-  // Find the business by username
+  // Direct match since username is always lowercase
   const business = businesses.find((b) => b.username === username);
 
   if (!business) {
     return (
-      <div className="p-10 text-center text-red-500">
+      <div className="p-10 text-center text-red-500 text-xl">
         Business not found
       </div>
     );
@@ -26,8 +32,8 @@ export default function BusinessPage({ params }: BusinessPageProps) {
         {/* Business Image */}
         <div className="flex-shrink-0">
           <Image
-            src={business.image || "/sample.svg"}
-            alt={business.name}
+            src={business.image || "/sample.svg"} // default image
+            alt={business.name || "Business Image"}
             width={250}
             height={250}
             className="rounded-xl object-contain"
@@ -36,18 +42,30 @@ export default function BusinessPage({ params }: BusinessPageProps) {
 
         {/* Business Details */}
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-gray-900">{business.name}</h1>
-          <p className="text-gray-500 mt-2">{business.location}</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {business.name || "Unnamed Business"}
+          </h1>
+
+          <p className="text-gray-500 mt-2">
+            {business.location || "Location not available"}
+          </p>
 
           <span className="inline-block mt-3 text-sm px-3 py-1 rounded-full bg-red-50 text-red-500">
-            {business.category}
+            {business.category || "Category not available"}
           </span>
 
-          <p className="mt-6 text-gray-700">{business.description}</p>
+          <p className="mt-6 text-gray-700">
+            {business.description || "No description available."}
+          </p>
 
-          <div className="mt-4 space-y-2">
-            <p><strong>Contact:</strong> {business.contact}</p>
-            <p><strong>Opening Hours:</strong> {business.openingHours}</p>
+          <div className="mt-4 space-y-2 text-gray-800">
+            <p>
+              <strong>Contact:</strong> {business.contact || "Not provided"}
+            </p>
+            <p>
+              <strong>Opening Hours:</strong>{" "}
+              {business.openingHours || "Not provided"}
+            </p>
           </div>
         </div>
       </div>

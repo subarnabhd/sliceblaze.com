@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface BusinessCardProps {
-  username: string; // <- make sure this is included
+  username: string;
   name: string;
   location: string;
   category: string;
@@ -13,7 +13,7 @@ interface BusinessCardProps {
 }
 
 export default function BusinessCard({
-  username, // <- destructure it here
+  username,
   name,
   location,
   category,
@@ -23,8 +23,8 @@ export default function BusinessCard({
 
   return (
     <Link
-      href={`/business/${username}`} // now this works
-      className="w-[280px] flex flex-col gap-10 p-10 rounded-2xl bg-white border border-gray-300 overflow-hidden hover:shadow-lg transition-shadow duration-300"
+      href={`/business/${username}`} // dynamic URL
+      className="w-[280px] flex flex-col gap-4 p-6 rounded-2xl bg-white border border-gray-300 overflow-hidden hover:shadow-lg transition-shadow duration-300"
     >
       <div className="flex justify-center items-center">
         <Image
@@ -40,11 +40,9 @@ export default function BusinessCard({
       <div>
         <h3 className="text-base font-semibold text-gray-900">{name}</h3>
         <p className="text-sm text-gray-500 mt-1">{location}</p>
-
-        <span className="inline-block mt-3 text-xs px-3 py-1 rounded-full bg-red-50 text-red-500">
+        <span className="inline-block mt-2 text-xs px-3 py-1 rounded-full bg-red-50 text-red-500">
           {category}
         </span>
-
         <span className="block mt-4 text-sm font-medium text-red-500">
           Explore →
         </span>
