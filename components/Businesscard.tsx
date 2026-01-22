@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-interface BusinessCardProps {
+interface BusinesscardProps {
   username: string;
   name: string;
   location: string;
@@ -12,15 +12,13 @@ interface BusinessCardProps {
   image: string;
 }
 
-export default function BusinessCard({
+export default function Businesscard({
   username,
   name,
   location,
   category,
   image,
-}: BusinessCardProps) {
-  // 1. Initialize state directly from the prop (or fallback)
-  // 2. We remove useEffect entirely
+}: BusinesscardProps) {
   const [imgSrc, setImgSrc] = useState(image || "/sample.svg");
 
   return (

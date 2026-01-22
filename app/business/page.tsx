@@ -1,4 +1,4 @@
-import BusinessCard from "../../components/BusinessCard";
+import Businesscard from "@/components/BusinessCard";
 import { businesses } from "@/data/businesses";
 
 const business = () => {
@@ -11,7 +11,7 @@ const business = () => {
 
       <div className="flex flex-wrap justify-center gap-5 mt-10">
         {businesses.map((business) => (
-          <BusinessCard
+          <Businesscard
             key={business.id}
             username={business.username} // important
             name={business.name}
