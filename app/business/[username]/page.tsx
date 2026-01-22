@@ -1,5 +1,6 @@
-import Image from "next/image";
 import { businesses } from "@/data/businesses";
+import Image from "next/image";
+
 
 interface BusinessPageProps {
   params: { username: string };
@@ -30,7 +31,7 @@ export default function BusinessProfile({ params }: BusinessPageProps) {
     <div className="max-w-4xl mx-auto p-10 bg-white rounded-xl shadow-md mt-10">
       <div className="flex flex-col md:flex-row gap-8">
         {/* Business Image */}
-        <div className="flex-shrink-0">
+        <div className="">
           <Image
             src={business.image || "/sample.svg"} // default image
             alt={business.name || "Business Image"}
