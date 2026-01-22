@@ -1,12 +1,25 @@
 "use client";
 
 import Profilecard from "@/components/Profilecard";
-import { businesses } from "@/data/businesses";
-import { useState, useMemo } from "react";
+import { getBusinesses } from "@/lib/supabase";
+import { useState, useMemo, useEffect } from "react";
 
 const business = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState("name"); // "name", "category", "location"
+  const [sortBy, setSortBy] = useState("name");
+  const [businesses, setBusinesses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch businesses from Supabase on component mount
+  useEffect(() => {
+    async function fetchBusinesses() {
+      setLoading(true);
+      const data = await getBusinesses();
+      setBusinesses(data);
+      setLoading(false);
+    }
+    fetchBusinesses();
+  }, []);
 
   const filteredBusinesses = useMemo(() => {
     let filtered = businesses.filter(
@@ -31,7 +44,7 @@ const business = () => {
     });
 
     return filtered;
-  }, [searchTerm, sortBy]);
+  }, [searchTerm, sortBy, businesses]);
 
   return (
     <div className="container mx-auto my-12 flex flex-col items-center justify-center">
@@ -80,20 +93,22 @@ const business = () => {
 
       {/* Results Count */}
       <p className="mt-4 text-gray-600">
-        Found {filteredBusinesses.length} business{filteredBusinesses.length !== 1 ? "es" : ""}
+        {loading ? "Loading..." : `Found ${filteredBusinesses.length} business${filteredBusinesses.length !== 1 ? "es" : ""}`}
       </p>
 
       {/* Business Cards */}
       <div className="flex flex-wrap justify-center gap-5 mt-10">
-        {filteredBusinesses.length > 0 ? (
-          filteredBusinesses.map((business) => (
+        {loading ? (
+          <p className="text-gray-500 text-lg">Loading businesses...</p>
+        ) : filteredBusinesses.length > 0 ? (
+          filteredBusinesses.map((bus) => (
             <Profilecard
-              key={business.id}
-              username={business.username}
-              name={business.name}
-              location={business.location}
-              category={business.category}
-              image={business.image || "/sample.svg"}
+              key={bus.id}
+              username={bus.username}
+              name={bus.name}
+              location={bus.location}
+              category={bus.category}
+              image={bus.image || "/sample.svg"}
             />
           ))
         ) : (

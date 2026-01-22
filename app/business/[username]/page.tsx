@@ -1,4 +1,4 @@
-import { businesses } from "@/data/businesses";
+import { getBusinessByUsername } from "@/lib/supabase";
 import Image from "next/image";
 
 
@@ -6,18 +6,9 @@ interface BusinessPageProps {
   params: Promise<{ username: string }>;
 }
 
-// For SSG: pre-generate pages for all businesses
-export function generateStaticParams() {
-  return businesses.map((b) => ({
-    username: b.username, // usernames are lowercase
-  }));
-}
-
 export default async function BusinessProfile({ params }: BusinessPageProps) {
   const { username } = await params;
-
-  // Convert to lowercase for matching
-  const business = businesses.find((b) => b.username === username.toLowerCase());
+  const business = await getBusinessByUsername(username);
 
   if (!business) {
     return (
@@ -47,7 +38,7 @@ export default async function BusinessProfile({ params }: BusinessPageProps) {
               alt={business.name || "Business Image"}
               width={200}
               height={200}
-              className="rounded-full object-contain border-1"
+              className="rounded-full object-contain border"
               style={{ borderColor: business.brandPrimaryColor || "#000" }}
               priority
             />

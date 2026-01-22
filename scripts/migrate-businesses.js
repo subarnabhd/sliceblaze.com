@@ -1,0 +1,200 @@
+/**
+ * Migration script to insert businesses from businesses.ts into Supabase
+ * Run with: node scripts/migrate-businesses.js
+ */
+
+import dotenv from 'dotenv'
+import { createClient } from '@supabase/supabase-js'
+
+// Load environment variables
+dotenv.config({ path: '.env.local' })
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('Missing Supabase credentials in .env.local');
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Your business data
+const businesses = [
+  {
+    username: "ujamaakoffie",
+    name: "Ujamaa Koffie & Bakery with Library",
+    location: "Kathmandu",
+    category: "Cafe",
+    image: "/ujamaakoffie.jpg",
+    description: "Cozy coffee cafe serving fresh drinks and snacks.",
+    contact: "9851357358",
+    openingHours: "7 AM - 9 PM",
+    facebook: "https://www.facebook.com/ujamaakoffie",
+    instagram: "https://www.instagram.com/ujamaakoffie",
+    tiktok: "https://www.tiktok.com/@ujamaakoffie",
+    googleMapUrl: "https://maps.google.com/?q=Ujamaa+Koffie+Kathmandu",
+    direction: "Lazy 1, Kathmandu",
+    menuUrl: "https://example.com/menu",
+    wifiQrCode: "/qrcodes/ujamaakoffie-wifi.png",
+    brandPrimaryColor: "#8B4513",
+    brandSecondaryColor: "#D2691E",
+  },
+  {
+    username: "parikarmarestro",
+    name: "Parikarma Restro",
+    location: "Kathmandu",
+    category: "Food & Beverage",
+    image: "/parikarmarestro.png",
+    description: "Trendy restaurant offering fusion cuisine and cocktails.",
+    contact: "9841234567",
+    openingHours: "11 AM - 11 PM",
+    facebook: "https://www.facebook.com/parikarmarestro",
+    instagram: "https://www.instagram.com/parikarmarestro",
+    tiktok: "https://www.tiktok.com/@parikarmarestro",
+    googleMapUrl: "https://maps.google.com/?q=Parikarma+Restro+Kathmandu",
+    direction: "Thamel, Kathmandu",
+    menuUrl: "https://example.com/parikarma-menu",
+    wifiQrCode: "/qrcodes/parikarmarestro-wifi.png",
+    brandPrimaryColor: "#C41E3A",
+    brandSecondaryColor: "#FF6B6B",
+  },
+  {
+    username: "kaveriinn",
+    name: "Kaveri Inn",
+    location: "Gyaneshwor, Kathmandu",
+    category: "Hotel",
+    image: "/kaveriinn.png",
+    description: "",
+    contact: "",
+    openingHours: "",
+    facebook: "",
+    instagram: "",
+    tiktok: "",
+    googleMapUrl: "",
+    direction: "",
+    menuUrl: "",
+    wifiQrCode: "",
+    brandPrimaryColor: "#1e40af",
+    brandSecondaryColor: "#3b82f6",
+  },
+  {
+    username: "kteam",
+    name: "KTEAM",
+    location: "Kathmandu",
+    category: "Food & Beverage",
+    image: "/kteam.png",
+    description: "",
+    contact: "",
+    openingHours: "",
+    facebook: "",
+    instagram: "",
+    tiktok: "",
+    googleMapUrl: "",
+    direction: "",
+    menuUrl: "",
+    wifiQrCode: "",
+    brandPrimaryColor: "#7c2d12",
+    brandSecondaryColor: "#ea580c",
+  },
+  {
+    username: "aahanewaSpice",
+    name: "Aaha Newa Spice",
+    location: "Baneshwor, Kathmandu",
+    category: "Food & Beverage",
+    image: "/aahanewaSpice.jpg",
+    description: "",
+    contact: "",
+    openingHours: "",
+    facebook: "",
+    instagram: "",
+    tiktok: "",
+    googleMapUrl: "",
+    direction: "",
+    menuUrl: "",
+    wifiQrCode: "",
+    brandPrimaryColor: "#991b1b",
+    brandSecondaryColor: "#dc2626",
+  },
+  {
+    username: "mellowgarden",
+    name: "Mellow Garden",
+    location: "Kathmandu",
+    category: "Food & Beverage",
+    image: "/mellowgarden.png",
+    description: "",
+    contact: "",
+    openingHours: "",
+    facebook: "",
+    instagram: "",
+    tiktok: "",
+    googleMapUrl: "",
+    direction: "",
+    menuUrl: "",
+    wifiQrCode: "",
+    brandPrimaryColor: "#15803d",
+    brandSecondaryColor: "#22c55e",
+  },
+  {
+    username: "sheelsekuwa",
+    name: "Sheel Sekuwa & Kitchen",
+    location: "Kathmandu",
+    category: "Food & Beverage",
+    image: "/sheelsekuwa.jpg",
+    description: "",
+    contact: "",
+    openingHours: "",
+    facebook: "",
+    instagram: "",
+    tiktok: "",
+    googleMapUrl: "",
+    direction: "",
+    menuUrl: "",
+    wifiQrCode: "",
+    brandPrimaryColor: "#7c2d12",
+    brandSecondaryColor: "#b45309",
+  },
+  {
+    username: "umojacoffee",
+    name: "Umoja Coffee",
+    location: "Kathmandu",
+    category: "Food & Beverage",
+    image: "/umojacoffee.jpg",
+    description: "",
+    contact: "",
+    openingHours: "",
+    facebook: "",
+    instagram: "",
+    tiktok: "",
+    googleMapUrl: "",
+    direction: "",
+    menuUrl: "",
+    wifiQrCode: "",
+    brandPrimaryColor: "#5b21b6",
+    brandSecondaryColor: "#a855f7",
+  },
+];
+
+async function migrate() {
+  try {
+    console.log('Starting migration...');
+    
+    // Insert businesses
+    const { error } = await supabase
+      .from('businesses')
+      .insert(businesses);
+
+    if (error) {
+      console.error('Migration failed:', error);
+      process.exit(1);
+    }
+
+    console.log(`✅ Successfully migrated ${businesses.length} businesses!`);
+    process.exit(0);
+  } catch (err) {
+    console.error('Migration error:', err);
+    process.exit(1);
+  }
+}
+
+migrate();

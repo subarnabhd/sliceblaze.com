@@ -1,0 +1,10 @@
+-- Insert all businesses into the businesses table
+INSERT INTO businesses (username, name, location, category, image, description, contact, openingHours, facebook, instagram, tiktok, googleMapUrl, direction, menuUrl, wifiQrCode, brandPrimaryColor, brandSecondaryColor) VALUES
+('ujamaakoffie', 'Ujamaa Koffie & Bakery with Library', 'Kathmandu', 'Cafe', '/ujamaakoffie.jpg', 'Cozy coffee cafe serving fresh drinks and snacks.', '9851357358', '7 AM - 9 PM', 'https://www.facebook.com/ujamaakoffie', 'https://www.instagram.com/ujamaakoffie', 'https://www.tiktok.com/@ujamaakoffie', 'https://maps.google.com/?q=Ujamaa+Koffie+Kathmandu', 'Lazy 1, Kathmandu', 'https://example.com/menu', '/qrcodes/ujamaakoffie-wifi.png', '#8B4513', '#D2691E'),
+('parikarmarestro', 'Parikarma Restro', 'Kathmandu', 'Food & Beverage', '/parikarmarestro.png', 'Trendy restaurant offering fusion cuisine and cocktails.', '9841234567', '11 AM - 11 PM', 'https://www.facebook.com/parikarmarestro', 'https://www.instagram.com/parikarmarestro', 'https://www.tiktok.com/@parikarmarestro', 'https://maps.google.com/?q=Parikarma+Restro+Kathmandu', 'Thamel, Kathmandu', 'https://example.com/parikarma-menu', '/qrcodes/parikarmarestro-wifi.png', '#C41E3A', '#FF6B6B'),
+('kaveriinn', 'Kaveri Inn', 'Gyaneshwor, Kathmandu', 'Hotel', '/kaveriinn.png', '', '', '', '', '', '', '', '', '', '', '#1e40af', '#3b82f6'),
+('kteam', 'KTEAM', 'Kathmandu', 'Food & Beverage', '/kteam.png', '', '', '', '', '', '', '', '', '', '', '#7c2d12', '#ea580c'),
+('aahanewaSpice', 'Aaha Newa Spice', 'Baneshwor, Kathmandu', 'Food & Beverage', '/aahanewaSpice.jpg', '', '', '', '', '', '', '', '', '', '', '#991b1b', '#dc2626'),
+('mellowgarden', 'Mellow Garden', 'Kathmandu', 'Food & Beverage', '/mellowgarden.png', '', '', '', '', '', '', '', '', '', '', '#15803d', '#22c55e'),
+('sheelsekuwa', 'Sheel Sekuwa & Kitchen', 'Kathmandu', 'Food & Beverage', '/sheelsekuwa.jpg', '', '', '', '', '', '', '', '', '', '', '#7c2d12', '#b45309'),
+('umojacoffee', 'Umoja Coffee', 'Kathmandu', 'Food & Beverage', '/umojacoffee.jpg', '', '', '', '', '', '', '', '', '', '', '#5b21b6', '#a855f7');
