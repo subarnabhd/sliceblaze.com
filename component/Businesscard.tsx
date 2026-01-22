@@ -24,7 +24,7 @@ export default function BusinessCard({
   return (
     <Link
       href={`/business/${username}`} // dynamic URL
-      className="w-70 flex flex-col gap-4 p-6 rounded-2xl bg-white border border-gray-300 overflow-hidden hover:shadow-lg transition-shadow duration-300"
+      className=" w-70flex flex-col gap-4 p-6 rounded-2xl bg-white border border-gray-300 overflow-hidden hover:shadow-lg transition-shadow duration-300"
     >
       <div className="flex justify-center items-center">
         <Image
