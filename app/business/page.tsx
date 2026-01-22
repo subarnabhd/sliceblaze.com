@@ -1,7 +1,7 @@
 // app/business/page.tsx
 import React from "react";
-import BusinessCard from "@/components/BusinessCard";
 import { businesses } from "@/data/businesses";
+import BusinessCard from "@/components/BusinessCard";
 
 const BusinessListPage = () => {
   return (

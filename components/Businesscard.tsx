@@ -19,10 +19,9 @@ export default function BusinessCard({
   category,
   image,
 }: BusinessCardProps) {
-  const [imgSrc, setImgSrc] = useState("/sample.svg");
-  useEffect(() => {
-    if (image) setImgSrc(image);
-  }, [image]);
+  // 1. Initialize state directly from the prop (or fallback)
+  // 2. We remove useEffect entirely
+  const [imgSrc, setImgSrc] = useState(image || "/sample.svg");
 
   return (
     <Link
