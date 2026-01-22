@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { verifyLogin } from '@/lib/supabase'
 
-export default function BusinessLoginPage() {
+export default function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -17,9 +17,11 @@ export default function BusinessLoginPage() {
     setLoading(true)
 
     try {
+      // Verify credentials against Supabase
       const user = await verifyLogin(username, password)
 
       if (user) {
+        // Store session in localStorage
         localStorage.setItem('session', JSON.stringify({
           userId: user.id,
           businessId: user.business_id,
@@ -29,6 +31,7 @@ export default function BusinessLoginPage() {
           fullName: user.full_name,
         }))
 
+        // Redirect based on user role
         switch (user.role) {
           case 'admin':
             router.push('/sliceblaze/admin')
@@ -55,27 +58,27 @@ export default function BusinessLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-orange-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg border-t-4 border-orange-600">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            SliceBlaze <span className="text-orange-600">Business</span>
+            Sign in to <span className="text-orange-600">SliceBlaze</span>
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Manage your restaurant
+            Access your dashboard
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="username" className="sr-only">Business Username</label>
+              <label htmlFor="username" className="sr-only">Username</label>
               <input
                 id="username"
                 name="username"
                 type="text"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
-                placeholder="Business Username"
+                placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -107,10 +110,19 @@ export default function BusinessLoginPage() {
               disabled={loading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50"
             >
-              {loading ? 'Accessing Business Dashboard...' : 'Login to Dashboard'}
+              {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
         </form>
+
+        <div className="mt-6 bg-white p-4 rounded shadow-sm border border-gray-200 text-sm">
+          <p className="font-bold text-gray-700 mb-2">Test Credentials:</p>
+          <div className="grid grid-cols-2 gap-2 text-gray-600">
+            <span>Admin:</span> <span className="font-mono">admin / admin123</span>
+            <span>Owner:</span> <span className="font-mono">ujamaakoffie / password123</span>
+            <span>User:</span> <span className="font-mono">user1 / user123</span>
+          </div>
+        </div>
       </div>
     </div>
   )

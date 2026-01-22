@@ -50,8 +50,8 @@ export default function Header() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Navigate to user dashboard with search query
-      router.push(`/user/dashboard?search=${encodeURIComponent(searchQuery)}`);
+      // Navigate to business page with search query (accessible to public)
+      router.push(`/search?query=${encodeURIComponent(searchQuery)}`);
     }
   };
 

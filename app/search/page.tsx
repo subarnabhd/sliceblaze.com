@@ -22,11 +22,9 @@ interface Business {
 export default function SearchPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const initialQuery = searchParams.get('search') || ''
 
   const [businesses, setBusinesses] = useState<Business[]>([])
   const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([])
-  const [searchQuery, setSearchQuery] = useState(initialQuery)
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [selectedLocation, setSelectedLocation] = useState<string>('')
   const [loading, setLoading] = useState(true)
@@ -54,16 +52,17 @@ export default function SearchPage() {
 
   // Filter businesses whenever search query, category, or location changes
   useEffect(() => {
+    const query = searchParams.get('query') || ''
     let results = businesses
 
     // Filter by search query
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase()
+    if (query.trim()) {
+      const q = query.toLowerCase()
       results = results.filter(
         (b) =>
-          b.name.toLowerCase().includes(query) ||
-          b.description.toLowerCase().includes(query) ||
-          b.category.toLowerCase().includes(query)
+          b.name.toLowerCase().includes(q) ||
+          b.description.toLowerCase().includes(q) ||
+          b.category.toLowerCase().includes(q)
       )
     }
 
@@ -78,58 +77,15 @@ export default function SearchPage() {
     }
 
     setFilteredBusinesses(results)
-  }, [searchQuery, selectedCategory, selectedLocation, businesses])
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      router.push(`/search?search=${encodeURIComponent(searchQuery)}`)
-    }
-  }
+  }, [searchParams, selectedCategory, selectedLocation, businesses])
 
   const clearFilters = () => {
-    setSearchQuery(initialQuery)
     setSelectedCategory('')
     setSelectedLocation('')
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Search Bar Section */}
-      <div className="bg-white border-b border-gray-200 sticky top-20 z-40">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <form onSubmit={handleSearch} className="flex gap-4">
-            <div className="flex-1 relative">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search businesses by name, description, or category..."
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
-              />
-              <button
-                type="submit"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600 transition"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Filters Section */}
@@ -176,7 +132,7 @@ export default function SearchPage() {
               </div>
 
               {/* Clear Filters Button */}
-              {(selectedCategory || selectedLocation || searchQuery) && (
+              {(selectedCategory || selectedLocation) && (
                 <button
                   onClick={clearFilters}
                   className="w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition font-medium text-sm"
@@ -214,7 +170,7 @@ export default function SearchPage() {
                   {filteredBusinesses.length} Business{filteredBusinesses.length !== 1 ? 'es' : ''} Found
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                   {filteredBusinesses.map((business) => (
                     <Link
                       key={business.id}
