@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { verifyLogin } from '@/lib/supabase'
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('')
@@ -17,32 +16,15 @@ export default function AdminLoginPage() {
     setLoading(true)
 
     try {
-      const user = await verifyLogin(username, password)
-
-      if (user) {
-        localStorage.setItem('session', JSON.stringify({
-          userId: user.id,
-          businessId: user.business_id,
-          username: user.username,
-          email: user.email,
-          role: user.role,
-          fullName: user.full_name,
+      // Hardcoded admin credentials
+      if (username === 'admin' && password === 'admin1234') {
+        localStorage.setItem('adminSession', JSON.stringify({
+          username: 'admin',
+          role: 'admin',
+          loginTime: new Date().toISOString(),
         }))
-
-        switch (user.role) {
-          case 'admin':
-            router.push('/sliceblaze/admin')
-            break
-          case 'owner':
-            router.push('/owner/dashboard')
-            break
-          case 'user':
-            router.push('/user/dashboard')
-            break
-          default:
-            setError('Unknown user role')
-            localStorage.removeItem('session')
-        }
+        
+        router.push('/admin/dashboard')
       } else {
         setError('Invalid username or password')
       }

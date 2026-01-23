@@ -65,7 +65,7 @@ export default function LoginPage() {
             Sign in to <span className="text-orange-600">SliceBlaze</span>
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            User Login
+            Access your dashboard
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
@@ -114,9 +114,6 @@ export default function LoginPage() {
             </button>
           </div>
         </form>
-        <div className="text-center mt-4">
-            <p className="text-sm text-gray-600">Don't have an account? <a href="#" className="text-orange-600 hover:text-orange-500">Sign up</a></p>
-        </div>
       </div>
     </div>
   )

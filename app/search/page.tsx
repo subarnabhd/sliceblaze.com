@@ -19,6 +19,37 @@ interface Business {
   openingHours?: string
 }
 
+function BusinessCardSkeleton() {
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden h-full animate-pulse">
+      {/* Image Skeleton */}
+      <div className="w-full h-48 bg-gray-200" />
+      
+      {/* Content Skeleton */}
+      <div className="p-5 space-y-4">
+        <div className="flex justify-between items-start">
+          <div className="h-6 bg-gray-200 rounded w-3/4" />
+          <div className="h-4 w-4 bg-gray-200 rounded-full" />
+        </div>
+        <div className="h-5 bg-gray-200 rounded w-1/3" />
+        <div className="space-y-2">
+          <div className="h-4 bg-gray-200 rounded w-full" />
+          <div className="h-4 bg-gray-200 rounded w-5/6" />
+        </div>
+        <div className="space-y-2 pt-2">
+          <div className="flex items-center gap-2">
+            <div className="h-4 w-4 bg-gray-200 rounded" />
+            <div className="h-4 bg-gray-200 rounded w-1/2" />
+          </div>
+        </div>
+      </div>
+      <div className="px-5 pb-5">
+        <div className="h-10 bg-gray-200 rounded-lg w-full" />
+      </div>
+    </div>
+  )
+}
+
 export default function SearchPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -28,6 +59,7 @@ export default function SearchPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [selectedLocation, setSelectedLocation] = useState<string>('')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const [categories, setCategories] = useState<string[]>([])
   const [locations, setLocations] = useState<string[]>([])
 
@@ -35,16 +67,23 @@ export default function SearchPage() {
   useEffect(() => {
     const fetchBusinesses = async () => {
       setLoading(true)
-      const data = await getBusinesses()
-      setBusinesses(data)
+      setError('')
+      try {
+        const data = (await getBusinesses()) as Business[]
+        setBusinesses(data)
 
-      // Extract unique categories and locations
-      const uniqueCategories = [...new Set(data.map((b) => b.category).filter(Boolean))]
-      const uniqueLocations = [...new Set(data.map((b) => b.location).filter(Boolean))]
+        // Extract unique categories and locations
+        const uniqueCategories = [...new Set(data.map((b) => b.category).filter((c): c is string => !!c))]
+        const uniqueLocations = [...new Set(data.map((b) => b.location).filter((l): l is string => !!l))]
 
-      setCategories(uniqueCategories.sort())
-      setLocations(uniqueLocations.sort())
-      setLoading(false)
+        setCategories(uniqueCategories.sort())
+        setLocations(uniqueLocations.sort())
+      } catch (err) {
+        console.error('Error fetching businesses:', err)
+        setError('Failed to load businesses. Please try again later.')
+      } finally {
+        setLoading(false)
+      }
     }
 
     fetchBusinesses()
@@ -146,8 +185,15 @@ export default function SearchPage() {
           {/* Results Section */}
           <div className="lg:col-span-3">
             {loading ? (
-              <div className="flex justify-center items-center h-64">
-                <div className="text-gray-500 text-lg">Loading businesses...</div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, i) => (
+                  <BusinessCardSkeleton key={i} />
+                ))}
+              </div>
+            ) : error ? (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <strong className="font-bold">Error!</strong>
+                <span className="block sm:inline"> {error}</span>
               </div>
             ) : filteredBusinesses.length === 0 ? (
               <div className="bg-white rounded-lg shadow p-12 text-center">
@@ -170,14 +216,14 @@ export default function SearchPage() {
                   {filteredBusinesses.length} Business{filteredBusinesses.length !== 1 ? 'es' : ''} Found
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {filteredBusinesses.map((business) => (
                     <Link
                       key={business.id}
                       href={`/business/${business.username}`}
                       className="group"
                     >
-                      <div className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden h-full">
+                      <div className="bg-white p-5 border border-gray-200 rounded-lg  hover:shadow-lg transition overflow-hidden h-full">
                         {/* Business Image */}
                         {business.image && (
                           <div className="relative w-full h-48 bg-gray-200 overflow-hidden">

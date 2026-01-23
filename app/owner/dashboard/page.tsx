@@ -1,403 +1,238 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { getBusinessById, updateBusiness } from "@/lib/supabase";
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { getBusinessById, updateBusiness } from '@/lib/supabase'
 
-interface SessionData {
-  userId: number;
-  businessId: number;
-  username: string;
-  email: string;
-  role: string;
-  fullName: string;
-}
-
-interface BusinessData {
+interface Business {
   id: number
-  name?: string
-  location?: string
-  category?: string
-  contact?: string
-  openingHours?: string
-  direction?: string
-  facebook?: string
-  instagram?: string
-  tiktok?: string
-  googleMapUrl?: string
-  menuUrl?: string
-  brandPrimaryColor?: string
-  brandSecondaryColor?: string
-  description?: string
-  image?: string
-  username?: string
-  wifiQrCode?: string
+  name: string
+  username: string
+  location: string
+  category: string
+  description: string
+  contact: string
+  openingHours: string
+  facebookUrl: string
+  instagramUrl: string
+  tiktokUrl: string
+  googleMapsUrl: string
+  menuUrl: string
+  wifiQrCode: string
+  brandPrimaryColor: string
+  brandSecondaryColor: string
+  image: string
 }
 
 export default function OwnerDashboard() {
-  const [session, setSession] = useState<SessionData | null>(null);
-  const [business, setBusiness] = useState<BusinessData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState("");
-  const [formData, setFormData] = useState<BusinessData>({} as BusinessData);
-  const router = useRouter();
+  const router = useRouter()
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [message, setMessage] = useState({ type: '', text: '' })
+  const [business, setBusiness] = useState<Business | null>(null)
+  const [formData, setFormData] = useState<Partial<Business>>({})
 
   useEffect(() => {
-    // Check if user is logged in
-    const sessionData = localStorage.getItem("session");
-    if (!sessionData) {
-      router.push("/login");
-      return;
-    }
-
-    const parsedSession = JSON.parse(sessionData);
-    
-    // Check if user is an owner
-    if (parsedSession.role !== 'owner') {
-      router.push('/business');
-      return;
-    }
-    
-    setSession(parsedSession);
-
-    // Fetch business details
-    const fetchBusiness = async () => {
-      const businessData = await getBusinessById(parsedSession.businessId);
-      if (businessData) {
-        setBusiness(businessData);
-        setFormData(businessData);
+    const checkSession = async () => {
+      const sessionData = localStorage.getItem('session')
+      if (!sessionData) {
+        router.push('/login')
+        return
       }
-      setLoading(false);
-    };
 
-    fetchBusiness();
-  }, [router]);
+      const session = JSON.parse(sessionData)
+      if (session.role !== 'owner') {
+        router.push('/login')
+        return
+      }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev: BusinessData) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+      if (session.businessId) {
+        try {
+          const data = await getBusinessById(session.businessId)
+          if (data) {
+            setBusiness(data)
+            setFormData(data)
+          }
+        } catch (error) {
+          console.error('Error fetching business:', error)
+        }
+      }
+      setLoading(false)
+    }
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaving(true);
-    setMessage("");
+    checkSession()
+  }, [router])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaving(true)
+    setMessage({ type: '', text: '' })
 
     try {
-      const updated = await updateBusiness(formData.id, formData);
-      if (updated) {
-        setBusiness(updated);
-        setMessage("✅ Business details updated successfully!");
-        setTimeout(() => setMessage(""), 3000);
-      } else {
-        setMessage("❌ Failed to update business details");
+      if (business?.id) {
+        await updateBusiness(business.id, formData)
+        setMessage({ type: 'success', text: 'Business details updated successfully!' })
+        setBusiness({ ...business, ...formData } as Business)
       }
     } catch (error) {
-      setMessage("❌ An error occurred while saving");
-      console.error(error);
+      console.error('Error updating business:', error)
+      setMessage({ type: 'error', text: 'Failed to update business details.' })
     } finally {
-      setSaving(false);
+      setSaving(false)
     }
-  };
+  }
 
   const handleLogout = () => {
-    localStorage.removeItem("session");
-    router.push("/login");
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg text-gray-600">Loading...</p>
-      </div>
-    );
+    localStorage.removeItem('session')
+    router.push('/login')
   }
 
-  if (!business) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg text-red-600">Business not found</p>
-      </div>
-    );
-  }
+  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50 pb-12">
       {/* Header */}
       <div className="bg-white shadow">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              {business.name}
-            </h1>
-            <p className="text-gray-600">Welcome, {session?.username}</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-gray-900">Business Dashboard</h1>
+          <div className="flex items-center gap-4">
+            <span className="text-gray-600">Welcome, {business?.name}</span>
+            <button onClick={handleLogout} className="text-red-600 hover:text-red-800 font-medium">Logout</button>
           </div>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold"
-          >
-            Logout
-          </button>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        {/* Success/Error Message */}
-        {message && (
-          <div className="mb-6 p-4 rounded-lg bg-blue-50 text-blue-700 border border-blue-200">
-            {message}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {message.text && (
+          <div className={`mb-6 p-4 rounded-md ${message.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`}>
+            {message.text}
           </div>
         )}
 
-        <form onSubmit={handleSave} className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
-            Edit Business Details
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Business Name */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Business Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name || ""}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-              />
-            </div>
-
-            {/* Location */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Location
-              </label>
-              <input
-                type="text"
-                name="location"
-                value={formData.location || ""}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-              />
-            </div>
-
-            {/* Category */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Category
-              </label>
-              <input
-                type="text"
-                name="category"
-                value={formData.category || ""}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-              />
-            </div>
-
-            {/* Contact */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Contact Number
-              </label>
-              <input
-                type="text"
-                name="contact"
-                value={formData.contact || ""}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-              />
-            </div>
-
-            {/* Opening Hours */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Opening Hours
-              </label>
-              <input
-                type="text"
-                name="openingHours"
-                value={formData.openingHours || ""}
-                onChange={handleInputChange}
-                placeholder="e.g., 9 AM - 6 PM"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-              />
-            </div>
-
-            {/* Direction */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Direction/Address
-              </label>
-              <input
-                type="text"
-                name="direction"
-                value={formData.direction || ""}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-              />
-            </div>
-
-            {/* Facebook */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Facebook URL
-              </label>
-              <input
-                type="url"
-                name="facebook"
-                value={formData.facebook || ""}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-              />
-            </div>
-
-            {/* Instagram */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Instagram URL
-              </label>
-              <input
-                type="url"
-                name="instagram"
-                value={formData.instagram || ""}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-              />
-            </div>
-
-            {/* TikTok */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                TikTok URL
-              </label>
-              <input
-                type="url"
-                name="tiktok"
-                value={formData.tiktok || ""}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-              />
-            </div>
-
-            {/* Google Maps URL */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Google Maps URL
-              </label>
-              <input
-                type="url"
-                name="googleMapUrl"
-                value={formData.googleMapUrl || ""}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-              />
-            </div>
-
-            {/* Menu URL */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Menu URL
-              </label>
-              <input
-                type="url"
-                name="menuUrl"
-                value={formData.menuUrl || ""}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-              />
-            </div>
-
-            {/* Brand Primary Color */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Brand Primary Color
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="color"
-                  name="brandPrimaryColor"
-                  value={formData.brandPrimaryColor || "#000000"}
-                  onChange={handleInputChange}
-                  className="w-16 h-10 border border-gray-300 rounded-lg cursor-pointer"
-                />
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Basic Info */}
+          <div className="bg-white shadow rounded-lg p-6">
+            <h2 className="text-lg font-medium text-gray-900 mb-6">Basic Information</h2>
+            <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+              <div className="sm:col-span-3">
+                <label className="block text-sm font-medium text-gray-700">Business Name</label>
                 <input
                   type="text"
-                  name="brandPrimaryColor"
-                  value={formData.brandPrimaryColor || ""}
-                  onChange={handleInputChange}
-                  placeholder="#000000"
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
+                  name="name"
+                  value={formData.name || ''}
+                  onChange={handleChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
                 />
               </div>
-            </div>
-
-            {/* Brand Secondary Color */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Brand Secondary Color
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="color"
-                  name="brandSecondaryColor"
-                  value={formData.brandSecondaryColor || "#000000"}
-                  onChange={handleInputChange}
-                  className="w-16 h-10 border border-gray-300 rounded-lg cursor-pointer"
-                />
+              <div className="sm:col-span-3">
+                <label className="block text-sm font-medium text-gray-700">Category</label>
                 <input
                   type="text"
-                  name="brandSecondaryColor"
-                  value={formData.brandSecondaryColor || ""}
-                  onChange={handleInputChange}
-                  placeholder="#000000"
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
+                  name="category"
+                  value={formData.category || ''}
+                  onChange={handleChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                />
+              </div>
+              <div className="sm:col-span-6">
+                <label className="block text-sm font-medium text-gray-700">Description</label>
+                <textarea
+                  name="description"
+                  rows={3}
+                  value={formData.description || ''}
+                  onChange={handleChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                />
+              </div>
+              <div className="sm:col-span-3">
+                <label className="block text-sm font-medium text-gray-700">Location</label>
+                <input
+                  type="text"
+                  name="location"
+                  value={formData.location || ''}
+                  onChange={handleChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                />
+              </div>
+              <div className="sm:col-span-3">
+                <label className="block text-sm font-medium text-gray-700">Contact Info</label>
+                <input
+                  type="text"
+                  name="contact"
+                  value={formData.contact || ''}
+                  onChange={handleChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
                 />
               </div>
             </div>
           </div>
 
-          {/* Description (Full Width) */}
-          <div className="mt-6">
-            <label className="block text-gray-700 font-semibold mb-2">
-              Business Description
-            </label>
-            <textarea
-              name="description"
-              value={formData.description || ""}
-              onChange={handleInputChange}
-              rows={4}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-              placeholder="Describe your business..."
-            />
+          {/* Branding */}
+          <div className="bg-white shadow rounded-lg p-6">
+            <h2 className="text-lg font-medium text-gray-900 mb-6">Branding & Colors</h2>
+            <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+              <div className="sm:col-span-3">
+                <label className="block text-sm font-medium text-gray-700">Primary Color</label>
+                <div className="mt-1 flex items-center gap-3">
+                  <input
+                    type="color"
+                    name="brandPrimaryColor"
+                    value={formData.brandPrimaryColor || '#000000'}
+                    onChange={handleChange}
+                    className="h-10 w-20 p-1 border border-gray-300 rounded-md"
+                  />
+                  <span className="text-sm text-gray-500">{formData.brandPrimaryColor}</span>
+                </div>
+              </div>
+              <div className="sm:col-span-3">
+                <label className="block text-sm font-medium text-gray-700">Secondary Color</label>
+                <div className="mt-1 flex items-center gap-3">
+                  <input
+                    type="color"
+                    name="brandSecondaryColor"
+                    value={formData.brandSecondaryColor || '#ffffff'}
+                    onChange={handleChange}
+                    className="h-10 w-20 p-1 border border-gray-300 rounded-md"
+                  />
+                  <span className="text-sm text-gray-500">{formData.brandSecondaryColor}</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Save Button */}
-          <div className="mt-8 flex gap-4">
+          {/* Links & Socials */}
+          <div className="bg-white shadow rounded-lg p-6">
+            <h2 className="text-lg font-medium text-gray-900 mb-6">Links & Social Media</h2>
+            <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+              <div className="sm:col-span-3">
+                <label className="block text-sm font-medium text-gray-700">Menu URL</label>
+                <input
+                  type="url"
+                  name="menuUrl"
+                  value={formData.menuUrl || ''}
+                  onChange={handleChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end">
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 bg-red-500 hover:bg-red-600 disabled:bg-gray-400 text-white font-semibold py-3 rounded-lg transition-colors"
+              className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50"
             >
-              {saving ? "Saving..." : "Save Changes"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setFormData(business)}
-              className="flex-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 rounded-lg transition-colors"
-            >
-              Reset
+              {saving ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </form>
-      </div>
+      </main>
     </div>
-  );
+  )
 }
