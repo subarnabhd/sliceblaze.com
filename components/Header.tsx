@@ -7,20 +7,10 @@ import { usePathname, useRouter } from "next/navigation";
 
 export default function Header() {
   const [isVisible, setIsVisible] = useState(false);
-  const [session, setSession] = useState<{ username: string; role: string } | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const pathname = usePathname();
   const router = useRouter();
   const isHomePage = pathname === "/";
-
-  useEffect(() => {
-    // Check if user is logged in
-    const sessionData = localStorage.getItem("session");
-    if (sessionData) {
-      const user = JSON.parse(sessionData);
-      setSession(user);
-    }
-  }, []);
 
   useEffect(() => {
     // On non-home pages, always show header
@@ -40,12 +30,6 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isHomePage]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("session");
-    setSession(null);
-    router.push("/login");
-  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,29 +92,8 @@ export default function Header() {
         </div>
       </form>
 
-      {/* Right side - Login/User menu */}
-      <div className="flex items-center gap-4 shrink-0">
-        {session ? (
-          <>
-            <span className="text-sm text-gray-700 font-medium">
-              {session.username}
-            </span>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium text-sm"
-            >
-              Logout
-            </button>
-          </>
-        ) : (
-          <Link
-            href="/login"
-            className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium text-sm"
-          >
-            Login
-          </Link>
-        )}
-      </div>
+      {/* Empty space for alignment */}
+      <div className="shrink-0 w-24"></div>
     </header>
   );
 }

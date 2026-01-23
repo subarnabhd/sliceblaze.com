@@ -2,21 +2,27 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { supabase, createBusiness } from '@/lib/supabase'
 
 interface Business {
   id: number
   name: string
   username: string
-  email: string
-  phone: string
+  location: string
+  category: string
+  image: string
   description: string
-  address: string
-  city: string
-  state: string
-  pincode: string
-  website: string
-  is_active: boolean
+  contact: string
+  openingHours: string
+  facebook: string
+  instagram: string
+  tiktok: string
+  googleMapUrl: string
+  direction: string
+  menuUrl: string
+  wifiQrCode: string
+  brandPrimaryColor: string
+  brandSecondaryColor: string
 }
 
 interface User {
@@ -36,6 +42,8 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState<User[]>([])
   const [editingBusiness, setEditingBusiness] = useState<Business | null>(null)
   const [editingUser, setEditingUser] = useState<User | null>(null)
+  const [addingBusiness, setAddingBusiness] = useState(false)
+  const [newBusinessData, setNewBusinessData] = useState<Partial<Business>>({})
   const [loading, setLoading] = useState(true)
 
   const fetchBusinesses = async () => {
@@ -92,16 +100,21 @@ export default function AdminDashboard() {
       .from('businesses')
       .update({
         name: editingBusiness.name,
-        username: editingBusiness.username,
-        email: editingBusiness.email,
-        phone: editingBusiness.phone,
+        location: editingBusiness.location,
+        category: editingBusiness.category,
+        image: editingBusiness.image,
         description: editingBusiness.description,
-        address: editingBusiness.address,
-        city: editingBusiness.city,
-        state: editingBusiness.state,
-        pincode: editingBusiness.pincode,
-        website: editingBusiness.website,
-        is_active: editingBusiness.is_active,
+        contact: editingBusiness.contact,
+        openingHours: editingBusiness.openingHours,
+        facebook: editingBusiness.facebook,
+        instagram: editingBusiness.instagram,
+        tiktok: editingBusiness.tiktok,
+        googleMapUrl: editingBusiness.googleMapUrl,
+        direction: editingBusiness.direction,
+        menuUrl: editingBusiness.menuUrl,
+        wifiQrCode: editingBusiness.wifiQrCode,
+        brandPrimaryColor: editingBusiness.brandPrimaryColor,
+        brandSecondaryColor: editingBusiness.brandSecondaryColor,
       })
       .eq('id', editingBusiness.id)
 
@@ -135,6 +148,44 @@ export default function AdminDashboard() {
       alert('User updated successfully!')
       setEditingUser(null)
       fetchUsers()
+    }
+  }
+
+  const handleCreateBusiness = async () => {
+    if (!newBusinessData.name || !newBusinessData.username) {
+      alert('Please fill in all required fields (Name, Username)')
+      return
+    }
+
+    const businessToCreate = {
+      name: newBusinessData.name,
+      username: newBusinessData.username?.toLowerCase(),
+      location: newBusinessData.location || '',
+      category: newBusinessData.category || '',
+      image: '',
+      description: newBusinessData.description || '',
+      contact: newBusinessData.contact || '',
+      openingHours: newBusinessData.openingHours || '',
+      facebook: newBusinessData.facebook || '',
+      instagram: newBusinessData.instagram || '',
+      tiktok: '',
+      googleMapUrl: '',
+      direction: '',
+      menuUrl: newBusinessData.menuUrl || '',
+      wifiQrCode: '',
+      brandPrimaryColor: '#1e40af',
+      brandSecondaryColor: '#3b82f6',
+    }
+
+    const result = await createBusiness(businessToCreate)
+
+    if (result) {
+      alert('Business created successfully!')
+      setAddingBusiness(false)
+      setNewBusinessData({})
+      fetchBusinesses()
+    } else {
+      alert('Error creating business. Username may already exist.')
     }
   }
 
@@ -198,6 +249,14 @@ export default function AdminDashboard() {
         {/* Businesses Tab */}
         {activeTab === 'businesses' && (
           <div className="space-y-4">
+            <div className="flex justify-end mb-4">
+              <button
+                onClick={() => setAddingBusiness(true)}
+                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 flex items-center gap-2"
+              >
+                <span className="text-xl">+</span> Add New Business
+              </button>
+            </div>
             <div className="grid gap-4">
               {businesses.map((business) => (
                 <div key={business.id} className="bg-gray-800 rounded-lg p-6 shadow">
@@ -206,10 +265,10 @@ export default function AdminDashboard() {
                       <h3 className="text-xl font-semibold text-white">{business.name}</h3>
                       <p className="text-gray-400">@{business.username}</p>
                       <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
-                        <p className="text-gray-300">Email: {business.email}</p>
-                        <p className="text-gray-300">Phone: {business.phone}</p>
-                        <p className="text-gray-300">City: {business.city}, {business.state}</p>
-                        <p className="text-gray-300">Status: <span className={business.is_active ? 'text-green-500' : 'text-red-500'}>{business.is_active ? 'Active' : 'Inactive'}</span></p>
+                        <p className="text-gray-300">Category: {business.category}</p>
+                        <p className="text-gray-300">Contact: {business.contact}</p>
+                        <p className="text-gray-300">Location: {business.location}</p>
+                        <p className="text-gray-300">Hours: {business.openingHours || 'N/A'}</p>
                       </div>
                     </div>
                     <button
@@ -256,6 +315,138 @@ export default function AdminDashboard() {
         )}
       </div>
 
+      {/* Add New Business Modal */}
+      {addingBusiness && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold text-white mb-4">Add New Business</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Business Name <span className="text-red-500">*</span></label>
+                <input
+                  type="text"
+                  value={newBusinessData.name || ''}
+                  onChange={(e) => setNewBusinessData({ ...newBusinessData, name: e.target.value })}
+                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                  placeholder="Enter business name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Username <span className="text-red-500">*</span></label>
+                <input
+                  type="text"
+                  value={newBusinessData.username || ''}
+                  onChange={(e) => setNewBusinessData({ ...newBusinessData, username: e.target.value })}
+                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                  placeholder="Enter unique username"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Category</label>
+                  <input
+                    type="text"
+                    value={newBusinessData.category || ''}
+                    onChange={(e) => setNewBusinessData({ ...newBusinessData, category: e.target.value })}
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                    placeholder="e.g., Restaurant, Cafe, Retail"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Contact</label>
+                  <input
+                    type="text"
+                    value={newBusinessData.contact || ''}
+                    onChange={(e) => setNewBusinessData({ ...newBusinessData, contact: e.target.value })}
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                    placeholder="Enter phone number"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Location</label>
+                <input
+                  type="text"
+                  value={newBusinessData.location || ''}
+                  onChange={(e) => setNewBusinessData({ ...newBusinessData, location: e.target.value })}
+                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                  placeholder="City, State"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                <textarea
+                  value={newBusinessData.description || ''}
+                  onChange={(e) => setNewBusinessData({ ...newBusinessData, description: e.target.value })}
+                  rows={3}
+                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                  placeholder="Enter business description"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Opening Hours</label>
+                <input
+                  type="text"
+                  value={newBusinessData.openingHours || ''}
+                  onChange={(e) => setNewBusinessData({ ...newBusinessData, openingHours: e.target.value })}
+                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                  placeholder="e.g., 7 AM - 9 PM"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Facebook</label>
+                  <input
+                    type="url"
+                    value={newBusinessData.facebook || ''}
+                    onChange={(e) => setNewBusinessData({ ...newBusinessData, facebook: e.target.value })}
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                    placeholder="Facebook page URL"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Instagram</label>
+                  <input
+                    type="url"
+                    value={newBusinessData.instagram || ''}
+                    onChange={(e) => setNewBusinessData({ ...newBusinessData, instagram: e.target.value })}
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                    placeholder="Instagram profile URL"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Menu URL</label>
+                <input
+                  type="url"
+                  value={newBusinessData.menuUrl || ''}
+                  onChange={(e) => setNewBusinessData({ ...newBusinessData, menuUrl: e.target.value })}
+                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                  placeholder="Link to menu or website"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end space-x-3 mt-6">
+              <button
+                onClick={() => {
+                  setAddingBusiness(false)
+                  setNewBusinessData({})
+                }}
+                className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateBusiness}
+                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+              >
+                Create Business
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Business Edit Modal */}
       {editingBusiness && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -276,25 +467,36 @@ export default function AdminDashboard() {
                 <input
                   type="text"
                   value={editingBusiness.username}
-                  onChange={(e) => setEditingBusiness({ ...editingBusiness, username: e.target.value })}
-                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                  disabled
+                  className="w-full px-3 py-2 bg-gray-600 text-gray-400 rounded border border-gray-600"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">Email</label>
-                <input
-                  type="email"
-                  value={editingBusiness.email}
-                  onChange={(e) => setEditingBusiness({ ...editingBusiness, email: e.target.value })}
-                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Category</label>
+                  <input
+                    type="text"
+                    value={editingBusiness.category}
+                    onChange={(e) => setEditingBusiness({ ...editingBusiness, category: e.target.value })}
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Contact</label>
+                  <input
+                    type="text"
+                    value={editingBusiness.contact}
+                    onChange={(e) => setEditingBusiness({ ...editingBusiness, contact: e.target.value })}
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                  />
+                </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">Phone</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Location</label>
                 <input
                   type="text"
-                  value={editingBusiness.phone}
-                  onChange={(e) => setEditingBusiness({ ...editingBusiness, phone: e.target.value })}
+                  value={editingBusiness.location}
+                  onChange={(e) => setEditingBusiness({ ...editingBusiness, location: e.target.value })}
                   className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
                 />
               </div>
@@ -308,61 +510,215 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">Address</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Opening Hours</label>
                 <input
                   type="text"
-                  value={editingBusiness.address}
-                  onChange={(e) => setEditingBusiness({ ...editingBusiness, address: e.target.value })}
+                  value={editingBusiness.openingHours}
+                  onChange={(e) => setEditingBusiness({ ...editingBusiness, openingHours: e.target.value })}
                   className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                  placeholder="e.g., 7 AM - 9 PM"
                 />
               </div>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">City</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Facebook</label>
                   <input
-                    type="text"
-                    value={editingBusiness.city}
-                    onChange={(e) => setEditingBusiness({ ...editingBusiness, city: e.target.value })}
+                    type="url"
+                    value={editingBusiness.facebook}
+                    onChange={(e) => setEditingBusiness({ ...editingBusiness, facebook: e.target.value })}
                     className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">State</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Instagram</label>
                   <input
-                    type="text"
-                    value={editingBusiness.state}
-                    onChange={(e) => setEditingBusiness({ ...editingBusiness, state: e.target.value })}
-                    className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Pincode</label>
-                  <input
-                    type="text"
-                    value={editingBusiness.pincode}
-                    onChange={(e) => setEditingBusiness({ ...editingBusiness, pincode: e.target.value })}
+                    type="url"
+                    value={editingBusiness.instagram}
+                    onChange={(e) => setEditingBusiness({ ...editingBusiness, instagram: e.target.value })}
                     className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">Website</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Menu URL</label>
                 <input
-                  type="text"
-                  value={editingBusiness.website}
-                  onChange={(e) => setEditingBusiness({ ...editingBusiness, website: e.target.value })}
+                  type="url"
+                  value={editingBusiness.menuUrl}
+                  onChange={(e) => setEditingBusiness({ ...editingBusiness, menuUrl: e.target.value })}
                   className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
                 />
               </div>
-              <div className="flex items-center">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">TikTok</label>
+                  <input
+                    type="url"
+                    value={editingBusiness.tiktok}
+                    onChange={(e) => setEditingBusiness({ ...editingBusiness, tiktok: e.target.value })}
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                    placeholder="TikTok profile URL"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Google Map URL</label>
+                  <input
+                    type="url"
+                    value={editingBusiness.googleMapUrl}
+                    onChange={(e) => setEditingBusiness({ ...editingBusiness, googleMapUrl: e.target.value })}
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                    placeholder="Google Maps link"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Direction</label>
                 <input
-                  type="checkbox"
-                  id="business-active"
-                  checked={editingBusiness.is_active}
-                  onChange={(e) => setEditingBusiness({ ...editingBusiness, is_active: e.target.checked })}
-                  className="mr-2"
+                  type="text"
+                  value={editingBusiness.direction}
+                  onChange={(e) => setEditingBusiness({ ...editingBusiness, direction: e.target.value })}
+                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                  placeholder="Detailed address or directions"
                 />
-                <label htmlFor="business-active" className="text-sm font-medium text-gray-300">Active</label>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Business Logo/Image</label>
+                <div className="space-y-2">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0]
+                      if (file) {
+                        const formData = new FormData()
+                        formData.append('file', file)
+                        
+                        try {
+                          const response = await fetch('/api/upload', {
+                            method: 'POST',
+                            body: formData,
+                          })
+                          const result = await response.json()
+                          if (result.success) {
+                            setEditingBusiness({ ...editingBusiness, image: result.url })
+                          } else {
+                            alert('Upload failed: ' + result.error)
+                          }
+                        } catch (error) {
+                          alert('Upload error')
+                        }
+                      }
+                    }}
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                  />
+                  <input
+                    type="text"
+                    value={editingBusiness.image}
+                    onChange={(e) => setEditingBusiness({ ...editingBusiness, image: e.target.value })}
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                    placeholder="/businessname.jpg or paste URL"
+                  />
+                  {editingBusiness.image && (
+                    <div className="mt-2">
+                      <img 
+                        src={editingBusiness.image} 
+                        alt="Business logo preview" 
+                        className="h-20 w-20 object-cover rounded border border-gray-600"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none'
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">WiFi QR Code</label>
+                <div className="space-y-2">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0]
+                      if (file) {
+                        const formData = new FormData()
+                        formData.append('file', file)
+                        
+                        try {
+                          const response = await fetch('/api/upload', {
+                            method: 'POST',
+                            body: formData,
+                          })
+                          const result = await response.json()
+                          if (result.success) {
+                            setEditingBusiness({ ...editingBusiness, wifiQrCode: result.url })
+                          } else {
+                            alert('Upload failed: ' + result.error)
+                          }
+                        } catch (error) {
+                          alert('Upload error')
+                        }
+                      }
+                    }}
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                  />
+                  <input
+                    type="text"
+                    value={editingBusiness.wifiQrCode}
+                    onChange={(e) => setEditingBusiness({ ...editingBusiness, wifiQrCode: e.target.value })}
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                    placeholder="/qrcodes/business-wifi.png or paste URL"
+                  />
+                  {editingBusiness.wifiQrCode && (
+                    <div className="mt-2">
+                      <img 
+                        src={editingBusiness.wifiQrCode} 
+                        alt="WiFi QR code preview" 
+                        className="h-20 w-20 object-cover rounded border border-gray-600"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none'
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Brand Primary Color</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="color"
+                      value={editingBusiness.brandPrimaryColor}
+                      onChange={(e) => setEditingBusiness({ ...editingBusiness, brandPrimaryColor: e.target.value })}
+                      className="w-12 h-10 rounded cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={editingBusiness.brandPrimaryColor}
+                      onChange={(e) => setEditingBusiness({ ...editingBusiness, brandPrimaryColor: e.target.value })}
+                      className="flex-1 px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                      placeholder="#1e40af"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Brand Secondary Color</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="color"
+                      value={editingBusiness.brandSecondaryColor}
+                      onChange={(e) => setEditingBusiness({ ...editingBusiness, brandSecondaryColor: e.target.value })}
+                      className="w-12 h-10 rounded cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={editingBusiness.brandSecondaryColor}
+                      onChange={(e) => setEditingBusiness({ ...editingBusiness, brandSecondaryColor: e.target.value })}
+                      className="flex-1 px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-red-500"
+                      placeholder="#3b82f6"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
             <div className="flex justify-end space-x-3 mt-6">

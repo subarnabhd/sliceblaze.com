@@ -21,6 +21,7 @@ interface Business {
 
 function BusinessCardSkeleton() {
   return (
+    
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden h-full animate-pulse">
       {/* Image Skeleton */}
       <div className="w-full h-48 bg-gray-200" />
@@ -220,7 +221,7 @@ export default function SearchPage() {
                   {filteredBusinesses.map((business) => (
                     <Link
                       key={business.id}
-                      href={`/business/${business.username}`}
+                      href={`/${business.username}`}
                       className="group"
                     >
                       <div className="bg-white p-5 border border-gray-200 rounded-lg  hover:shadow-lg transition overflow-hidden h-full">
