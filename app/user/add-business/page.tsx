@@ -32,7 +32,7 @@ export default function AddBusinessPage() {
   useEffect(() => {
     const session = localStorage.getItem('session')
     if (!session) {
-      router.push('/sliceblaze/login')
+      router.push('/login')
       return
     }
 

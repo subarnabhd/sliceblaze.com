@@ -46,7 +46,7 @@ export default function MyBusinessesPage() {
     // Check if user is logged in
     const session = localStorage.getItem('session')
     if (!session) {
-      router.push('/sliceblaze/login')
+      router.push('/login')
       return
     }
 
@@ -78,7 +78,7 @@ export default function MyBusinessesPage() {
 
   const handleLogout = () => {
     localStorage.removeItem('session')
-    router.push('/sliceblaze/login')
+    router.push('/login')
   }
 
   const handleAddBusiness = () => {

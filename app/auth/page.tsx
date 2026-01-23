@@ -38,7 +38,7 @@ export default function LoginRedirectPage() {
             ) : (
               <>
                 <Link
-                  href="/sliceblaze/login"
+                  href="/login"
                   className="px-4 py-2 border border-[#ED1D33] text-[#ED1D33] rounded-lg hover:bg-red-50 font-medium"
                 >
                   Login

@@ -84,7 +84,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex justify-center mb-8">
-          <Image src="/images/logo.png" alt="SliceBlaze" width={80} height={80} />
+          <Image src="/sliceblazelogo.svg" alt="SliceBlaze" width={150} height={150} />
         </div>
 
         {/* Title */}

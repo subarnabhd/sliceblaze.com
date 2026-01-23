@@ -249,7 +249,7 @@ export default function RegisterPage() {
         {/* Login Link */}
         <p className="text-center text-gray-600 text-sm">
           Already have an account?{' '}
-          <Link href="/sliceblaze/login" className="text-[#ED1D33] hover:text-red-700 font-medium">
+          <Link href="/login" className="text-[#ED1D33] hover:text-red-700 font-medium">
             Login here
           </Link>
         </p>
