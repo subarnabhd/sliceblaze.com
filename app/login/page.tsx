@@ -8,7 +8,7 @@ import { supabase } from '@/lib/supabase'
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -19,7 +19,7 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      if (!email || !password) {
+      if (!username || !password) {
         setError('Please fill in all fields')
         setLoading(false)
         return
@@ -35,18 +35,18 @@ export default function LoginPage() {
       const { data: user, error: queryError } = await supabase
         .from('users')
         .select('*')
-        .eq('email', email)
+        .eq('username', username)
         .single()
 
       if (queryError || !user) {
-        setError('Invalid email or password')
+        setError('Invalid username or password')
         setLoading(false)
         return
       }
 
-      // Check password (plaintext comparison - should use bcrypt in production)
+      // Check password
       if (user.password_hash !== password) {
-        setError('Invalid email or password')
+        setError('Invalid username or password')
         setLoading(false)
         return
       }
@@ -59,17 +59,17 @@ export default function LoginPage() {
 
       // Set session
       const session = {
-        userId: user.id,
+        id: user.id,
         username: user.username,
         email: user.email,
-        role: user.role,
-        fullName: user.full_name,
+        full_name: user.full_name,
+        business_id: user.business_id
       }
 
-      localStorage.setItem('session', JSON.stringify(session))
+      localStorage.setItem('userSession', JSON.stringify(session))
 
       // Redirect to user dashboard
-      router.push('/user/my-businesses')
+      router.push('/user/dashboard')
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred. Please try again.'
       setError(errorMessage)
@@ -101,13 +101,13 @@ export default function LoginPage() {
         {/* Form */}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
-              placeholder="you@example.com"
+              placeholder="your_username"
               required
             />
           </div>

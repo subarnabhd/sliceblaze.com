@@ -92,8 +92,15 @@ export default function Header() {
         </div>
       </form>
 
-      {/* Empty space for alignment */}
-      <div className="shrink-0 w-24"></div>
+      {/* Right - User Login Link */}
+      <div className="shrink-0 w-24 flex justify-end">
+        <Link
+          href="/login"
+          className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#ED1D33] transition"
+        >
+          Login
+        </Link>
+      </div>
     </header>
   );
 }

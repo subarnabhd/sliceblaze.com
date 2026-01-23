@@ -24,6 +24,7 @@ interface Business {
   wifiQrCode: string
   brandPrimaryColor: string
   brandSecondaryColor: string
+  is_active: boolean
 }
 
 interface User {
@@ -39,7 +40,7 @@ interface User {
 interface Category {
   id: number
   name: string
-  description: string
+  is_active: boolean
   created_at: string
 }
 
@@ -55,7 +56,7 @@ export default function AdminDashboard() {
   const [addingCategory, setAddingCategory] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [newBusinessData, setNewBusinessData] = useState<Partial<Business>>({})
-  const [newCategoryData, setNewCategoryData] = useState({ name: '', description: '' })
+  const [newCategoryData, setNewCategoryData] = useState({ name: '', is_active: true })
   const [loading, setLoading] = useState(true)
 
   const fetchBusinesses = async () => {
@@ -142,6 +143,7 @@ export default function AdminDashboard() {
         wifiQrCode: editingBusiness.wifiQrCode,
         brandPrimaryColor: editingBusiness.brandPrimaryColor,
         brandSecondaryColor: editingBusiness.brandSecondaryColor,
+        is_active: editingBusiness.is_active,
       })
       .eq('id', editingBusiness.id)
 
@@ -189,19 +191,20 @@ export default function AdminDashboard() {
       username: newBusinessData.username?.toLowerCase(),
       location: newBusinessData.location || '',
       category: newBusinessData.category || '',
-      image: '',
+      image: newBusinessData.image || '',
       description: newBusinessData.description || '',
       contact: newBusinessData.contact || '',
       openingHours: newBusinessData.openingHours || '',
       facebook: newBusinessData.facebook || '',
       instagram: newBusinessData.instagram || '',
-      tiktok: '',
-      googleMapUrl: '',
-      direction: '',
+      tiktok: newBusinessData.tiktok || '',
+      googleMapUrl: newBusinessData.googleMapUrl || '',
+      direction: newBusinessData.direction || '',
       menuUrl: newBusinessData.menuUrl || '',
-      wifiQrCode: '',
-      brandPrimaryColor: '#1e40af',
-      brandSecondaryColor: '#3b82f6',
+      wifiQrCode: newBusinessData.wifiQrCode || '',
+      brandPrimaryColor: newBusinessData.brandPrimaryColor || '#1e40af',
+      brandSecondaryColor: newBusinessData.brandSecondaryColor || '#3b82f6',
+      is_active: newBusinessData.is_active !== false,
     }
 
     const result = await createBusiness(businessToCreate)
@@ -213,6 +216,23 @@ export default function AdminDashboard() {
       fetchBusinesses()
     } else {
       alert('Error creating business. Username may already exist.')
+    }
+  }
+
+  const handleDeleteBusiness = async (businessId: number) => {
+    if (!confirm('Are you sure you want to delete this business?')) return
+    if (!supabase) return
+
+    const { error } = await supabase
+      .from('businesses')
+      .delete()
+      .eq('id', businessId)
+
+    if (error) {
+      alert('Error deleting business: ' + error.message)
+    } else {
+      alert('Business deleted successfully!')
+      fetchBusinesses()
     }
   }
 
@@ -229,7 +249,7 @@ export default function AdminDashboard() {
       .insert([
         {
           name: newCategoryData.name.trim(),
-          description: newCategoryData.description.trim(),
+          is_active: newCategoryData.is_active,
         },
       ])
 
@@ -238,7 +258,7 @@ export default function AdminDashboard() {
     } else {
       alert('Category created successfully!')
       setAddingCategory(false)
-      setNewCategoryData({ name: '', description: '' })
+      setNewCategoryData({ name: '', is_active: true })
       fetchCategories()
     }
   }
@@ -250,7 +270,7 @@ export default function AdminDashboard() {
       .from('categories')
       .update({
         name: editingCategory.name,
-        description: editingCategory.description,
+        is_active: editingCategory.is_active,
       })
       .eq('id', editingCategory.id)
 
@@ -476,6 +496,15 @@ export default function AdminDashboard() {
                           <span className="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full">
                             @{business.username}
                           </span>
+                          {business.is_active ? (
+                            <span className="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full">
+                              Active
+                            </span>
+                          ) : (
+                            <span className="bg-red-100 text-red-800 text-xs font-medium px-3 py-1 rounded-full">
+                              Inactive
+                            </span>
+                          )}
                         </div>
                         <p className="text-gray-600 text-sm mb-4">
                           {business.description}
@@ -507,12 +536,20 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                       </div>
-                      <button
-                        onClick={() => setEditingBusiness(business)}
-                        className="ml-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium whitespace-nowrap"
-                      >
-                        Edit
-                      </button>
+                      <div className="ml-4 flex gap-2">
+                        <button
+                          onClick={() => setEditingBusiness(business)}
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium whitespace-nowrap"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteBusiness(business.id)}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium whitespace-nowrap"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -576,9 +613,11 @@ export default function AdminDashboard() {
                             </p>
                           </div>
                           <div>
-                            <p className="text-gray-500">Business ID</p>
+                            <p className="text-gray-500">Assigned Business</p>
                             <p className="font-medium text-gray-900">
-                              {user.business_id || "N/A"}
+                              {user.business_id 
+                                ? businesses.find(b => b.id === user.business_id)?.name || `ID: ${user.business_id}`
+                                : "None"}
                             </p>
                           </div>
                           <div>
@@ -629,12 +668,20 @@ export default function AdminDashboard() {
                   >
                     <div className="p-6 flex justify-between items-start">
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-gray-900">
-                          {category.name}
-                        </h3>
-                        <p className="text-gray-600 text-sm mt-2">
-                          {category.description || "No description"}
-                        </p>
+                        <div className="flex items-center gap-4 mb-2">
+                          <h3 className="text-xl font-bold text-gray-900">
+                            {category.name}
+                          </h3>
+                          {category.is_active ? (
+                            <span className="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full">
+                              Active
+                            </span>
+                          ) : (
+                            <span className="bg-red-100 text-red-800 text-xs font-medium px-3 py-1 rounded-full">
+                              Inactive
+                            </span>
+                          )}
+                        </div>
                         <p className="text-gray-500 text-xs mt-3">
                           Created:{" "}
                           {new Date(category.created_at).toLocaleDateString()}
@@ -688,29 +735,32 @@ export default function AdminDashboard() {
                   placeholder="e.g., Restaurant, Cafe, Retail"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Description
-                </label>
-                <textarea
-                  value={newCategoryData.description}
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="new-category-active"
+                  checked={newCategoryData.is_active}
                   onChange={(e) =>
                     setNewCategoryData({
                       ...newCategoryData,
-                      description: e.target.value,
+                      is_active: e.target.checked,
                     })
                   }
-                  rows={3}
-                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                  placeholder="Enter a description for this category"
+                  className="mr-2"
                 />
+                <label
+                  htmlFor="new-category-active"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Active
+                </label>
               </div>
             </div>
             <div className="flex justify-end space-x-3 mt-6">
               <button
                 onClick={() => {
                   setAddingCategory(false);
-                  setNewCategoryData({ name: "", description: "" });
+                  setNewCategoryData({ name: "", is_active: true });
                 }}
                 className="px-4 py-2 bg-gray-300 text-gray-900 rounded hover:bg-gray-400 font-medium"
               >
@@ -751,21 +801,25 @@ export default function AdminDashboard() {
                   className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Description
-                </label>
-                <textarea
-                  value={editingCategory.description}
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="edit-category-active"
+                  checked={editingCategory.is_active}
                   onChange={(e) =>
                     setEditingCategory({
                       ...editingCategory,
-                      description: e.target.value,
+                      is_active: e.target.checked,
                     })
                   }
-                  rows={3}
-                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                  className="mr-2"
                 />
+                <label
+                  htmlFor="edit-category-active"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Active
+                </label>
               </div>
             </div>
             <div className="flex justify-end space-x-3 mt-6">
@@ -831,20 +885,28 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Category
+                    Categories
                   </label>
-                  <input
-                    type="text"
-                    value={newBusinessData.category || ""}
-                    onChange={(e) =>
+                  <select
+                    multiple
+                    value={newBusinessData.category?.split(', ') || []}
+                    onChange={(e) => {
+                      const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
                       setNewBusinessData({
                         ...newBusinessData,
-                        category: e.target.value,
-                      })
-                    }
+                        category: selectedOptions.join(', '),
+                      });
+                    }}
                     className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                    placeholder="e.g., Restaurant, Cafe, Retail"
-                  />
+                    size={5}
+                  >
+                    {categories.filter(c => c.is_active).map(cat => (
+                      <option key={cat.id} value={cat.name}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -968,6 +1030,175 @@ export default function AdminDashboard() {
                   placeholder="Link to menu or website"
                 />
               </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    TikTok
+                  </label>
+                  <input
+                    type="url"
+                    value={newBusinessData.tiktok || ""}
+                    onChange={(e) =>
+                      setNewBusinessData({
+                        ...newBusinessData,
+                        tiktok: e.target.value,
+                      })
+                    }
+                    className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                    placeholder="TikTok profile URL"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Google Map URL
+                  </label>
+                  <input
+                    type="url"
+                    value={newBusinessData.googleMapUrl || ""}
+                    onChange={(e) =>
+                      setNewBusinessData({
+                        ...newBusinessData,
+                        googleMapUrl: e.target.value,
+                      })
+                    }
+                    className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                    placeholder="Google Maps link"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Direction
+                </label>
+                <input
+                  type="text"
+                  value={newBusinessData.direction || ""}
+                  onChange={(e) =>
+                    setNewBusinessData({
+                      ...newBusinessData,
+                      direction: e.target.value,
+                    })
+                  }
+                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                  placeholder="Detailed address or directions"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Business Logo/Image URL
+                </label>
+                <input
+                  type="text"
+                  value={newBusinessData.image || ""}
+                  onChange={(e) =>
+                    setNewBusinessData({
+                      ...newBusinessData,
+                      image: e.target.value,
+                    })
+                  }
+                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                  placeholder="/businessname.jpg"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  WiFi QR Code URL
+                </label>
+                <input
+                  type="text"
+                  value={newBusinessData.wifiQrCode || ""}
+                  onChange={(e) =>
+                    setNewBusinessData({
+                      ...newBusinessData,
+                      wifiQrCode: e.target.value,
+                    })
+                  }
+                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                  placeholder="/qrcodes/business-wifi.png"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Brand Primary Color
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="color"
+                      value={newBusinessData.brandPrimaryColor || "#1e40af"}
+                      onChange={(e) =>
+                        setNewBusinessData({
+                          ...newBusinessData,
+                          brandPrimaryColor: e.target.value,
+                        })
+                      }
+                      className="w-12 h-10 rounded cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={newBusinessData.brandPrimaryColor || "#1e40af"}
+                      onChange={(e) =>
+                        setNewBusinessData({
+                          ...newBusinessData,
+                          brandPrimaryColor: e.target.value,
+                        })
+                      }
+                      className="flex-1 px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                      placeholder="#1e40af"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Brand Secondary Color
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="color"
+                      value={newBusinessData.brandSecondaryColor || "#3b82f6"}
+                      onChange={(e) =>
+                        setNewBusinessData({
+                          ...newBusinessData,
+                          brandSecondaryColor: e.target.value,
+                        })
+                      }
+                      className="w-12 h-10 rounded cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={newBusinessData.brandSecondaryColor || "#3b82f6"}
+                      onChange={(e) =>
+                        setNewBusinessData({
+                          ...newBusinessData,
+                          brandSecondaryColor: e.target.value,
+                        })
+                      }
+                      className="flex-1 px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                      placeholder="#3b82f6"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="new-business-active"
+                  checked={newBusinessData.is_active !== false}
+                  onChange={(e) =>
+                    setNewBusinessData({
+                      ...newBusinessData,
+                      is_active: e.target.checked,
+                    })
+                  }
+                  className="mr-2"
+                />
+                <label
+                  htmlFor="new-business-active"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Active
+                </label>
+              </div>
             </div>
             <div className="flex justify-end space-x-3 mt-6">
               <button
@@ -1028,19 +1259,28 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Category
+                    Categories
                   </label>
-                  <input
-                    type="text"
-                    value={editingBusiness.category}
-                    onChange={(e) =>
+                  <select
+                    multiple
+                    value={editingBusiness.category?.split(', ') || []}
+                    onChange={(e) => {
+                      const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
                       setEditingBusiness({
                         ...editingBusiness,
-                        category: e.target.value,
-                      })
-                    }
+                        category: selectedOptions.join(', '),
+                      });
+                    }}
                     className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                  />
+                    size={5}
+                  >
+                    {categories.filter(c => c.is_active).map(cat => (
+                      <option key={cat.id} value={cat.name}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1395,6 +1635,26 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               </div>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="edit-business-active"
+                  checked={editingBusiness.is_active}
+                  onChange={(e) =>
+                    setEditingBusiness({
+                      ...editingBusiness,
+                      is_active: e.target.checked,
+                    })
+                  }
+                  className="mr-2"
+                />
+                <label
+                  htmlFor="edit-business-active"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Active
+                </label>
+              </div>
             </div>
             <div className="flex justify-end space-x-3 mt-6">
               <button
@@ -1480,10 +1740,9 @@ export default function AdminDashboard() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Business ID
+                  Assigned Business
                 </label>
-                <input
-                  type="number"
+                <select
                   value={editingUser.business_id || ""}
                   onChange={(e) =>
                     setEditingUser({
@@ -1494,8 +1753,14 @@ export default function AdminDashboard() {
                     })
                   }
                   className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                  placeholder="Leave empty for no business"
-                />
+                >
+                  <option value="">No Business Assigned</option>
+                  {businesses.map((business) => (
+                    <option key={business.id} value={business.id}>
+                      {business.name} (@{business.username})
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="flex items-center">
                 <input
