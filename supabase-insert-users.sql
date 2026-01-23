@@ -2,7 +2,7 @@
 
 -- Super Admin
 INSERT INTO users (username, email, full_name, password_hash, role, is_active)
-VALUES ('admin', 'admin@sliceblaze.com', 'Admin User', 'admin123', 'admin', true);
+VALUES ('admin', 'admin@sliceblaze.com', 'Admin User', 'Slicebl@ze2025', 'admin', true);
 
 -- Business Owners
 INSERT INTO users (username, email, full_name, password_hash, role, business_id, is_active)
@@ -19,6 +19,6 @@ VALUES
   ('user3', 'user3@example.com', 'Bob Johnson', 'user123', 'user', true);
 
 -- Test Credentials:
--- Admin: admin / admin123
+-- Admin: admin / Slicebl@ze2025
 -- Owner: ujamaakoffie / password123
 -- User: user1 / user123

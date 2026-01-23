@@ -42,7 +42,7 @@ CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
 
 -- Super Admin
 INSERT INTO users (username, email, full_name, password_hash, role, is_active)
-VALUES ('admin', 'admin@sliceblaze.com', 'Admin User', 'admin123', 'admin', true);
+VALUES ('admin', 'admin@sliceblaze.com', 'Admin User', 'Slicebl@ze2025', 'admin', true);
 
 -- Business Owners
 INSERT INTO users (username, email, full_name, password_hash, role, business_id, is_active)
@@ -78,7 +78,7 @@ VALUES
 
 ### Admin Login
 - Username: `admin`
-- Password: `admin123`
+- Password: `Slicebl@ze2025`
 - Expected: Redirects to `/sliceblaze/admin` (Admin Dashboard)
 
 ### Owner Login
@@ -120,7 +120,7 @@ Check browser console (F12 → Console tab) when attempting login. You'll see de
 
 | Role | Username | Password | Expected Dashboard |
 |------|----------|----------|-------------------|
-| Admin | `admin` | `admin123` | `/sliceblaze/admin` |
+| Admin | `admin` | `Slicebl@ze2025` | `/sliceblaze/admin` |
 | Owner | `ujamaakoffie` | `password123` | `/owner/dashboard` |
 | User | `user1` | `user123` | `/user/dashboard` |
 

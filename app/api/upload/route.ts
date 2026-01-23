@@ -15,7 +15,6 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes)
 
     // Create unique filename
-    const ext = path.extname(file.name)
     const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
     const filepath = path.join(process.cwd(), 'public', filename)
 

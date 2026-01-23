@@ -3,7 +3,7 @@
 ## 🔑 Test Credentials
 
 ```
-Admin:  admin / admin123
+Admin:  admin / Slicebl@ze2025
 Owner:  ujamaakoffie / password123
 User:   user1 / user123
 ```

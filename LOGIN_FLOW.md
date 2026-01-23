@@ -54,7 +54,7 @@ After successful login, user is redirected based on their role:
 
 | Role | Username | Password |
 |------|----------|----------|
-| Admin | `admin` | `admin123` |
+| Admin | `admin` | `Slicebl@ze2025` |
 | Business Owner | `ujamaakoffie` | `password123` |
 | Regular User | `user1` | `user123` |
 

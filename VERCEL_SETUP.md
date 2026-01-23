@@ -84,7 +84,7 @@ sb_publishable_DxIKVpNXinU7MeeKYz7OZQ_orpC18ku
 
 1. Go to `/login` on your live site
 2. Try logging in with:
-   - **Admin:** `admin` / `admin123`
+   - **Admin:** `admin` / `Slicebl@ze2025`
    - **Owner:** `ujamaakoffie` / `password123`
    - **User:** `user1` / `user123`
 

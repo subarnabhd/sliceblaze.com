@@ -91,7 +91,7 @@ Redirect Based on Role:
 ### Super Admin
 ```
 Username: admin
-Password: admin123
+Password: Slicebl@ze2025
 ```
 
 ### Business Owner
@@ -196,7 +196,7 @@ Run [supabase-insert-users.sql](./supabase-insert-users.sql) in Supabase SQL Edi
 
 1. Go to `/sliceblaze/login`
 2. Try different credentials:
-   - Admin: `admin` / `admin123` → redirects to `/sliceblaze/admin`
+   - Admin: `admin` / `Slicebl@ze2025` → redirects to `/sliceblaze/admin`
    - Owner: `ujamaakoffie` / `password123` → redirects to `/owner/dashboard`
    - User: `user1` / `user123` → redirects to `/user/dashboard`
 

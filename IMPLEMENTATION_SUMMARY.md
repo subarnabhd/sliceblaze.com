@@ -133,7 +133,7 @@ CREATE TABLE users (
 
 | Role | Username | Password | Redirect |
 |------|----------|----------|----------|
-| Admin | `admin` | `admin123` | `/sliceblaze/admin` |
+| Admin | `admin` | `Slicebl@ze2025` | `/sliceblaze/admin` |
 | Owner | `ujamaakoffie` | `password123` | `/owner/dashboard` |
 | User | `user1` | `user123` | `/user/dashboard` |
 
@@ -228,7 +228,7 @@ Before deploying to production:
 ### 2. Test Login
 ```
 Go to /sliceblaze/login
-Login with: admin / admin123
+Login with: admin / Slicebl@ze2025
 ```
 
 ### 3. Create New Users

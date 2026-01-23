@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('')
@@ -37,17 +38,18 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-[#ED1D33] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-xl">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            SliceBlaze <span className="text-red-600">Admin</span>
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Restricted Access
-          </p>
+        <div className="flex justify-center mb-6">
+          <Image
+            src="/sliceblazelogo.svg"
+            alt="SliceBlaze logo"
+            width={150}
+            height={60}
+            priority
+          />
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
+        <form className="space-y-6" onSubmit={handleLogin}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="username" className="sr-only">Username</label>

@@ -39,7 +39,7 @@ CREATE INDEX idx_users_role ON users(role);
 Copy and paste the contents of `supabase-insert-users.sql` in the SQL Editor:
 
 **Test Credentials:**
-- Admin: `admin` / `admin123`
+- Admin: `admin` / `Slicebl@ze2025`
 - Business Owner: `ujamaakoffie` / `password123`
 - Regular User: `user1` / `user123`
 
@@ -130,7 +130,7 @@ localStorage.getItem('session') // Returns:
 ## 🎓 How to Use
 
 ### For Admin Users
-1. Login with `admin` / `admin123` at `/sliceblaze/login`
+1. Login with `admin` / `Slicebl@ze2025` at `/sliceblaze/login`
 2. You'll see the admin dashboard with:
    - **Users Tab**: Manage all users
    - **Businesses Tab**: View all businesses
@@ -173,7 +173,7 @@ For more details, see:
 
 - [ ] Run SQL to create users table with role column
 - [ ] Insert test users using supabase-insert-users.sql
-- [ ] Test admin login: `admin` / `admin123`
+- [ ] Test admin login: `admin` / `Slicebl@ze2025`
 - [ ] Test owner login: `ujamaakoffie` / `password123`
 - [ ] Test user login: `user1` / `user123`
 - [ ] Verify admin can manage users
