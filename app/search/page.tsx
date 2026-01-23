@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getBusinesses } from '@/lib/supabase'
+import { getBusinesses, supabase } from '@/lib/supabase'
 
 interface Business {
   id: number
@@ -17,6 +17,12 @@ interface Business {
   contact: string
   brandPrimaryColor: string
   openingHours?: string
+}
+
+interface Category {
+  id: number
+  name: string
+  is_active: boolean
 }
 
 function BusinessCardSkeleton() {
@@ -58,11 +64,9 @@ function SearchPageContent() {
   const [businesses, setBusinesses] = useState<Business[]>([])
   const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>('')
-  const [selectedLocation, setSelectedLocation] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [categories, setCategories] = useState<string[]>([])
-  const [locations, setLocations] = useState<string[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
 
   // Fetch all businesses
   useEffect(() => {
@@ -72,13 +76,6 @@ function SearchPageContent() {
       try {
         const data = (await getBusinesses()) as Business[]
         setBusinesses(data)
-
-        // Extract unique categories and locations
-        const uniqueCategories = [...new Set(data.map((b) => b.category).filter((c): c is string => !!c))]
-        const uniqueLocations = [...new Set(data.map((b) => b.location).filter((l): l is string => !!l))]
-
-        setCategories(uniqueCategories.sort())
-        setLocations(uniqueLocations.sort())
       } catch (err) {
         console.error('Error fetching businesses:', err)
         setError('Failed to load businesses. Please try again later.')
@@ -87,7 +84,22 @@ function SearchPageContent() {
       }
     }
 
+    const fetchCategories = async () => {
+      if (!supabase) return
+
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .eq('is_active', true)
+        .order('name')
+
+      if (!error && data) {
+        setCategories(data)
+      }
+    }
+
     fetchBusinesses()
+    fetchCategories()
   }, [])
 
   // Filter businesses whenever search query, category, or location changes
@@ -111,77 +123,66 @@ function SearchPageContent() {
       results = results.filter((b) => b.category === selectedCategory)
     }
 
-    // Filter by location
-    if (selectedLocation) {
-      results = results.filter((b) => b.location === selectedLocation)
-    }
-
     setFilteredBusinesses(results)
-  }, [searchParams, selectedCategory, selectedLocation, businesses])
+  }, [searchParams, selectedCategory, businesses])
 
   const clearFilters = () => {
     setSelectedCategory('')
-    setSelectedLocation('')
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Filters Section */}
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-         
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Category Filter */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">
-                Category
-              </label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
-              >
-                <option value="">All Categories</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
-            </div>
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Discover Businesses</h1>
+          <p className="text-gray-600">Browse and filter businesses by category</p>
+        </div>
 
-            {/* Location Filter */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">
-                Location
-              </label>
-              <select
-                value={selectedLocation}
-                onChange={(e) => setSelectedLocation(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
+        {/* Category Filter - Prominent Display */}
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">Filter by Category</h2>
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => setSelectedCategory('')}
+              className={`px-5 py-2.5 rounded-full font-medium transition-all ${
+                selectedCategory === ''
+                  ? 'bg-[#ED1D33] text-white shadow-md'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:border-[#ED1D33] hover:text-[#ED1D33]'
+              }`}
+            >
+              All Categories
+            </button>
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.name)}
+                className={`px-5 py-2.5 rounded-full font-medium transition-all ${
+                  selectedCategory === cat.name
+                    ? 'bg-[#ED1D33] text-white shadow-md'
+                    : 'bg-white text-gray-700 border border-gray-300 hover:border-[#ED1D33] hover:text-[#ED1D33]'
+                }`}
               >
-                <option value="">All Locations</option>
-                {locations.map((loc) => (
-                  <option key={loc} value={loc}>
-                    {loc}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Clear Filters Button */}
-            {(selectedCategory || selectedLocation) && (
-              <div className="flex items-end">
-                <button
-                  onClick={clearFilters}
-                  className="w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition font-medium text-sm"
-                >
-                  Clear Filters
-                </button>
-              </div>
-            )}
+                {cat.name}
+              </button>
+            ))}
           </div>
         </div>
+
+        {/* Clear Filters Button */}
+        {selectedCategory && (
+          <div className="mb-6 flex justify-end">
+            <button
+              onClick={clearFilters}
+              className="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition font-medium text-sm flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              Clear All Filters
+            </button>
+          </div>
+        )}
 
         {/* Results Section */}
         <div>
@@ -206,7 +207,7 @@ function SearchPageContent() {
                 </p>
                 <button
                   onClick={clearFilters}
-                  className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium"
+                  className="px-6 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] transition font-medium"
                 >
                   Clear All Filters
                 </button>
@@ -240,7 +241,7 @@ function SearchPageContent() {
                         {/* Business Info */}
                         <div className="p-5">
                           <div className="flex items-start justify-between mb-2">
-                            <h3 className="text-lg font-bold text-gray-800 group-hover:text-red-600 transition">
+                            <h3 className="text-lg font-bold text-gray-800 group-hover:text-[#ED1D33] transition">
                               {business.name}
                             </h3>
                             {business.brandPrimaryColor && (
@@ -254,7 +255,7 @@ function SearchPageContent() {
 
                           {/* Category Badge */}
                           <div className="mb-3">
-                            <span className="inline-block px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-semibold">
+                            <span className="inline-block px-3 py-1 bg-red-100 text-[#ED1D33] rounded-full text-xs font-semibold">
                               {business.category}
                             </span>
                           </div>
@@ -312,7 +313,7 @@ function SearchPageContent() {
                         {/* View Details Button */}
                         <div className="px-5 pb-5">
                           <button
-                            className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium text-sm"
+                            className="w-full px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] transition font-medium text-sm"
                             onClick={(e) => {
                               e.preventDefault()
                               router.push(`/business/${business.username}`)
@@ -338,7 +339,7 @@ export default function SearchPage() {
     <Suspense fallback={
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ED1D33] mx-auto mb-4"></div>
           <p className="text-gray-600">Loading search...</p>
         </div>
       </div>
@@ -347,3 +348,4 @@ export default function SearchPage() {
     </Suspense>
   )
 }
+

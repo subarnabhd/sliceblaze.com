@@ -146,7 +146,7 @@ export default function MyBusinessesPage() {
           </div>
           <button
             onClick={handleLogout}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium"
+            className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium"
           >
             Logout
           </button>
@@ -159,7 +159,7 @@ export default function MyBusinessesPage() {
         <div className="flex justify-end mb-6">
           <button
             onClick={handleAddBusiness}
-            className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 font-medium flex items-center gap-2"
+            className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium flex items-center gap-2"
           >
             <span className="text-xl">+</span> Add New Business
           </button>
@@ -171,7 +171,7 @@ export default function MyBusinessesPage() {
             <p className="text-gray-600 text-lg mb-4">No businesses yet</p>
             <button
               onClick={handleAddBusiness}
-              className="px-6 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 font-medium"
+              className="px-6 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium"
             >
               Create Your First Business
             </button>
@@ -351,7 +351,7 @@ export default function MyBusinessesPage() {
               </button>
               <button
                 onClick={handleUpdateBusiness}
-                className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-red-700 font-medium"
+                className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-[#C91828] font-medium"
               >
                 Save Changes
               </button>
@@ -362,3 +362,4 @@ export default function MyBusinessesPage() {
     </div>
   )
 }
+

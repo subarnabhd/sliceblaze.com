@@ -19,7 +19,7 @@ export default function LoginRedirectPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#ED1D33] to-red-800">
+    <div className="min-h-screen bg-linear-to-br from-[#ED1D33] to-[#A01520]">
       {/* Navigation */}
       <nav className="bg-white shadow">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -45,7 +45,7 @@ export default function LoginRedirectPage() {
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 font-medium"
+                  className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium"
                 >
                   Register
                 </Link>
@@ -66,7 +66,7 @@ export default function LoginRedirectPage() {
             <p className="text-gray-600 mb-6">You&apos;re logged in as <strong>{user.email}</strong></p>
             <Link
               href="/user/my-businesses"
-              className="block text-center px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 font-medium mb-4"
+              className="block text-center px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium mb-4"
             >
               Go to Your Dashboard
             </Link>
@@ -85,7 +85,7 @@ export default function LoginRedirectPage() {
               <p className="text-gray-600 mb-6">Browse and discover restaurants and food businesses near you</p>
               <Link
                 href="/search"
-                className="block text-center px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 font-medium"
+                className="block text-center px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium"
               >
                 Browse Restaurants
               </Link>
@@ -97,7 +97,7 @@ export default function LoginRedirectPage() {
               <p className="text-gray-600 mb-6">Register your business and reach more customers online</p>
               <Link
                 href="/register"
-                className="block text-center px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 font-medium mb-3"
+                className="block text-center px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium mb-3"
               >
                 Register Your Business
               </Link>
@@ -133,3 +133,4 @@ export default function LoginRedirectPage() {
     </div>
   )
 }
+

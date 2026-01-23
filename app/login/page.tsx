@@ -80,16 +80,30 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-center items-center px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-[#ED1D33] flex flex-col justify-center items-center px-4">
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg py-15 m-auto flex flex-col ">
         {/* Logo */}
-        <div className="flex justify-center mb-8">
-          <Image src="/sliceblazelogo.svg" alt="SliceBlaze" width={150} height={150} />
-        </div>
+        <Link
+          className="m-auto pb-5 flex w-full justify-center"
+          href="/"
+          aria-label="Go to home"
+        >
+          <Image
+            src="/sliceblazelogo.svg"
+            alt="SliceBlaze"
+            width={150}
+            height={150}
+            className="cursor-pointer"
+          />
+        </Link>
 
         {/* Title */}
-        <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">Welcome Back</h1>
-        <p className="text-center text-gray-600 mb-8">Login to your SliceBlaze account</p>
+        <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">
+          Let’s take a slice
+        </h1>
+        <p className="text-center text-gray-600 mb-8">
+          All your slices, right where you left them.
+        </p>
 
         {/* Error Message */}
         {error && (
@@ -101,19 +115,23 @@ export default function LoginPage() {
         {/* Form */}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Username
+            </label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
-              placeholder="your_username"
+              placeholder="username"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
             <input
               type="password"
               value={password}
@@ -127,9 +145,9 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#ED1D33] hover:bg-red-700 text-white font-semibold py-3 rounded-lg transition disabled:opacity-50"
+            className="w-full bg-[#ED1D33] hover:bg-[#C91828] text-white font-semibold py-3 rounded-lg transition disabled:opacity-50"
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
@@ -142,19 +160,16 @@ export default function LoginPage() {
 
         {/* Register Link */}
         <p className="text-center text-gray-600">
-          Don&apos;t have an account?{' '}
-          <Link href="/register" className="text-[#ED1D33] font-semibold hover:underline">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/register"
+            className="text-[#ED1D33] font-semibold hover:underline"
+          >
             Register here
-          </Link>
-        </p>
-
-        {/* Admin Login Link */}
-        <p className="text-center text-gray-500 text-sm mt-4">
-          <Link href="/admin" className="text-gray-600 hover:text-[#ED1D33]">
-            Admin Login
           </Link>
         </p>
       </div>
     </div>
-  )
+  );
 }
+

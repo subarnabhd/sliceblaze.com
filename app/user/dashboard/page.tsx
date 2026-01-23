@@ -284,7 +284,7 @@ export default function UserDashboard() {
           </div>
           <button
             onClick={handleLogout}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828]"
           >
             Logout
           </button>
@@ -372,7 +372,7 @@ export default function UserDashboard() {
                   </button>
                   <button
                     onClick={handleUpdateProfile}
-                    className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-red-700 font-medium"
+                    className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-[#C91828] font-medium"
                   >
                     Save Changes
                   </button>
@@ -403,7 +403,7 @@ export default function UserDashboard() {
             <p className="text-gray-600 mb-6">Create your business profile to get started</p>
             <button
               onClick={() => setCreatingBusiness(true)}
-              className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 font-medium"
+              className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium"
             >
               Create My Business
             </button>
@@ -416,7 +416,7 @@ export default function UserDashboard() {
               <h2 className="text-2xl font-bold text-gray-900">Manage Business</h2>
               <button
                 onClick={handleDeleteBusiness}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium"
+                className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium"
               >
                 Delete Business
               </button>
@@ -551,7 +551,7 @@ export default function UserDashboard() {
               <div className="flex justify-end pt-4">
                 <button
                   onClick={handleUpdateBusiness}
-                  className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 font-medium"
+                  className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium"
                 >
                   Save Changes
                 </button>
@@ -716,7 +716,7 @@ export default function UserDashboard() {
                 </button>
                 <button
                   onClick={handleCreateBusiness}
-                  className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-red-700 font-medium"
+                  className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-[#C91828] font-medium"
                 >
                   Create Business
                 </button>
@@ -728,3 +728,4 @@ export default function UserDashboard() {
     </div>
   )
 }
+

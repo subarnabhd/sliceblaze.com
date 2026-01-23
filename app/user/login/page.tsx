@@ -109,18 +109,15 @@ export default function UserLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 font-medium disabled:bg-gray-400"
+            className="w-full py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium disabled:bg-gray-400"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
-        <div className="mt-4 text-center">
-          <Link href="/admin" className="text-sm text-[#ED1D33] hover:underline">
-            Admin Login
-          </Link>
-        </div>
+       
       </div>
     </div>
   )
 }
+

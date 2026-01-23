@@ -18,12 +18,6 @@ interface Business {
   facebook: string
   instagram: string
   tiktok: string
-  googleMapUrl: string
-  direction: string
-  menuUrl: string
-  wifiQrCode: string
-  brandPrimaryColor: string
-  brandSecondaryColor: string
   is_active: boolean
 }
 
@@ -137,12 +131,6 @@ export default function AdminDashboard() {
         facebook: editingBusiness.facebook,
         instagram: editingBusiness.instagram,
         tiktok: editingBusiness.tiktok,
-        googleMapUrl: editingBusiness.googleMapUrl,
-        direction: editingBusiness.direction,
-        menuUrl: editingBusiness.menuUrl,
-        wifiQrCode: editingBusiness.wifiQrCode,
-        brandPrimaryColor: editingBusiness.brandPrimaryColor,
-        brandSecondaryColor: editingBusiness.brandSecondaryColor,
         is_active: editingBusiness.is_active,
       })
       .eq('id', editingBusiness.id)
@@ -198,12 +186,6 @@ export default function AdminDashboard() {
       facebook: newBusinessData.facebook || '',
       instagram: newBusinessData.instagram || '',
       tiktok: newBusinessData.tiktok || '',
-      googleMapUrl: newBusinessData.googleMapUrl || '',
-      direction: newBusinessData.direction || '',
-      menuUrl: newBusinessData.menuUrl || '',
-      wifiQrCode: newBusinessData.wifiQrCode || '',
-      brandPrimaryColor: newBusinessData.brandPrimaryColor || '#1e40af',
-      brandSecondaryColor: newBusinessData.brandSecondaryColor || '#3b82f6',
       is_active: newBusinessData.is_active !== false,
     }
 
@@ -368,7 +350,7 @@ export default function AdminDashboard() {
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
           <button
             onClick={handleLogout}
-            className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium"
+            className="w-full px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium"
           >
             Logout
           </button>
@@ -469,7 +451,7 @@ export default function AdminDashboard() {
             <div className="flex justify-end mb-6">
               <button
                 onClick={() => setAddingBusiness(true)}
-                className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 font-medium flex items-center gap-2 shadow-md"
+                className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium flex items-center gap-2 shadow-md"
               >
                 <span className="text-xl">+</span> Add New Business
               </button>
@@ -545,7 +527,7 @@ export default function AdminDashboard() {
                         </button>
                         <button
                           onClick={() => handleDeleteBusiness(business.id)}
-                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium whitespace-nowrap"
+                          className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium whitespace-nowrap"
                         >
                           Delete
                         </button>
@@ -648,7 +630,7 @@ export default function AdminDashboard() {
             <div className="flex justify-end mb-6">
               <button
                 onClick={() => setAddingCategory(true)}
-                className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 font-medium flex items-center gap-2 shadow-md"
+                className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium flex items-center gap-2 shadow-md"
               >
                 <span className="text-xl">+</span> Add New Category
               </button>
@@ -696,7 +678,7 @@ export default function AdminDashboard() {
                         </button>
                         <button
                           onClick={() => handleDeleteCategory(category.id)}
-                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium whitespace-nowrap"
+                          className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium whitespace-nowrap"
                         >
                           Delete
                         </button>
@@ -768,7 +750,7 @@ export default function AdminDashboard() {
               </button>
               <button
                 onClick={handleCreateCategory}
-                className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-red-700 font-medium"
+                className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-[#C91828] font-medium"
               >
                 Create Category
               </button>
@@ -831,7 +813,7 @@ export default function AdminDashboard() {
               </button>
               <button
                 onClick={handleUpdateCategory}
-                className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-red-700 font-medium"
+                className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-[#C91828] font-medium"
               >
                 Save Changes
               </button>
@@ -1212,7 +1194,7 @@ export default function AdminDashboard() {
               </button>
               <button
                 onClick={handleCreateBusiness}
-                className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-red-700 font-medium"
+                className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-[#C91828] font-medium"
               >
                 Create Business
               </button>
@@ -1665,7 +1647,7 @@ export default function AdminDashboard() {
               </button>
               <button
                 onClick={handleUpdateBusiness}
-                className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-red-700 font-medium"
+                className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-[#C91828] font-medium"
               >
                 Save Changes
               </button>
@@ -1792,7 +1774,7 @@ export default function AdminDashboard() {
               </button>
               <button
                 onClick={handleUpdateUser}
-                className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-red-700 font-medium"
+                className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-[#C91828] font-medium"
               >
                 Save Changes
               </button>
@@ -1803,3 +1785,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

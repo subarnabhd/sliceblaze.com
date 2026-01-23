@@ -126,26 +126,30 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-[#ED1D33] to-red-800 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-[#ED1D33] to-[#A01520] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-xl">
         {/* Logo */}
-        <div className="flex justify-center mb-6">
+        <Link
+          className="m-auto pb-5 flex w-full justify-center"
+          href="/"
+          aria-label="Go to home"
+        >
           <Image
             src="/sliceblazelogo.svg"
-            alt="SliceBlaze logo"
+            alt="SliceBlaze"
             width={150}
-            height={60}
-            priority
+            height={150}
+            className="cursor-pointer"
           />
-        </div>
+        </Link>
 
         {/* Title */}
         <div>
           <h2 className="text-center text-2xl font-bold text-gray-900">
-            Create Account
+            Fuel the Blaze
           </h2>
           <p className="text-center text-gray-600 text-sm mt-2">
-            Join SliceBlaze and manage your business
+            Join Sliceblaze & manage your business
           </p>
         </div>
 
@@ -240,27 +244,34 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-[#ED1D33] hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ED1D33] disabled:opacity-50"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-[#ED1D33] hover:bg-[#C91828] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ED1D33] disabled:opacity-50"
           >
-            {loading ? 'Creating Account...' : 'Create Account'}
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 
         {/* Login Link */}
         <p className="text-center text-gray-600 text-sm">
-          Already have an account?{' '}
-          <Link href="/login" className="text-[#ED1D33] hover:text-red-700 font-medium">
-            Login here
+          Already have an account?{" "}
+          <Link
+            href="/login"
+            className="text-[#ED1D33] hover:text-[#C91828] font-medium"
+          >
+            Login
           </Link>
         </p>
 
         {/* Home Link */}
         <p className="text-center text-gray-600 text-sm">
-          <Link href="/" className="text-[#ED1D33] hover:text-red-700 font-medium">
+          <Link
+            href="/"
+            className="text-[#ED1D33] hover:text-[#C91828] font-medium"
+          >
             Back to Home
           </Link>
         </p>
       </div>
     </div>
-  )
+  );
 }
+

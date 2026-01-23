@@ -58,7 +58,7 @@ export default function BusinessProfilePage() {
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">Business Not Found</h1>
           <p className="text-gray-600 mb-6">The business you're looking for doesn't exist.</p>
-          <Link href="/" className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700">
+          <Link href="/" className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828]">
             Go Home
           </Link>
         </div>
@@ -177,7 +177,7 @@ export default function BusinessProfilePage() {
                 </a>
               )}
               {business.googleMapUrl && (
-                <a href={business.googleMapUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-red-600 hover:text-red-700">
+                <a href={business.googleMapUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#ED1D33] hover:text-[#C91828]">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                   </svg>

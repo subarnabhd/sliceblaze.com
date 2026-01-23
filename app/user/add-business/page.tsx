@@ -342,7 +342,7 @@ export default function AddBusinessPage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 font-medium disabled:opacity-50"
+              className="flex-1 px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium disabled:opacity-50"
             >
               {loading ? 'Creating...' : 'Create Business'}
             </button>
@@ -352,3 +352,4 @@ export default function AddBusinessPage() {
     </div>
   )
 }
+
