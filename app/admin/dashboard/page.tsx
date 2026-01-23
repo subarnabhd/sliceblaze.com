@@ -997,27 +997,9 @@ export default function AdminDashboard() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Menu URL
+                  TikTok
                 </label>
                 <input
-                  type="url"
-                  value={newBusinessData.menuUrl || ""}
-                  onChange={(e) =>
-                    setNewBusinessData({
-                      ...newBusinessData,
-                      menuUrl: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                  placeholder="Link to menu or website"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    TikTok
-                  </label>
-                  <input
                     type="url"
                     value={newBusinessData.tiktok || ""}
                     onChange={(e) =>
@@ -1029,41 +1011,6 @@ export default function AdminDashboard() {
                     className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
                     placeholder="TikTok profile URL"
                   />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Google Map URL
-                  </label>
-                  <input
-                    type="url"
-                    value={newBusinessData.googleMapUrl || ""}
-                    onChange={(e) =>
-                      setNewBusinessData({
-                        ...newBusinessData,
-                        googleMapUrl: e.target.value,
-                      })
-                    }
-                    className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                    placeholder="Google Maps link"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Direction
-                </label>
-                <input
-                  type="text"
-                  value={newBusinessData.direction || ""}
-                  onChange={(e) =>
-                    setNewBusinessData({
-                      ...newBusinessData,
-                      direction: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                  placeholder="Detailed address or directions"
-                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1081,85 +1028,6 @@ export default function AdminDashboard() {
                   className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
                   placeholder="/businessname.jpg"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  WiFi QR Code URL
-                </label>
-                <input
-                  type="text"
-                  value={newBusinessData.wifiQrCode || ""}
-                  onChange={(e) =>
-                    setNewBusinessData({
-                      ...newBusinessData,
-                      wifiQrCode: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                  placeholder="/qrcodes/business-wifi.png"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Brand Primary Color
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="color"
-                      value={newBusinessData.brandPrimaryColor || "#1e40af"}
-                      onChange={(e) =>
-                        setNewBusinessData({
-                          ...newBusinessData,
-                          brandPrimaryColor: e.target.value,
-                        })
-                      }
-                      className="w-12 h-10 rounded cursor-pointer"
-                    />
-                    <input
-                      type="text"
-                      value={newBusinessData.brandPrimaryColor || "#1e40af"}
-                      onChange={(e) =>
-                        setNewBusinessData({
-                          ...newBusinessData,
-                          brandPrimaryColor: e.target.value,
-                        })
-                      }
-                      className="flex-1 px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                      placeholder="#1e40af"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Brand Secondary Color
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="color"
-                      value={newBusinessData.brandSecondaryColor || "#3b82f6"}
-                      onChange={(e) =>
-                        setNewBusinessData({
-                          ...newBusinessData,
-                          brandSecondaryColor: e.target.value,
-                        })
-                      }
-                      className="w-12 h-10 rounded cursor-pointer"
-                    />
-                    <input
-                      type="text"
-                      value={newBusinessData.brandSecondaryColor || "#3b82f6"}
-                      onChange={(e) =>
-                        setNewBusinessData({
-                          ...newBusinessData,
-                          brandSecondaryColor: e.target.value,
-                        })
-                      }
-                      className="flex-1 px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                      placeholder="#3b82f6"
-                    />
-                  </div>
-                </div>
               </div>
               <div className="flex items-center">
                 <input
@@ -1366,26 +1234,9 @@ export default function AdminDashboard() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Menu URL
+                  TikTok
                 </label>
                 <input
-                  type="url"
-                  value={editingBusiness.menuUrl}
-                  onChange={(e) =>
-                    setEditingBusiness({
-                      ...editingBusiness,
-                      menuUrl: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    TikTok
-                  </label>
-                  <input
                     type="url"
                     value={editingBusiness.tiktok}
                     onChange={(e) =>
@@ -1397,41 +1248,6 @@ export default function AdminDashboard() {
                     className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
                     placeholder="TikTok profile URL"
                   />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Google Map URL
-                  </label>
-                  <input
-                    type="url"
-                    value={editingBusiness.googleMapUrl}
-                    onChange={(e) =>
-                      setEditingBusiness({
-                        ...editingBusiness,
-                        googleMapUrl: e.target.value,
-                      })
-                    }
-                    className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                    placeholder="Google Maps link"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Direction
-                </label>
-                <input
-                  type="text"
-                  value={editingBusiness.direction}
-                  onChange={(e) =>
-                    setEditingBusiness({
-                      ...editingBusiness,
-                      direction: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                  placeholder="Detailed address or directions"
-                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1492,129 +1308,6 @@ export default function AdminDashboard() {
                       />
                     </div>
                   )}
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  WiFi QR Code
-                </label>
-                <div className="space-y-2">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={async (e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        const formData = new FormData();
-                        formData.append("file", file);
-
-                        try {
-                          const response = await fetch("/api/upload", {
-                            method: "POST",
-                            body: formData,
-                          });
-                          const result = await response.json();
-                          if (result.success) {
-                            setEditingBusiness({
-                              ...editingBusiness,
-                              wifiQrCode: result.url,
-                            });
-                          } else {
-                            alert("Upload failed: " + result.error);
-                          }
-                        } catch (error) {
-                          alert("Upload error");
-                        }
-                      }
-                    }}
-                    className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                  />
-                  <input
-                    type="text"
-                    value={editingBusiness.wifiQrCode}
-                    onChange={(e) =>
-                      setEditingBusiness({
-                        ...editingBusiness,
-                        wifiQrCode: e.target.value,
-                      })
-                    }
-                    className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                    placeholder="/qrcodes/business-wifi.png or paste URL"
-                  />
-                  {editingBusiness.wifiQrCode && (
-                    <div className="mt-2">
-                      <img
-                        src={editingBusiness.wifiQrCode}
-                        alt="WiFi QR code preview"
-                        className="h-20 w-20 object-cover rounded border border-gray-300"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = "none";
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Brand Primary Color
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="color"
-                      value={editingBusiness.brandPrimaryColor}
-                      onChange={(e) =>
-                        setEditingBusiness({
-                          ...editingBusiness,
-                          brandPrimaryColor: e.target.value,
-                        })
-                      }
-                      className="w-12 h-10 rounded cursor-pointer"
-                    />
-                    <input
-                      type="text"
-                      value={editingBusiness.brandPrimaryColor}
-                      onChange={(e) =>
-                        setEditingBusiness({
-                          ...editingBusiness,
-                          brandPrimaryColor: e.target.value,
-                        })
-                      }
-                      className="flex-1 px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                      placeholder="#1e40af"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Brand Secondary Color
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="color"
-                      value={editingBusiness.brandSecondaryColor}
-                      onChange={(e) =>
-                        setEditingBusiness({
-                          ...editingBusiness,
-                          brandSecondaryColor: e.target.value,
-                        })
-                      }
-                      className="w-12 h-10 rounded cursor-pointer"
-                    />
-                    <input
-                      type="text"
-                      value={editingBusiness.brandSecondaryColor}
-                      onChange={(e) =>
-                        setEditingBusiness({
-                          ...editingBusiness,
-                          brandSecondaryColor: e.target.value,
-                        })
-                      }
-                      className="flex-1 px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
-                      placeholder="#3b82f6"
-                    />
-                  </div>
                 </div>
               </div>
               <div className="flex items-center">
