@@ -91,7 +91,7 @@ export default function BusinessProfilePage() {
       <div className="max-w-4xl mx-auto px-4">
         {/* Business Header */}
         <div
-          className="bg-white rounded-lg shadow-lg overflow-hidden mb-6"
+          className="mx-auto w-[100%] max-w-[1350px] md:max-w-6xl rounded-2xl border border-gray-200 bg-white/70 drop-shadow-xl backdrop-blur-lg md:px-4 lg:max-w-6xl lg:px-4 px-4 transition-all duration-500 ease-in-out lg:py-3 py-4 overflow-hidden mb-6"
           style={{
             borderTop: `4px solid ${business.brandprimarycolor || business.brandPrimaryColor || "#ED1D33"}`,
           }}

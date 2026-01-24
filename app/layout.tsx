@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
-import ConditionalHeader from "@/components/ConditionalHeader";
+import Header from "@/components/Header";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -25,7 +25,7 @@ export default function RootLayout({
         className={`${outfit.variable} font-sans antialiased bg-white`}
         suppressHydrationWarning
       >
-        <ConditionalHeader />
+        <Header />
         {children}
       </body>
     </html>
