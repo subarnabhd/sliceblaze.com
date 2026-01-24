@@ -3,11 +3,7 @@
  * Run with: node scripts/migrate-businesses.js
  */
 
-import dotenv from 'dotenv'
 import { createClient } from '@supabase/supabase-js'
-
-// Load environment variables
-dotenv.config({ path: '.env.local' })
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -19,177 +15,66 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Your business data
+// Your business data - Complete list from all sources
 const businesses = [
-  {
-    username: "ujamaakoffie",
-    name: "Ujamaa Koffie & Bakery with Library",
-    location: "Kathmandu",
-    category: "Cafe",
-    image: "/ujamaakoffie.jpg",
-    description: "Cozy coffee cafe serving fresh drinks and snacks.",
-    contact: "9851357358",
-    openingHours: "7 AM - 9 PM",
-    facebook: "https://www.facebook.com/ujamaakoffie",
-    instagram: "https://www.instagram.com/ujamaakoffie",
-    tiktok: "https://www.tiktok.com/@ujamaakoffie",
-    googleMapUrl: "https://maps.google.com/?q=Ujamaa+Koffie+Kathmandu",
-    direction: "Lazy 1, Kathmandu",
-    menuUrl: "https://example.com/menu",
-    wifiQrCode: "/qrcodes/ujamaakoffie-wifi.png",
-    brandPrimaryColor: "#8B4513",
-    brandSecondaryColor: "#D2691E",
-  },
-  {
-    username: "parikarmarestro",
-    name: "Parikarma Restro",
-    location: "Kathmandu",
-    category: "Food & Beverage",
-    image: "/parikarmarestro.png",
-    description: "Trendy restaurant offering fusion cuisine and cocktails.",
-    contact: "9841234567",
-    openingHours: "11 AM - 11 PM",
-    facebook: "https://www.facebook.com/parikarmarestro",
-    instagram: "https://www.instagram.com/parikarmarestro",
-    tiktok: "https://www.tiktok.com/@parikarmarestro",
-    googleMapUrl: "https://maps.google.com/?q=Parikarma+Restro+Kathmandu",
-    direction: "Thamel, Kathmandu",
-    menuUrl: "https://example.com/parikarma-menu",
-    wifiQrCode: "/qrcodes/parikarmarestro-wifi.png",
-    brandPrimaryColor: "#C41E3A",
-    brandSecondaryColor: "#FF6B6B",
-  },
-  {
-    username: "kaveriinn",
-    name: "Kaveri Inn",
-    location: "Gyaneshwor, Kathmandu",
-    category: "Hotel",
-    image: "/kaveriinn.png",
-    description: "",
-    contact: "",
-    openingHours: "",
-    facebook: "",
-    instagram: "",
-    tiktok: "",
-    googleMapUrl: "",
-    direction: "",
-    menuUrl: "",
-    wifiQrCode: "",
-    brandPrimaryColor: "#1e40af",
-    brandSecondaryColor: "#3b82f6",
-  },
-  {
-    username: "kteam",
-    name: "KTEAM",
-    location: "Kathmandu",
-    category: "Food & Beverage",
-    image: "/kteam.png",
-    description: "",
-    contact: "",
-    openingHours: "",
-    facebook: "",
-    instagram: "",
-    tiktok: "",
-    googleMapUrl: "",
-    direction: "",
-    menuUrl: "",
-    wifiQrCode: "",
-    brandPrimaryColor: "#7c2d12",
-    brandSecondaryColor: "#ea580c",
-  },
-  {
-    username: "aahanewaSpice",
-    name: "Aaha Newa Spice",
-    location: "Baneshwor, Kathmandu",
-    category: "Food & Beverage",
-    image: "/aahanewaSpice.jpg",
-    description: "",
-    contact: "",
-    openingHours: "",
-    facebook: "",
-    instagram: "",
-    tiktok: "",
-    googleMapUrl: "",
-    direction: "",
-    menuUrl: "",
-    wifiQrCode: "",
-    brandPrimaryColor: "#991b1b",
-    brandSecondaryColor: "#dc2626",
-  },
-  {
-    username: "mellowgarden",
-    name: "Mellow Garden",
-    location: "Kathmandu",
-    category: "Food & Beverage",
-    image: "/mellowgarden.png",
-    description: "",
-    contact: "",
-    openingHours: "",
-    facebook: "",
-    instagram: "",
-    tiktok: "",
-    googleMapUrl: "",
-    direction: "",
-    menuUrl: "",
-    wifiQrCode: "",
-    brandPrimaryColor: "#15803d",
-    brandSecondaryColor: "#22c55e",
-  },
-  {
-    username: "sheelsekuwa",
-    name: "Sheel Sekuwa & Kitchen",
-    location: "Kathmandu",
-    category: "Food & Beverage",
-    image: "/sheelsekuwa.jpg",
-    description: "",
-    contact: "",
-    openingHours: "",
-    facebook: "",
-    instagram: "",
-    tiktok: "",
-    googleMapUrl: "",
-    direction: "",
-    menuUrl: "",
-    wifiQrCode: "",
-    brandPrimaryColor: "#7c2d12",
-    brandSecondaryColor: "#b45309",
-  },
-  {
-    username: "umojacoffee",
-    name: "Umoja Coffee",
-    location: "Kathmandu",
-    category: "Food & Beverage",
-    image: "/umojacoffee.jpg",
-    description: "",
-    contact: "",
-    openingHours: "",
-    facebook: "",
-    instagram: "",
-    tiktok: "",
-    googleMapUrl: "",
-    direction: "",
-    menuUrl: "",
-    wifiQrCode: "",
-    brandPrimaryColor: "#5b21b6",
-    brandSecondaryColor: "#a855f7",
-  },
+  { username: 'aahanewaSpice', name: 'Aaha Newa Spice', location: 'Baneshwor, Kathmandu', category: 'Food & Beverage', image: '/business/aahanewaSpice.jpg', description: '', contact: '', openinghours: '', facebook: '', instagram: '', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#991b1b', brandsecondarycolor: '#dc2626' },
+  { username: 'antearestro', name: 'Antea Restro', location: 'Kathmandu', category: 'Restaurant', image: '/business/antearestro.jpg', description: 'Fine dining restaurant', contact: '', openinghours: '', facebook: 'https://www.facebook.com/p/Antea-Restro-100089633284887/', instagram: 'https://www.instagram.com/antearestro/', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#ef4444', brandsecondarycolor: '#dc2626' },
+  { username: 'bambooteamaster', name: 'Bamboo Tea Master', location: 'Kathmandu', category: 'Cafe', image: '/business/bambooteamaster.jpg', description: 'Tea specialists and cafe', contact: '', openinghours: '', facebook: 'https://www.facebook.com/bambooteamaster/', instagram: 'https://www.instagram.com/bamboo_teamaster/', tiktok: '', googlemapurl: '', direction: '', menuurl: 'http://bambooteamaster.com.np/', wifiqrcode: '', brandprimarycolor: '#65a30d', brandsecondarycolor: '#84cc16' },
+  { username: 'best3', name: 'Best 3 The Kitchen & Bar', location: 'Kathmandu', category: 'Restaurant & Bar', image: '/business/best3.png', description: 'Kitchen and bar experience', contact: '', openinghours: '', facebook: 'https://www.facebook.com/profile.php?id=61555859080364', instagram: '', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#0891b2', brandsecondarycolor: '#06b6d4' },
+  { username: 'bhojannapurnaa', name: 'Bhoj Annapurnaa', location: 'Kathmandu', category: 'Restaurant & Bar', image: '/business/bhojannapurnnaa.jpg', description: 'Traditional restaurant and bar', contact: '', openinghours: '', facebook: 'https://www.facebook.com/bhojannapurnaa/', instagram: 'https://www.instagram.com/bhojannapurnaa/', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#b91c1c', brandsecondarycolor: '#dc2626' },
+  { username: 'chiyaconnection', name: 'Chiya Connection', location: 'Kathmandu', category: 'Cafe', image: '/business/chiyaconnection.png', description: 'Tea cafe connecting people', contact: '', openinghours: '', facebook: '', instagram: 'https://www.instagram.com/chiya_connection/', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#ca8a04', brandsecondarycolor: '#eab308' },
+  { username: 'chiyamandala', name: 'Chiya Mandala', location: 'Kathmandu', category: 'Cafe', image: '/business/chiyamandala.png', description: 'Tea cafe with unique ambiance', contact: '', openinghours: '', facebook: 'https://www.facebook.com/p/Chiya-Mandala-61571089747446/', instagram: 'https://www.instagram.com/chiya_mandala/', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#4f46e5', brandsecondarycolor: '#6366f1' },
+  { username: 'chiyamantralaya', name: 'Chiya Mantralaya', location: 'Kathmandu', category: 'Cafe', image: '/business/chiyamantralaya.png', description: 'Spiritual tea experience', contact: '', openinghours: '', facebook: 'https://www.facebook.com/chiyamantralaya/', instagram: 'https://www.instagram.com/chiya_mantralaya_/', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#7c3aed', brandsecondarycolor: '#8b5cf6' },
+  { username: 'debajicafe', name: 'Debaji Cafe', location: 'Kathmandu', category: 'Cafe', image: '/business/debajicafe.jpg', description: 'Cozy neighborhood cafe', contact: '', openinghours: '', facebook: 'https://www.facebook.com/p/Debaji-Cafe-61574432577801/', instagram: 'https://www.instagram.com/cafedebaji', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#be123c', brandsecondarycolor: '#e11d48' },
+  { username: 'dumbiryani', name: 'Dum Biryani', location: 'Kathmandu', category: 'Restaurant', image: '/business/dumbiryani.jpg', description: 'Biryani and kebab specialists', contact: '', openinghours: '', facebook: 'https://www.facebook.com/dbkparadise2207/', instagram: 'https://www.instagram.com/dbkparadise2207/', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#ea580c', brandsecondarycolor: '#f97316' },
+  { username: 'firerestro', name: 'Fire Restro & Bar', location: 'Kathmandu', category: 'Restaurant & Bar', image: '/business/firerestro&bar.jpg', description: 'Fiery dining and bar experience', contact: '', openinghours: '', facebook: 'https://www.facebook.com/profile.php?id=61571737874141', instagram: '', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#dc2626', brandsecondarycolor: '#ef4444' },
+  { username: 'greenhouseresturant', name: 'Green House Restaurant', location: 'Kathmandu', category: 'Restaurant', image: '/business/greenhouseresturant.png', description: 'Fresh and green dining', contact: '', openinghours: '', facebook: 'https://www.facebook.com/p/Green-House-Restaurant-61571558294062/', instagram: 'https://www.instagram.com/gre.enhouse7', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#16a34a', brandsecondarycolor: '#22c55e' },
+  { username: 'horaacafe', name: 'Horaa Cafe', location: 'Kathmandu', category: 'Cafe', image: '/business/horaacafe.jpg', description: 'Traditional cafe experience', contact: '', openinghours: '', facebook: '', instagram: '', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#854d0e', brandsecondarycolor: '#a16207' },
+  { username: 'iranichiya', name: 'Irani Chiya', location: 'Kathmandu', category: 'Cafe', image: '/business/iranichiya.jpg', description: 'Iranian style tea cafe', contact: '', openinghours: '', facebook: '', instagram: 'https://www.instagram.com/iranichiyaa/', tiktok: '', googlemapurl: '', direction: '', menuurl: 'https://iranichiya.com/', wifiqrcode: '', brandprimarycolor: '#b91c1c', brandsecondarycolor: '#dc2626' },
+  { username: 'kathmanduheighthotel', name: 'Kathmandu Height Hotel', location: 'Kathmandu', category: 'Hotel', image: '/business/Kathmanduheighthotel.jpg', description: 'Boutique hotel with city views', contact: '', openinghours: '', facebook: 'https://www.facebook.com/Kathmanduheightboutiquehotel', instagram: '', tiktok: '', googlemapurl: '', direction: '', menuurl: 'https://www.ktmheighthotel.com/', wifiqrcode: '', brandprimarycolor: '#1e40af', brandsecondarycolor: '#3b82f6' },
+  { username: 'kaveriinn', name: 'Kaveri Inn', location: 'Gyaneshwor, Kathmandu', category: 'Hotel', image: '/business/kaveriinn.png', description: '', contact: '', openinghours: '', facebook: '', instagram: '', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#1e40af', brandsecondarycolor: '#3b82f6' },
+  { username: 'kimburestro', name: 'Kimbu Restro', location: 'Kathmandu', category: 'Restaurant', image: '/business/kimburestro.png', description: 'Contemporary dining experience', contact: '', openinghours: '', facebook: 'https://www.facebook.com/kimburestro/', instagram: 'https://www.instagram.com/kimburestro/', tiktok: '', googlemapurl: '', direction: '', menuurl: 'https://kimburestro.com/', wifiqrcode: '', brandprimarycolor: '#b91c1c', brandsecondarycolor: '#dc2626' },
+  { username: 'koshelithakali', name: 'Kosheli Thakali', location: 'Kathmandu', category: 'Restaurant', image: '/business/koshelithakali.jpg', description: 'Authentic Thakali cuisine', contact: '', openinghours: '', facebook: 'https://www.facebook.com/koshelithakali/', instagram: '', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#991b1b', brandsecondarycolor: '#dc2626' },
+  { username: 'krystalfoodcafe', name: 'Krystal Food Cafe', location: 'Kathmandu', category: 'Cafe', image: '/business/krystalfoodcafe.jpg', description: 'Food cafe with crystal clear service', contact: '', openinghours: '', facebook: 'https://www.facebook.com/krystalcafe.info/', instagram: 'https://www.instagram.com/krystalfoodcafe/', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#0284c7', brandsecondarycolor: '#0ea5e9' },
+  { username: 'kteam', name: 'KTEAM', location: 'Kathmandu', category: 'Food & Beverage', image: '/business/kteam.png', description: '', contact: '', openinghours: '', facebook: '', instagram: '', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#7c2d12', brandsecondarycolor: '#ea580c' },
+  { username: 'makaighar', name: 'Makai Ghar', location: 'Kathmandu', category: 'Restaurant', image: '/business/makaigharnepalichulo.jpg', description: 'Traditional Nepali cuisine', contact: '', openinghours: '', facebook: 'https://www.facebook.com/MakaiGhar/', instagram: 'https://www.instagram.com/makaigharnepalichulo/', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#ca8a04', brandsecondarycolor: '#eab308' },
+  { username: 'mellowgarden', name: 'Mellow Garden', location: 'Kathmandu', category: 'Food & Beverage', image: '/business/mellowgarden.png', description: '', contact: '', openinghours: '', facebook: '', instagram: '', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#15803d', brandsecondarycolor: '#22c55e' },
+  { username: 'mithilachiyalaya', name: 'Mithila Chiyalaya', location: 'Kathmandu', category: 'Cafe', image: '/business/mithilachiyalaya.jpg', description: 'Mithila culture tea house', contact: '', openinghours: '', facebook: '', instagram: 'https://www.instagram.com/mithila_chiyalaya/', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#dc2626', brandsecondarycolor: '#ef4444' },
+  { username: 'nepalexpressbakery', name: 'Nepal Express Bakery', location: 'Kathmandu', category: 'Bakery', image: '/business/nepalexpressbakery.png', description: 'Fresh bakery products', contact: '', openinghours: '', facebook: 'https://www.facebook.com/nepalexpressbakery/', instagram: 'https://www.instagram.com/nepal_express_bakery10/', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#ea580c', brandsecondarycolor: '#f97316' },
+  { username: 'parikarmarestro', name: 'Parikarma Restro', location: 'Kathmandu', category: 'Food & Beverage', image: '/business/parikarmarestro.png', description: 'Trendy restaurant offering fusion cuisine and cocktails', contact: '9841234567', openinghours: '11 AM - 11 PM', facebook: 'https://www.facebook.com/parikarmarestro', instagram: 'https://www.instagram.com/parikarmarestro', tiktok: 'https://www.tiktok.com/@parikarmarestro', googlemapurl: 'https://maps.google.com/?q=Parikarma+Restro+Kathmandu', direction: 'Thamel, Kathmandu', menuurl: 'https://example.com/parikarma-menu', wifiqrcode: '/qrcodes/parikarmarestro-wifi.png', brandprimarycolor: '#C41E3A', brandsecondarycolor: '#FF6B6B' },
+  { username: 'parpalabistrocafe', name: 'Parpala Bistro & Cafe', location: 'Kathmandu', category: 'Cafe', image: '/business/parpalabistrocafe.jpg', description: 'Bistro style cafe', contact: '', openinghours: '', facebook: 'https://www.facebook.com/parpalabistrocafe/', instagram: 'https://www.instagram.com/parpalabistrocafe', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#9333ea', brandsecondarycolor: '#a855f7' },
+  { username: 'primechiya', name: 'Prime Chiya', location: 'Kathmandu', category: 'Cafe', image: '/business/primechiya.jpg', description: 'Premium tea experience', contact: '', openinghours: '', facebook: '', instagram: 'https://www.instagram.com/primechiya/', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#be185d', brandsecondarycolor: '#db2777' },
+  { username: 'sheelsekuwa', name: 'Sheel Sekuwa', location: 'Kathmandu', category: 'Food & Beverage', image: '/business/sheelsekuwa.jpg', description: '', contact: '', openinghours: '', facebook: '', instagram: '', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#7c2d12', brandsecondarycolor: '#b45309' },
+  { username: 'singhskitchen', name: 'Singh\'s Kitchen', location: 'Kathmandu', category: 'Restaurant', image: '/business/singhskitchen.jpg', description: 'Home-style cooking', contact: '', openinghours: '', facebook: 'https://www.facebook.com/singhskitchenofficial', instagram: 'https://www.instagram.com/singhskitchenofficial', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#15803d', brandsecondarycolor: '#22c55e' },
+  { username: 'tastegarden', name: 'Taste Garden', location: 'Kathmandu', category: 'Restaurant', image: '/business/tastegarden.jpg', description: 'Garden restaurant experience', contact: '', openinghours: '', facebook: 'https://www.facebook.com/tastegardenofficial/', instagram: 'https://www.instagram.com/tastegardenofficial/', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#059669', brandsecondarycolor: '#10b981' },
+  { username: 'templetree', name: 'Temple Tree', location: 'Kathmandu', category: 'Restaurant & Bar', image: '/business/templetree.jpg', description: 'Elegant lounge and dining', contact: '', openinghours: '', facebook: 'https://www.instagram.com/temple_tree_restaurant', instagram: 'https://www.instagram.com/temple_tree_restaurant', tiktok: '', googlemapurl: '', direction: '', menuurl: 'https://www.templetreerestaurant.com.np/', wifiqrcode: '', brandprimarycolor: '#7c3aed', brandsecondarycolor: '#8b5cf6' },
+  { username: 'theexoticarestaurant', name: 'The Exotica Restaurant', location: 'Kathmandu', category: 'Restaurant', image: '/business/theexoticarestaurant.png', description: 'Exotic dining experience', contact: '', openinghours: '', facebook: 'https://www.facebook.com/TheExtcaPub/', instagram: 'https://www.instagram.com/the_exotica_restaurant', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#be123c', brandsecondarycolor: '#e11d48' },
+  { username: 'uhilekochiya', name: 'Uhileko Chiya', location: 'Kathmandu', category: 'Cafe', image: '/business/uhilekochiya.jpg', description: 'Traditional tea house', contact: '', openinghours: '', facebook: '', instagram: 'https://www.instagram.com/uhileko.chiya/', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#92400e', brandsecondarycolor: '#b45309' },
+  { username: 'ujamaakoffie', name: 'Ujamaa Koffie', location: 'Kathmandu', category: 'Cafe', image: '/business/ujamaakoffie.jpg', description: 'Cozy coffee cafe serving fresh drinks and snacks', contact: '9851357358', openinghours: '7 AM - 9 PM', facebook: 'https://www.facebook.com/ujamaakoffie', instagram: 'https://www.instagram.com/ujamaakoffie', tiktok: 'https://www.tiktok.com/@ujamaakoffie', googlemapurl: 'https://maps.google.com/?q=Ujamaa+Koffie+Kathmandu', direction: 'Lazy 1, Kathmandu', menuurl: 'https://example.com/menu', wifiqrcode: '/qrcodes/ujamaakoffie-wifi.png', brandprimarycolor: '#8B4513', brandsecondarycolor: '#D2691E' },
+  { username: 'ujimacoffeeacademy', name: 'Ujima Coffee Academy', location: 'Kathmandu', category: 'Cafe & Training', image: '/business/ujimacoffeeacademy.jpg', description: 'Coffee academy and cafe', contact: '', openinghours: '', facebook: 'https://www.facebook.com/profile.php?id=61569550105517', instagram: 'https://www.instagram.com/ujimacoffeeacademy/', tiktok: '', googlemapurl: '', direction: '', menuurl: 'https://ujimacoffee.com/', wifiqrcode: '', brandprimarycolor: '#78350f', brandsecondarycolor: '#92400e' },
+  { username: 'umojacoffee', name: 'Umoja Coffee', location: 'Kathmandu', category: 'Food & Beverage', image: '/business/umojacoffee.jpg', description: '', contact: '', openinghours: '', facebook: '', instagram: '', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#5b21b6', brandsecondarycolor: '#a855f7' },
+  { username: 'yatrisuitesandspa', name: 'Yatri Suites and Spa', location: 'Kathmandu', category: 'Hotel', image: '/business/yatrisuitesandspa.jpg', description: 'Luxury suites and spa', contact: '', openinghours: '', facebook: '', instagram: '', tiktok: '', googlemapurl: '', direction: '', menuurl: '', wifiqrcode: '', brandprimarycolor: '#1e3a8a', brandsecondarycolor: '#3b82f6' },
 ];
 
 async function migrate() {
   try {
     console.log('Starting migration...');
+    console.log(`Upserting ${businesses.length} businesses...\n`);
     
-    // Insert businesses
+    // Use upsert to insert or update businesses
     const { error } = await supabase
       .from('businesses')
-      .insert(businesses);
+      .upsert(businesses, {
+        onConflict: 'username',
+        ignoreDuplicates: false
+      });
 
     if (error) {
       console.error('Migration failed:', error);
       process.exit(1);
     }
 
-    console.log(`✅ Successfully migrated ${businesses.length} businesses!`);
+    console.log(`\n✅ Successfully migrated ${businesses.length} businesses!`);
     process.exit(0);
   } catch (err) {
     console.error('Migration error:', err);

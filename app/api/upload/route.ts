@@ -15,15 +15,19 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes)
 
     // Create unique filename
-    const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
-    const filepath = path.join(process.cwd(), 'public', filename)
+    const timestamp = Date.now()
+    const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
+    const filename = `${timestamp}-${sanitizedName}`
+    
+    // Save to public/business directory
+    const filepath = path.join(process.cwd(), 'public', 'business', filename)
 
     await writeFile(filepath, buffer)
 
     return NextResponse.json({ 
       success: true, 
-      filename: `/${filename}`,
-      url: `/${filename}`
+      filename: filename,
+      url: `/business/${filename}`
     })
   } catch (error) {
     console.error('Upload error:', error)

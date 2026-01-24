@@ -32,12 +32,16 @@ export default function BusinessProfilePage() {
   const username = params.username as string
   const [business, setBusiness] = useState<Business | null>(null)
   const [loading, setLoading] = useState(true)
+  const [imgSrc, setImgSrc] = useState('/sample.svg')
 
   useEffect(() => {
     async function fetchBusiness() {
       if (username) {
         const data = await getBusinessByUsername(username)
         setBusiness(data)
+        if (data?.image) {
+          setImgSrc(data.image)
+        }
         setLoading(false)
       }
     }
@@ -57,7 +61,7 @@ export default function BusinessProfilePage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">Business Not Found</h1>
-          <p className="text-gray-600 mb-6">The business you're looking for doesn't exist.</p>
+          <p className="text-gray-600 mb-6">The business you are looking for does not exist.</p>
           <Link href="/" className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828]">
             Go Home
           </Link>
@@ -78,17 +82,16 @@ export default function BusinessProfilePage() {
         >
           <div className="p-8">
             <div className="flex items-start gap-6">
-              {business.image && (
-                <div className="shrink-0">
-                  <Image
-                    src={business.image}
-                    alt={business.name}
-                    width={120}
-                    height={120}
-                    className="rounded-lg object-cover"
-                  />
-                </div>
-              )}
+              <div className="shrink-0">
+                <Image
+                  src={imgSrc}
+                  alt={business.name}
+                  width={120}
+                  height={120}
+                  className="rounded-lg object-cover"
+                  onError={() => setImgSrc('/sample.svg')}
+                />
+              </div>
               <div className="flex-1">
                 <h1 className="text-4xl font-bold text-gray-900 mb-2">{business.name}</h1>
                 <p className="text-lg text-gray-600 mb-1">{business.category}</p>
