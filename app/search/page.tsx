@@ -28,7 +28,7 @@ interface Category {
 function BusinessCardSkeleton() {
   return (
     
-    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden h-full animate-pulse">
+    <div className="container bg-white border border-gray-200 rounded-lg overflow-hidden h-full animate-pulse">
       {/* Image Skeleton */}
       <div className="w-full h-48 bg-gray-200" />
       
@@ -168,7 +168,7 @@ function SearchPageContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="container  mx-auto px-6 py-8">
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Discover Businesses</h1>
@@ -291,7 +291,7 @@ function SearchPageContent() {
                       href={`/${business.username}`}
                       className="group"
                     >
-                      <div className="bg-white p-5 border border-gray-200 rounded-lg  hover:shadow-lg transition overflow-hidden h-full">
+                      <div className="bg-white p-5 flex flex-col  border border-gray-200 rounded-lg  hover:shadow-lg transition overflow-hidden h-full">
                         {/* Business Image */}
                         {business.image && (
                           <div className="relative w-full h-48 bg-gray-200 overflow-hidden">
@@ -305,7 +305,7 @@ function SearchPageContent() {
                         )}
 
                         {/* Business Info */}
-                        <div className="p-5">
+                        <div className="">
                           <div className="flex items-start justify-between mb-2">
                             <h3 className="text-lg font-bold text-gray-800 group-hover:text-[#ED1D33] transition">
                               {business.name}
@@ -377,9 +377,9 @@ function SearchPageContent() {
                         </div>
 
                         {/* View Details Button */}
-                        <div className="px-5 pb-5">
+                      
                           <button
-                            className="w-full px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] transition font-medium text-sm"
+                            className="w-full px-4 py-2 mt-4 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] transition font-medium text-sm"
                             onClick={(e) => {
                               e.preventDefault()
                               router.push(`/${business.username}`)
@@ -387,7 +387,7 @@ function SearchPageContent() {
                           >
                             View Details
                           </button>
-                        </div>
+                      
                       </div>
                     </Link>
                   ))}

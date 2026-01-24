@@ -79,37 +79,66 @@ export default function Header() {
 
   return (
     <header
-      className={`w-full flex justify-center sticky top-0 z-50 transition-all duration-200 ease-in-out border-b ${
+      className={`w-full flex justify-center sticky top-0 z-50 transition-all duration-200 ease-in-out  ${
         isScrolled
           ? "py-4 bg-transparent border-transparent"
           : "py-0 bg-[#ffffffd1] backdrop-blur-md border-gray-200"
       }`}
     >
-      <div className="conatiner flex justify-between w-full max-w-[1350px]">
+      <div className="conatiner flex justify-between w-full max-w-[1120px]">
         <div
-          className={`flex justify-between items-center w-full transition-all duration-200 ease-in-out border rounded-2xl ${
+          className={`grid grid-cols-3 items-center w-full transition-all duration-200 ease-in-out border rounded-2xl ${
             isScrolled
-              ? "max-w-[1350px] border-gray-200 bg-white/70 drop-shadow-xl backdrop-blur-lg md:px-4 lg:px-4 px-4 lg:py-3 py-4"
-              : "px-8 py-6 border-transparent"
+              ? "max-w-[1120px] border-gray-200 bg-white/70 drop-shadow-xl backdrop-blur-lg md:px-4 lg:px-4 px-4 lg:py-4 py-4"
+              : "px-8 py-4 border-transparent"
           }`}
         >
+          {/* Left - Logo */}
           <Link
             href="/"
             aria-label="Go to home"
-            className="flex items-center justify-center shrink-0"
+            className="flex items-center justify-start"
           >
             <Image
               src="/sliceblazelogo.svg"
               alt="SliceBlaze logo"
-              width={80}
+              width={90}
               height={30}
               priority
               className="cursor-pointer"
             />
           </Link>
 
+          {/* Middle - Navigation Menu */}
+          <nav className="hidden md:flex items-center justify-center gap-8">
+            <Link
+              href="/"
+              className="text-gray-700 hover:text-[#ED1D33] font-medium transition-colors"
+            >
+              Home
+            </Link>
+            <Link
+              href="#features"
+              className="text-gray-700 hover:text-[#ED1D33] font-medium transition-colors"
+            >
+              Features
+            </Link>
+            <Link
+              href="/search"
+              className="text-gray-700 hover:text-[#ED1D33] font-medium transition-colors"
+            >
+              Explore
+            </Link>
+            <Link
+              href="#contact"
+              className="text-gray-700 hover:text-[#ED1D33] font-medium transition-colors"
+            >
+              Contact
+            </Link>
+          </nav>
+
           {/* Right - User Profile or Login */}
-          <div className="shrink-0 w-auto flex justify-end ml-auto">
+          <div className="flex justify-end">
             {user ? (
               <div className="relative" ref={dropdownRef}>
                 <button
