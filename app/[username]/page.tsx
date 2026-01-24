@@ -16,15 +16,21 @@ interface Business {
   description: string
   contact: string
   openingHours: string
+  openinghours?: string
   facebook: string
   instagram: string
   tiktok: string
   googleMapUrl: string
+  googlemapurl?: string
   direction: string
   menuUrl: string
+  menuurl?: string
   wifiQrCode: string
+  wifiqrcode?: string
   brandPrimaryColor: string
+  brandprimarycolor?: string
   brandSecondaryColor: string
+  brandsecondarycolor?: string
 }
 
 export default function BusinessProfilePage() {
