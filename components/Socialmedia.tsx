@@ -17,7 +17,7 @@ const Socialmedia = () => {
       role="navigation"
     >
       <Link
-        href="https://www.facebook.com/letsvhandar"
+        href="https://www.facebook.com/sliceblaze"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Vhandar Facebook page"
@@ -29,7 +29,7 @@ const Socialmedia = () => {
       </Link>
 
       <Link
-        href="https://www.instagram.com/letsvhandar"
+        href="https://www.instagram.com/sliceblaze"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Vhandar Instagram profile"
@@ -40,8 +40,8 @@ const Socialmedia = () => {
         <span className="sr-only">Instagram</span>
       </Link>
 
-      <Link
-        href="https://www.x.com/@letsvhandar"
+      {/* <Link
+        href="https://www.x.com/@sliceblaze"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Vhandar Twitter profile"
@@ -53,7 +53,7 @@ const Socialmedia = () => {
       </Link>
 
       <Link
-        href="https://www.tiktok.com/@letsvhandar"
+        href="https://www.tiktok.com/@sliceblaze"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Vhandar TikTok profile"
@@ -65,7 +65,7 @@ const Socialmedia = () => {
       </Link>
 
       <Link
-        href="https://www.youtube.com/@letsvhandar"
+        href="https://www.youtube.com/@sliceblaze"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Vhandar YouTube channel"
@@ -74,10 +74,10 @@ const Socialmedia = () => {
       >
         <YoutubeIcon />
         <span className="sr-only">YouTube</span>
-      </Link>
+      </Link> */}
 
       <Link
-        href="https://linkedin.com/company/letsvhandar"
+        href="https://linkedin.com/company/sliceblaze"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Vhandar LinkedIn profile"
