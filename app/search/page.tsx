@@ -132,7 +132,8 @@ function SearchPageContent() {
         (b) =>
           b.name.toLowerCase().includes(q) ||
           b.description.toLowerCase().includes(q) ||
-          b.category.toLowerCase().includes(q)
+          b.category.toLowerCase().includes(q) ||
+          b.location.toLowerCase().includes(q)
       )
     }
 
@@ -171,7 +172,7 @@ function SearchPageContent() {
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Discover Businesses</h1>
-          <p className="text-gray-600">Browse and filter businesses by category</p>
+          <p className="text-gray-500 text-sm">Browse and filter businesses by category</p>
         </div>
 
         {/* Search Bar */}
@@ -183,26 +184,15 @@ function SearchPageContent() {
                 name="search"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                placeholder="Search for businesses, categories, or descriptions..."
+                placeholder="Search for businesses, categories, descriptions, or locations..."
                 className="w-full px-5 py-3 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent shadow-sm"
               />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => handleSearchChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>)}
-                  className="absolute right-20 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
-                  aria-label="Clear search"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
               <button
-                type="submit"
+                type={searchQuery ? "button" : "submit"}
+                onClick={searchQuery ? () => handleSearchChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>) : undefined}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 px-4 py-1.5 bg-[#ED1D33] text-white rounded-md hover:bg-[#C91828] transition font-medium text-sm"
               >
-                Search
+                {searchQuery ? 'Clear' : 'Search'}
               </button>
             </div>
           </form>
