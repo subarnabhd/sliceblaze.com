@@ -64,7 +64,12 @@ export default function AdminDashboard() {
     if (error) {
       console.error('Error fetching businesses:', error)
     } else {
-      setBusinesses(data || [])
+      // Map lowercase database fields to camelCase for the interface
+      const mappedData = (data || []).map(business => ({
+        ...business,
+        openingHours: business.openinghours || '',
+      }))
+      setBusinesses(mappedData || [])
     }
   }
 
@@ -127,7 +132,7 @@ export default function AdminDashboard() {
         image: editingBusiness.image,
         description: editingBusiness.description,
         contact: editingBusiness.contact,
-        openingHours: editingBusiness.openingHours,
+        openinghours: editingBusiness.openingHours,
         facebook: editingBusiness.facebook,
         instagram: editingBusiness.instagram,
         tiktok: editingBusiness.tiktok,
@@ -179,7 +184,7 @@ export default function AdminDashboard() {
       username: newBusinessData.username?.toLowerCase(),
       location: newBusinessData.location || '',
       category: newBusinessData.category || '',
-      image: newBusinessData.image || '',
+      image: newBusinessData.image || '/sample.svg',
       description: newBusinessData.description || '',
       contact: newBusinessData.contact || '',
       openingHours: newBusinessData.openingHours || '',
@@ -1296,18 +1301,16 @@ export default function AdminDashboard() {
                     className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
                     placeholder="/businessname.jpg or paste URL"
                   />
-                  {editingBusiness.image && (
-                    <div className="mt-2">
-                      <img
-                        src={editingBusiness.image}
-                        alt="Business logo preview"
-                        className="h-20 w-20 object-cover rounded border border-gray-600"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = "none";
-                        }}
-                      />
-                    </div>
-                  )}
+                  <div className="mt-2">
+                    <img
+                      src={editingBusiness.image || '/sample.svg'}
+                      alt="Business logo preview"
+                      className="h-20 w-20 object-cover rounded border border-gray-600"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/sample.svg';
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
               <div className="flex items-center">
