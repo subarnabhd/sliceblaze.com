@@ -79,93 +79,74 @@ export default function Header() {
 
   return (
     <header
-      className={`w-full flex justify-center  sticky top-0 z-50 transition-all duration-200 ease-in-out ${
+      className={`w-full flex justify-center sticky top-0 z-50 transition-all duration-200 ease-in-out border-b ${
         isScrolled
-          ? "py-4 bg-transparent"
-          : "py-0 bg-[#ffffffd1] backdrop-blur-md"
+          ? "py-4 bg-transparent border-transparent"
+          : "py-0 bg-[#ffffffd1] backdrop-blur-md border-gray-200"
       }`}
     >
-      <div
-        className={`flex justify-between items-center w-full transition-all duration-200 ease-in-out ${
-          isScrolled
-            ? "max-w-[1350px] rounded-2xl border border-gray-200 bg-white/70 drop-shadow-xl backdrop-blur-lg md:px-4 lg:px-4 px-4 lg:py-3 py-4"
-            : "  px-8 py-6 border-b border-gray-200"
-        }`}
-      >
-        <Link
-          href="/"
-          aria-label="Go to home"
-          className="flex items-center justify-center shrink-0"
+      <div className="conatiner flex justify-between w-full max-w-[1350px]">
+        <div
+          className={`flex justify-between items-center w-full transition-all duration-200 ease-in-out border rounded-2xl ${
+            isScrolled
+              ? "max-w-[1350px] border-gray-200 bg-white/70 drop-shadow-xl backdrop-blur-lg md:px-4 lg:px-4 px-4 lg:py-3 py-4"
+              : "px-8 py-6 border-transparent"
+          }`}
         >
-          <Image
-            src="/sliceblazelogo.svg"
-            alt="SliceBlaze logo"
-            width={80}
-            height={30}
-            priority
-            className="cursor-pointer"
-          />
-        </Link>
+          <Link
+            href="/"
+            aria-label="Go to home"
+            className="flex items-center justify-center shrink-0"
+          >
+            <Image
+              src="/sliceblazelogo.svg"
+              alt="SliceBlaze logo"
+              width={80}
+              height={30}
+              priority
+              className="cursor-pointer"
+            />
+          </Link>
 
-        {/* Right - User Profile or Login */}
-        <div className="shrink-0 w-auto flex justify-end ml-auto">
-          {user ? (
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition"
-              >
-                <div className="w-8 h-8 rounded-full bg-[#ED1D33] flex items-center justify-center text-white font-semibold">
-                  {user.full_name?.charAt(0).toUpperCase() ||
-                    user.username.charAt(0).toUpperCase()}
-                </div>
-                <div className="text-left">
-                  <div className="text-sm font-semibold text-gray-800">
-                    {user.full_name || user.username}
-                  </div>
-                  <div className="text-xs text-gray-500">@{user.username}</div>
-                </div>
-                <svg
-                  className={`w-4 h-4 text-gray-600 transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+          {/* Right - User Profile or Login */}
+          <div className="shrink-0 w-auto flex justify-end ml-auto">
+            {user ? (
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-
-              {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                  <Link
-                    href="/user/dashboard"
-                    onClick={() => setDropdownOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+                  <div className="w-8 h-8 rounded-full bg-[#ED1D33] flex items-center justify-center text-white font-semibold">
+                    {user.full_name?.charAt(0).toUpperCase() ||
+                      user.username.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="text-left">
+                    <div className="text-sm font-semibold text-gray-800">
+                      {user.full_name || user.username}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      @{user.username}
+                    </div>
+                  </div>
+                  <svg
+                    className={`w-4 h-4 text-gray-600 transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                      />
-                    </svg>
-                    Dashboard
-                  </Link>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
 
-                  {user.business_id && (
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                     <Link
-                      href="/user/dashboard?tab=business"
+                      href="/user/dashboard"
                       onClick={() => setDropdownOpen(false)}
                       className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
                     >
@@ -179,45 +160,68 @@ export default function Header() {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth={2}
-                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
                         />
                       </svg>
-                      Edit Business
+                      Dashboard
                     </Link>
-                  )}
 
-                  <hr className="my-2 border-gray-200" />
+                    {user.business_id && (
+                      <Link
+                        href="/user/dashboard?tab=business"
+                        onClick={() => setDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                          />
+                        </svg>
+                        Edit Business
+                      </Link>
+                    )}
 
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-3 px-4 py-2 text-sm text-[#ED1D33] hover:bg-red-50 transition w-full text-left"
-                  >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                    <hr className="my-2 border-gray-200" />
+
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-[#ED1D33] hover:bg-red-50 transition w-full text-left"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                      />
-                    </svg>
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <Link
-              href="/login"
-              className="px-6 py-2.5 bg-[#ED1D33] text-white text-sm font-semibold rounded-lg hover:bg-[#C91828] transition-colors shadow-sm hover:shadow-md"
-            >
-              Login
-            </Link>
-          )}
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        />
+                      </svg>
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="px-6 py-2.5 bg-[#ED1D33] text-white text-sm font-semibold rounded-lg hover:bg-[#C91828] transition-colors shadow-sm hover:shadow-md"
+              >
+                Login
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </header>
