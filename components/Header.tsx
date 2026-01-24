@@ -15,7 +15,6 @@ interface UserSession {
 
 export default function Header() {
   const [isVisible, setIsVisible] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [user, setUser] = useState<UserSession | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -69,14 +68,6 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isHomePage]);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      // Navigate to business page with search query (accessible to public)
-      router.push(`/search?query=${encodeURIComponent(searchQuery)}`);
-    }
-  };
-
   const handleLogout = () => {
     localStorage.removeItem('userSession');
     setUser(null);
@@ -107,39 +98,8 @@ export default function Header() {
         />
       </Link>
 
-      {/* Center - Search Bar */}
-      <form onSubmit={handleSearch} className="flex-1 flex justify-center mx-8">
-        <div className="relative w-full max-w-md">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search businesses..."
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white-200 focus:outline-none focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
-          />
-          <button
-            type="submit"
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-[#ED1D33] transition"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </button>
-        </div>
-      </form>
-
       {/* Right - User Profile or Login */}
-      <div className="shrink-0 w-auto flex justify-end">
+      <div className="shrink-0 w-auto flex justify-end ml-auto">
         {user ? (
           <div className="relative" ref={dropdownRef}>
             <button

@@ -67,6 +67,8 @@ function SearchPageContent() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [categories, setCategories] = useState<Category[]>([])
+  const [searchQuery, setSearchQuery] = useState<string>('')
+  const searchInputRef = useState<HTMLInputElement | null>(null)[0]
 
   // Fetch all businesses
   useEffect(() => {
@@ -102,14 +104,30 @@ function SearchPageContent() {
     fetchCategories()
   }, [])
 
+  // Initialize search query from URL params
+  useEffect(() => {
+    setSearchQuery(searchParams.get('query') || '')
+    
+    // Auto-focus search input if focus parameter is present
+    if (searchParams.get('focus') === 'true') {
+      setTimeout(() => {
+        const input = document.querySelector('input[name="search"]') as HTMLInputElement
+        if (input) {
+          input.focus()
+        }
+      }, 100)
+      // Remove focus parameter from URL
+      router.replace('/search', { scroll: false })
+    }
+  }, [searchParams, router])
+
   // Filter businesses whenever search query, category, or location changes
   useEffect(() => {
-    const query = searchParams.get('query') || ''
     let results = businesses
 
     // Filter by search query
-    if (query.trim()) {
-      const q = query.toLowerCase()
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase()
       results = results.filter(
         (b) =>
           b.name.toLowerCase().includes(q) ||
@@ -124,10 +142,27 @@ function SearchPageContent() {
     }
 
     setFilteredBusinesses(results)
-  }, [searchParams, selectedCategory, businesses])
+  }, [searchQuery, selectedCategory, businesses])
 
   const clearFilters = () => {
     setSelectedCategory('')
+  }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setSearchQuery(value)
+    
+    // Update URL query parameter
+    if (value.trim()) {
+      router.push(`/search?query=${encodeURIComponent(value)}`, { scroll: false })
+    } else {
+      router.push('/search', { scroll: false })
+    }
+  }
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Form submission is handled by onChange, but we keep this for Enter key
   }
 
   return (
@@ -137,6 +172,40 @@ function SearchPageContent() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Discover Businesses</h1>
           <p className="text-gray-600">Browse and filter businesses by category</p>
+        </div>
+
+        {/* Search Bar */}
+        <div className="mb-6">
+          <form onSubmit={handleSearch} className="w-full max-w-2xl">
+            <div className="relative">
+              <input
+                type="text"
+                name="search"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search for businesses, categories, or descriptions..."
+                className="w-full px-5 py-3 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent shadow-sm"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => handleSearchChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>)}
+                  className="absolute right-20 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+                  aria-label="Clear search"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+              <button
+                type="submit"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 px-4 py-1.5 bg-[#ED1D33] text-white rounded-md hover:bg-[#C91828] transition font-medium text-sm"
+              >
+                Search
+              </button>
+            </div>
+          </form>
         </div>
 
         {/* Category Filter - Prominent Display */}
@@ -214,9 +283,16 @@ function SearchPageContent() {
               </div>
             ) : (
               <div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                  {filteredBusinesses.length} Business{filteredBusinesses.length !== 1 ? 'es' : ''} Found
-                </h2>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    {filteredBusinesses.length} Business{filteredBusinesses.length !== 1 ? 'es' : ''} Found
+                  </h2>
+                  {searchQuery && (
+                    <p className="text-gray-600 mt-1">
+                      Search results for: <span className="font-semibold text-gray-800">"{searchQuery}"</span>
+                    </p>
+                  )}
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {filteredBusinesses.map((business) => (
@@ -316,7 +392,7 @@ function SearchPageContent() {
                             className="w-full px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] transition font-medium text-sm"
                             onClick={(e) => {
                               e.preventDefault()
-                              router.push(`/business/${business.username}`)
+                              router.push(`/${business.username}`)
                             }}
                           >
                             View Details
