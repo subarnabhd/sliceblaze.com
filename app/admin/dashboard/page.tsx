@@ -380,6 +380,14 @@ export default function AdminDashboard() {
               <span className="text-lg">🏷️</span> Categories
             </span>
           </button>
+          <button
+            onClick={() => router.push('/admin/wifi')}
+            className="w-full text-left px-4 py-3 rounded-lg font-medium transition text-gray-700 hover:bg-gray-100"
+          >
+            <span className="flex items-center gap-2">
+              <span className="text-lg">📶</span> WiFi Management
+            </span>
+          </button>
         </nav>
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
           <button

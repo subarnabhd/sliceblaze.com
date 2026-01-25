@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { getBusinessByUsername } from '@/lib/supabase'
+import { getBusinessByUsername, getBusinessWifi } from '@/lib/supabase'
 import Image from 'next/image'
 import Link from 'next/link'
+import WifiConnect from '@/components/WifiConnect'
 
 interface Business {
   id: number
@@ -40,10 +41,19 @@ interface Business {
   brandsecondarycolor?: string
 }
 
+interface WifiNetwork {
+  id: number
+  ssid: string
+  password: string
+  security_type: string
+  is_hidden: boolean
+}
+
 export default function BusinessProfilePage() {
   const params = useParams()
   const username = params.username as string
   const [business, setBusiness] = useState<Business | null>(null)
+  const [wifiNetworks, setWifiNetworks] = useState<WifiNetwork[]>([])
   const [loading, setLoading] = useState(true)
   const [imgSrc, setImgSrc] = useState('/sample.svg')
   const [copied, setCopied] = useState(false)
@@ -64,6 +74,11 @@ export default function BusinessProfilePage() {
         setBusiness(data)
         if (data?.image) {
           setImgSrc(data.image)
+        }
+        // Fetch WiFi networks for the business
+        if (data?.id) {
+          const wifi = await getBusinessWifi(data.id)
+          setWifiNetworks(wifi)
         }
         setLoading(false)
       }
@@ -499,7 +514,17 @@ export default function BusinessProfilePage() {
           {/* Social Links */}
         </div>
 
-        {/* WiFi QR Code */}
+        {/* WiFi Networks */}
+        {wifiNetworks && wifiNetworks.length > 0 && (
+          <div className="mt-4 md:mt-6">
+            <WifiConnect 
+              wifiNetworks={wifiNetworks} 
+              brandColor={business.brandprimarycolor || business.brandPrimaryColor || '#ED1D33'}
+            />
+          </div>
+        )}
+
+        {/* Legacy WiFi QR Code (kept for backward compatibility) */}
         {business.wifiQrCode && (
           <div className="mt-4 md:mt-6 bg-white rounded-lg shadow p-4 md:p-6">
             <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">Free WiFi</h2>

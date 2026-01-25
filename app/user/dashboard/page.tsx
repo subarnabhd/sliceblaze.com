@@ -420,12 +420,20 @@ export default function UserDashboard() {
           <div className="bg-white rounded-lg shadow p-8">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-gray-900">Manage Business</h2>
-              <button
-                onClick={handleDeleteBusiness}
-                className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium"
-              >
-                Delete Business
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => router.push('/user/wifi')}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+                >
+                  Manage WiFi
+                </button>
+                <button
+                  onClick={handleDeleteBusiness}
+                  className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium"
+                >
+                  Delete Business
+                </button>
+              </div>
             </div>
             <div className="space-y-4">
               <div>
