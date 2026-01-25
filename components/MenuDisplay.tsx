@@ -118,7 +118,7 @@ export default function MenuDisplay({ menu, brandColor = '#ED1D33', currencySymb
                               className="font-bold text-lg whitespace-nowrap"
                               style={{ color: brandColor }}
                             >
-                              {currencySymbol}{Math.floor(item.price)}
+                              Rs.{Math.floor(item.price)}
                             </span>
                           </div>
                           {item.description && (
