@@ -35,7 +35,7 @@ interface MenuDisplayProps {
   currencySymbol?: string
 }
 
-export default function MenuDisplay({ menu, brandColor = '#ED1D33', currencySymbol = '$' }: MenuDisplayProps) {
+export default function MenuDisplay({ menu, brandColor = '#ED1D33', currencySymbol = 'Rs.' }: MenuDisplayProps) {
   const [activeCategory, setActiveCategory] = useState<number | null>(
     menu.length > 0 ? menu[0].id : null
   )
@@ -118,7 +118,7 @@ export default function MenuDisplay({ menu, brandColor = '#ED1D33', currencySymb
                               className="font-bold text-lg whitespace-nowrap"
                               style={{ color: brandColor }}
                             >
-                              {currencySymbol}{item.price.toFixed(2)}
+                              {currencySymbol}{Math.floor(item.price)}
                             </span>
                           </div>
                           {item.description && (

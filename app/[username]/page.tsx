@@ -549,15 +549,7 @@ export default function BusinessProfilePage() {
           </div>
         )}
 
-        {/* WiFi Networks */}
-        {wifiNetworks && wifiNetworks.length > 0 && (
-          <div className="mt-4 md:mt-6">
-            <WifiConnect 
-              wifiNetworks={wifiNetworks} 
-              brandColor={business.brandprimarycolor || business.brandPrimaryColor || '#ED1D33'}
-            />
-          </div>
-        )}
+      
 
         {/* Legacy WiFi QR Code (kept for backward compatibility) */}
         {business.wifiQrCode && (
