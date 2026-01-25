@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { getBusinessByUsername, getBusinessWifi } from '@/lib/supabase'
+import { getBusinessByUsername, getBusinessWifi, getFullMenu } from '@/lib/supabase'
 import Image from 'next/image'
 import Link from 'next/link'
 import WifiConnect from '@/components/WifiConnect'
+import MenuDisplay from '@/components/MenuDisplay'
 
 interface Business {
   id: number
@@ -49,11 +50,20 @@ interface WifiNetwork {
   is_hidden: boolean
 }
 
+interface MenuCategory {
+  id: number
+  name: string
+  display_order: number
+  is_active: boolean
+  menu_subcategories: any[]
+}
+
 export default function BusinessProfilePage() {
   const params = useParams()
   const username = params.username as string
   const [business, setBusiness] = useState<Business | null>(null)
   const [wifiNetworks, setWifiNetworks] = useState<WifiNetwork[]>([])
+  const [menu, setMenu] = useState<MenuCategory[]>([])
   const [loading, setLoading] = useState(true)
   const [imgSrc, setImgSrc] = useState('/sample.svg')
   const [copied, setCopied] = useState(false)
@@ -70,6 +80,10 @@ export default function BusinessProfilePage() {
     async function fetchBusiness() {
       if (username) {
         const data = await getBusinessByUsername(username)
+          
+          // Fetch menu for the business
+          const menuData = await getFullMenu(data.id)
+          setMenu(menuData)
         console.log('Fetched business data:', data) // Debug log
         setBusiness(data)
         if (data?.image) {
@@ -513,6 +527,27 @@ export default function BusinessProfilePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Social Links */}
         </div>
+
+        {/* WiFi Networks */}
+        {wifiNetworks && wifiNetworks.length > 0 && (
+          <div className="mt-4 md:mt-6">
+            <WifiConnect 
+              wifiNetworks={wifiNetworks} 
+              brandColor={business.brandprimarycolor || business.brandPrimaryColor || '#ED1D33'}
+            />
+          </div>
+        )}
+
+        {/* Menu Display */}
+        {menu && menu.length > 0 && (
+          <div className="mt-4 md:mt-6">
+            <MenuDisplay 
+              menu={menu} 
+              brandColor={business.brandprimarycolor || business.brandPrimaryColor || '#ED1D33'}
+              currencySymbol="$"
+            />
+          </div>
+        )}
 
         {/* WiFi Networks */}
         {wifiNetworks && wifiNetworks.length > 0 && (

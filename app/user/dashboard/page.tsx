@@ -422,6 +422,12 @@ export default function UserDashboard() {
               <h2 className="text-2xl font-bold text-gray-900">Manage Business</h2>
               <div className="flex gap-3">
                 <button
+                  onClick={() => router.push('/user/menu')}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
+                >
+                  Manage Menu
+                </button>
+                <button
                   onClick={() => router.push('/user/wifi')}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
                 >

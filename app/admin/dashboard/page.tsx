@@ -60,11 +60,14 @@ export default function AdminDashboard() {
   const [editingBusiness, setEditingBusiness] = useState<Business | null>(null)
   const [editingUser, setEditingUser] = useState<User | null>(null)
   const [addingBusiness, setAddingBusiness] = useState(false)
+  const [addingUser, setAddingUser] = useState(false)
   const [addingCategory, setAddingCategory] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [newBusinessData, setNewBusinessData] = useState<Partial<Business>>({})
+  const [newUserData, setNewUserData] = useState({ username: '', email: '', full_name: '', password: '', role: 'user', business_id: null as number | null, is_active: true })
   const [newCategoryData, setNewCategoryData] = useState({ name: '', is_active: true })
   const [loading, setLoading] = useState(true)
+  const [userPassword, setUserPassword] = useState('')
 
   const fetchBusinesses = async () => {
     if (!supabase) return
@@ -181,16 +184,23 @@ export default function AdminDashboard() {
   const handleUpdateUser = async () => {
     if (!editingUser || !supabase) return
 
+    const updateData: any = {
+      username: editingUser.username,
+      email: editingUser.email,
+      full_name: editingUser.full_name,
+      role: editingUser.role,
+      business_id: editingUser.business_id,
+      is_active: editingUser.is_active,
+    }
+
+    // Add password if changed
+    if (userPassword) {
+      updateData.password_hash = userPassword
+    }
+
     const { error } = await supabase
       .from('users')
-      .update({
-        username: editingUser.username,
-        email: editingUser.email,
-        full_name: editingUser.full_name,
-        role: editingUser.role,
-        business_id: editingUser.business_id,
-        is_active: editingUser.is_active,
-      })
+      .update(updateData)
       .eq('id', editingUser.id)
 
     if (error) {
@@ -198,6 +208,54 @@ export default function AdminDashboard() {
     } else {
       alert('User updated successfully!')
       setEditingUser(null)
+      setUserPassword('')
+      fetchUsers()
+    }
+  }
+
+  const handleCreateUser = async () => {
+    if (!newUserData.username || !newUserData.email || !newUserData.password) {
+      alert('Please fill in all required fields (Username, Email, Password)')
+      return
+    }
+
+    if (!supabase) return
+
+    const { error } = await supabase
+      .from('users')
+      .insert([{
+        username: newUserData.username.toLowerCase(),
+        email: newUserData.email,
+        full_name: newUserData.full_name,
+        password_hash: newUserData.password,
+        role: newUserData.role,
+        business_id: newUserData.business_id,
+        is_active: newUserData.is_active,
+      }])
+
+    if (error) {
+      alert('Error creating user: ' + error.message)
+    } else {
+      alert('User created successfully!')
+      setAddingUser(false)
+      setNewUserData({ username: '', email: '', full_name: '', password: '', role: 'user', business_id: null, is_active: true })
+      fetchUsers()
+    }
+  }
+
+  const handleDeleteUser = async (userId: number) => {
+    if (!confirm('Are you sure you want to delete this user?')) return
+    if (!supabase) return
+
+    const { error } = await supabase
+      .from('users')
+      .delete()
+      .eq('id', userId)
+
+    if (error) {
+      alert('Error deleting user: ' + error.message)
+    } else {
+      alert('User deleted successfully!')
       fetchUsers()
     }
   }
@@ -386,6 +444,14 @@ export default function AdminDashboard() {
           >
             <span className="flex items-center gap-2">
               <span className="text-lg">📶</span> WiFi Management
+            </span>
+          </button>
+          <button
+            onClick={() => router.push('/admin/menu')}
+            className="w-full text-left px-4 py-3 rounded-lg font-medium transition text-gray-700 hover:bg-gray-100"
+          >
+            <span className="flex items-center gap-2">
+              <span className="text-lg">🍽️</span> Menu Management
             </span>
           </button>
         </nav>
@@ -585,6 +651,14 @@ export default function AdminDashboard() {
         {/* Users Tab */}
         {activeTab === "users" && (
           <div>
+            <div className="flex justify-end mb-6">
+              <button
+                onClick={() => setAddingUser(true)}
+                className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium flex items-center gap-2 shadow-md"
+              >
+                <span className="text-xl">+</span> Create New User
+              </button>
+            </div>
             {users.length === 0 ? (
               <div className="bg-white rounded-lg shadow p-12 text-center">
                 <p className="text-gray-600 text-lg">No users yet.</p>
@@ -652,12 +726,23 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                       </div>
-                      <button
-                        onClick={() => setEditingUser(user)}
-                        className="ml-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium whitespace-nowrap"
-                      >
-                        Edit
-                      </button>
+                      <div className="ml-4 flex gap-2">
+                        <button
+                          onClick={() => {
+                            setEditingUser(user)
+                            setUserPassword('')
+                          }}
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium whitespace-nowrap"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteUser(user.id)}
+                          className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] font-medium whitespace-nowrap"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -1884,6 +1969,18 @@ export default function AdminDashboard() {
                   ))}
                 </select>
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  New Password (leave blank to keep current)
+                </label>
+                <input
+                  type="password"
+                  value={userPassword}
+                  onChange={(e) => setUserPassword(e.target.value)}
+                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                  placeholder="Enter new password or leave blank"
+                />
+              </div>
               <div className="flex items-center">
                 <input
                   type="checkbox"
@@ -1907,7 +2004,10 @@ export default function AdminDashboard() {
             </div>
             <div className="flex justify-end space-x-3 mt-6">
               <button
-                onClick={() => setEditingUser(null)}
+                onClick={() => {
+                  setEditingUser(null)
+                  setUserPassword('')
+                }}
                 className="px-4 py-2 bg-gray-300 text-gray-900 rounded hover:bg-gray-400 font-medium"
               >
                 Cancel
@@ -1917,6 +2017,153 @@ export default function AdminDashboard() {
                 className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-[#C91828] font-medium"
               >
                 Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create User Modal */}
+      {addingUser && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg p-8 max-w-2xl w-full">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New User</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Full Name <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={newUserData.full_name}
+                  onChange={(e) =>
+                    setNewUserData({
+                      ...newUserData,
+                      full_name: e.target.value,
+                    })
+                  }
+                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                  placeholder="John Doe"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Username <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={newUserData.username}
+                  onChange={(e) =>
+                    setNewUserData({ ...newUserData, username: e.target.value.toLowerCase() })
+                  }
+                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                  placeholder="johndoe"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="email"
+                  value={newUserData.email}
+                  onChange={(e) =>
+                    setNewUserData({ ...newUserData, email: e.target.value })
+                  }
+                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                  placeholder="john@example.com"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Password <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="password"
+                  value={newUserData.password}
+                  onChange={(e) =>
+                    setNewUserData({ ...newUserData, password: e.target.value })
+                  }
+                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                  placeholder="Enter password"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Role
+                </label>
+                <select
+                  value={newUserData.role}
+                  onChange={(e) =>
+                    setNewUserData({ ...newUserData, role: e.target.value })
+                  }
+                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                >
+                  <option value="user">User</option>
+                  <option value="owner">Owner</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Assigned Business
+                </label>
+                <select
+                  value={newUserData.business_id || ""}
+                  onChange={(e) =>
+                    setNewUserData({
+                      ...newUserData,
+                      business_id: e.target.value
+                        ? parseInt(e.target.value)
+                        : null,
+                    })
+                  }
+                  className="w-full px-3 py-2 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
+                >
+                  <option value="">No Business Assigned</option>
+                  {businesses.map((business) => (
+                    <option key={business.id} value={business.id}>
+                      {business.name} (@{business.username})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="new-user-active"
+                  checked={newUserData.is_active}
+                  onChange={(e) =>
+                    setNewUserData({
+                      ...newUserData,
+                      is_active: e.target.checked,
+                    })
+                  }
+                  className="mr-2"
+                />
+                <label
+                  htmlFor="new-user-active"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Active
+                </label>
+              </div>
+            </div>
+            <div className="flex justify-end space-x-3 mt-6">
+              <button
+                onClick={() => {
+                  setAddingUser(false)
+                  setNewUserData({ username: '', email: '', full_name: '', password: '', role: 'user', business_id: null, is_active: true })
+                }}
+                className="px-4 py-2 bg-gray-300 text-gray-900 rounded hover:bg-gray-400 font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateUser}
+                className="px-4 py-2 bg-[#ED1D33] text-white rounded hover:bg-[#C91828] font-medium"
+              >
+                Create User
               </button>
             </div>
           </div>
