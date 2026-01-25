@@ -81,15 +81,15 @@ export default function Header() {
     <header
       className={`w-full flex justify-center sticky top-0 z-50 transition-all duration-200 ease-in-out  ${
         isScrolled
-          ? "py-4 bg-transparent border-transparent"
+          ? "p-4 bg-transparent border-transparent"
           : "py-0 bg-[#ffffffd1] backdrop-blur-md border-gray-200"
       }`}
     >
-      <div className="conatiner flex justify-between w-full max-w-[1120px]">
+      <div className="container justify-between w-full max-w-[1120px]">
         <div
           className={`grid grid-cols-3 items-center w-full transition-all duration-200 ease-in-out border rounded-2xl ${
             isScrolled
-              ? "max-w-[1120px] border-gray-200 bg-white/70 drop-shadow-xl backdrop-blur-lg md:px-4 lg:px-4 px-4 lg:py-4 py-4"
+              ? "container border-gray-200 bg-white/70 drop-shadow-xl backdrop-blur-lg md:px-4 lg:px-4 px-4 lg:py-4 py-4"
               : "px-8 py-4 border-transparent"
           }`}
         >

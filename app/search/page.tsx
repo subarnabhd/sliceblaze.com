@@ -68,7 +68,6 @@ function SearchPageContent() {
   const [error, setError] = useState('')
   const [categories, setCategories] = useState<Category[]>([])
   const [searchQuery, setSearchQuery] = useState<string>('')
-  const searchInputRef = useState<HTMLInputElement | null>(null)[0]
 
   // Fetch all businesses
   useEffect(() => {
@@ -130,10 +129,10 @@ function SearchPageContent() {
       const q = searchQuery.toLowerCase()
       results = results.filter(
         (b) =>
-          b.name.toLowerCase().includes(q) ||
-          b.description.toLowerCase().includes(q) ||
-          b.category.toLowerCase().includes(q) ||
-          b.location.toLowerCase().includes(q)
+          b.name?.toLowerCase().includes(q) ||
+          b.description?.toLowerCase().includes(q) ||
+          b.category?.toLowerCase().includes(q) ||
+          b.location?.toLowerCase().includes(q)
       )
     }
 
@@ -168,7 +167,7 @@ function SearchPageContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container  mx-auto px-6 py-8">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Discover Businesses</h1>

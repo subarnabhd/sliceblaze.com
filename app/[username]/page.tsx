@@ -103,7 +103,7 @@ export default function BusinessProfilePage() {
             borderTop: `4px solid ${business.brandprimarycolor || business.brandPrimaryColor || "#ED1D33"}`,
           }}
         >
-          <div className="p-4 md:p-6 lg:p-8">
+          <div className="p-4 md:p-6 lg:p-8 bg-white">
             <div className="flex flex-col sm:flex-row items-start gap-4 md:gap-6">
               <div className="shrink-0">
                 <Image
