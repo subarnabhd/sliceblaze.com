@@ -14,10 +14,16 @@ interface Business {
   image: string
   description: string
   contact: string
+  whatsapp: string
+  website: string
   openingHours: string
   facebook: string
+  twitter: string
+  youtube: string
   instagram: string
+  linkedin: string
   tiktok: string
+  threads: string
   googleMapUrl: string
   direction: string
   menuUrl: string

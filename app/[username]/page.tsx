@@ -15,13 +15,20 @@ interface Business {
   image: string
   description: string
   contact: string
+  whatsapp: string
+  website: string
   openingHours: string
   openinghours?: string
   facebook: string
+  twitter: string
+  youtube: string
   instagram: string
+  linkedin: string
   tiktok: string
+  threads: string
   googleMapUrl: string
   googlemapurl?: string
+  getdirection: string
   direction: string
   menuUrl: string
   menuurl?: string
@@ -88,16 +95,16 @@ export default function BusinessProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
+      <div className="container mx-auto px-4">
         {/* Business Header */}
         <div
-          className="mx-auto w-[100%] max-w-[1350px] md:max-w-6xl rounded-2xl border border-gray-200 bg-white/70 drop-shadow-xl backdrop-blur-lg md:px-4 lg:max-w-6xl lg:px-4 px-4 transition-all duration-500 ease-in-out lg:py-3 py-4 overflow-hidden mb-6"
+          className="rounded-2xl border border-gray-200 bg-white/70 drop-shadow-xl backdrop-blur-lg transition-all duration-500 ease-in-out overflow-hidden mb-6"
           style={{
             borderTop: `4px solid ${business.brandprimarycolor || business.brandPrimaryColor || "#ED1D33"}`,
           }}
         >
-          <div className="p-8">
-            <div className="flex items-start gap-6">
+          <div className="p-4 md:p-6 lg:p-8">
+            <div className="flex flex-col sm:flex-row items-start gap-4 md:gap-6">
               <div className="shrink-0">
                 <Image
                   src={imgSrc}
@@ -108,16 +115,19 @@ export default function BusinessProfilePage() {
                   onError={() => setImgSrc("/sample.svg")}
                 />
               </div>
-              <div className="flex-1">
-                <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              <div className="flex-1 w-full">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
                   {business.name}
-                </h1> 
+                </h1>
                 <div className="flex items-center gap-2 my-2">
-                  <p 
+                  <p
                     className="text-sm  px-3 py-1 rounded-full inline-block"
                     style={{
-                      color: business.brandprimarycolor || business.brandPrimaryColor || "#ED1D33",
-                      backgroundColor: `${business.brandprimarycolor || business.brandPrimaryColor || "#ED1D33"}20`
+                      color:
+                        business.brandprimarycolor ||
+                        business.brandPrimaryColor ||
+                        "#ED1D33",
+                      backgroundColor: `${business.brandprimarycolor || business.brandPrimaryColor || "#ED1D33"}20`,
                     }}
                   >
                     @{business.username}
@@ -128,12 +138,32 @@ export default function BusinessProfilePage() {
                     title="Copy profile link"
                   >
                     {copied ? (
-                      <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      <svg
+                        className="w-4 h-4 text-green-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
                       </svg>
                     ) : (
-                      <svg className="w-4 h-4 text-gray-500 group-hover:text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      <svg
+                        className="w-4 h-4 text-gray-500 group-hover:text-gray-700"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                        />
                       </svg>
                     )}
                   </button>
@@ -141,28 +171,58 @@ export default function BusinessProfilePage() {
                 <p className="text-lg text-gray-600 mb-1">
                   {business.category}
                 </p>
-                <p className="text-gray-500 flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                {(business.googleMapUrl || business.googlemapurl) ? (
+                  <a
+                    href={(business.googleMapUrl || business.googlemapurl)?.replace('/embed', '')}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-500 hover:text-[#ED1D33] flex items-center gap-2 transition-colors"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                  {business.location}
-                </p>
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                    {business.location}
+                  </a>
+                ) : (
+                  <p className="text-gray-500 flex items-center gap-2">
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                    {business.location}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -174,10 +234,10 @@ export default function BusinessProfilePage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           {/* Contact Info */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <div className="bg-white rounded-lg shadow p-4 md:p-6">
+            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">
               Contact Information
             </h2>
             <div className="space-y-3">
@@ -199,6 +259,71 @@ export default function BusinessProfilePage() {
                   <span className="text-gray-700">{business.contact}</span>
                 </div>
               )}
+              {business.whatsapp && (
+                <a
+                  href={`https://wa.me/${business.whatsapp.replace(/[^0-9]/g, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-green-600 hover:text-green-700"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                  </svg>
+                  WhatsApp
+                </a>
+              )}
+              {business.website && (
+                <a
+                  href={business.website.startsWith('http') ? business.website : `https://${business.website}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-blue-600 hover:text-blue-700 break-all"
+                >
+                  <svg
+                    className="w-5 h-5 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+                    />
+                  </svg>
+                  {business.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                </a>
+              )}
+              {(business.googleMapUrl || business.googlemapurl) && (
+                <a
+                  href={(
+                    business.googleMapUrl || business.googlemapurl
+                  )?.replace("/embed", "")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-[#ED1D33] hover:text-[#C91828]"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                    />
+                  </svg>
+                  View on Google Maps
+                </a>
+              )}
               {business.openingHours && (
                 <div className="flex items-center gap-3">
                   <svg
@@ -217,30 +342,10 @@ export default function BusinessProfilePage() {
                   <span className="text-gray-700">{business.openingHours}</span>
                 </div>
               )}
-              {business.direction && (
-                <div className="flex items-start gap-3">
-                  <svg
-                    className="w-5 h-5 text-gray-500 mt-0.5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                  </svg>
-                  <span className="text-gray-700">{business.direction}</span>
-                </div>
-              )}
             </div>
           </div>
-
-          {/* Social Links */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <div className="bg-white rounded-lg shadow p-4 md:p-6">
+            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">
               Connect With Us
             </h2>
             <div className="space-y-3">
@@ -295,6 +400,74 @@ export default function BusinessProfilePage() {
                   TikTok
                 </a>
               )}
+              {business.twitter && (
+                <a
+                  href={business.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-blue-400 hover:text-blue-500"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                  </svg>
+                  Twitter
+                </a>
+              )}
+              {business.youtube && (
+                <a
+                  href={business.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-red-600 hover:text-red-700"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                  </svg>
+                  YouTube
+                </a>
+              )}
+              {business.linkedin && (
+                <a
+                  href={business.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-blue-700 hover:text-blue-800"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                  </svg>
+                  LinkedIn
+                </a>
+              )}
+              {business.threads && (
+                <a
+                  href={business.threads}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-gray-900 hover:text-gray-700"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.956 1.191-2.352 1.796-4.15 1.796-1.747 0-3.234-.586-4.42-1.741-1.197-1.165-1.803-2.789-1.803-4.83s.606-3.665 1.803-4.83c1.186-1.155 2.673-1.741 4.42-1.741 1.798 0 3.194.605 4.15 1.796.662.826 1.092 1.92 1.284 3.272.761-.45 1.324-1.04 1.634-1.75.528-1.205.557-3.185-1.09-4.798-1.442-1.414-3.177-2.025-5.8-2.045z" />
+                  </svg>
+                  Threads
+                </a>
+              )}
               {business.menuUrl && (
                 <a
                   href={business.menuUrl}
@@ -318,47 +491,28 @@ export default function BusinessProfilePage() {
                   View Menu
                 </a>
               )}
-              {business.googleMapUrl && (
-                <a
-                  href={business.googleMapUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-[#ED1D33] hover:text-[#C91828]"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-                    />
-                  </svg>
-                  Get Directions
-                </a>
-              )}
             </div>
           </div>
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Social Links */}
+        </div>
+
         {/* WiFi QR Code */}
         {business.wifiQrCode && (
-          <div className="mt-6 bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Free WiFi</h2>
+          <div className="mt-4 md:mt-6 bg-white rounded-lg shadow p-4 md:p-6">
+            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">Free WiFi</h2>
             <div className="flex justify-center">
               <Image
                 src={business.wifiQrCode}
                 alt="WiFi QR Code"
                 width={200}
                 height={200}
-                className="rounded border border-gray-200"
+                className="rounded border border-gray-200 w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52"
               />
             </div>
-            <p className="text-center text-gray-600 mt-3">
+            <p className="text-center text-gray-600 mt-3 text-sm md:text-base">
               Scan to connect to our WiFi
             </p>
           </div>
