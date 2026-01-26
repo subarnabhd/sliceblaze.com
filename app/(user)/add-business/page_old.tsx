@@ -30,7 +30,7 @@ export default function AddBusinessPage() {
   })
 
   useEffect(() => {
-    const session = localStorage.getItem('session')
+    const session = localStorage.getItem('userSession')
     if (!session) {
       router.push('/login')
       return
@@ -80,6 +80,15 @@ export default function AddBusinessPage() {
         return
       }
 
+      // Get logged in user ID
+      const session = localStorage.getItem('userSession')
+      if (!session) {
+        alert('Please login first')
+        router.push('/login')
+        return
+      }
+      const userData = JSON.parse(session)
+
       const businessData = {
         name: formData.name,
         username: formData.username.toLowerCase(),
@@ -98,6 +107,7 @@ export default function AddBusinessPage() {
         image: '',
         brandPrimaryColor: formData.brandPrimaryColor,
         brandSecondaryColor: formData.brandSecondaryColor,
+        user_id: userData.id, // Assign business to the logged-in user (making them owner)
       }
 
       const { error } = await supabase
@@ -108,7 +118,7 @@ export default function AddBusinessPage() {
         alert('Error creating business: ' + error.message)
       } else {
         alert('Business created successfully!')
-        router.push('/user/my-businesses')
+        router.push('/my-businesses')
       }
     } catch (err) {
       console.error('Error:', err)

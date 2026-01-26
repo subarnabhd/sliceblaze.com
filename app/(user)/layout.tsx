@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import Header from "@/components/Header";
 import Copyright from "@/components/Copyright";
 import Footer from "@/components/Footer";
@@ -27,8 +27,10 @@ export default function RootLayout({
         className={`${outfit.variable} font-sans antialiased bg-white`}
         suppressHydrationWarning
       >
-        
+        <Header />
         {children}
+        <Footer />
+        <Copyright />
       </body>
     </html>
   );

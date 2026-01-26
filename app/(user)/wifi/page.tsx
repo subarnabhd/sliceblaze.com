@@ -176,7 +176,7 @@ export default function WifiManagement() {
           <h1 className="text-2xl font-bold text-gray-800 mb-4">No Business Found</h1>
           <p className="text-gray-600 mb-4">You need to create a business first to manage WiFi networks.</p>
           <button
-            onClick={() => router.push('/user/dashboard')}
+            onClick={() => router.push('/dashboard')}
             className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828]"
           >
             Go to Dashboard
@@ -191,7 +191,7 @@ export default function WifiManagement() {
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="mb-6">
           <button
-            onClick={() => router.push('/user/dashboard')}
+            onClick={() => router.push('/dashboard')}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-4"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

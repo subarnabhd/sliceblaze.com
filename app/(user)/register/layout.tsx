@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
-import "./globals.css";
-import Header from "@/components/Header";
-import Copyright from "@/components/Copyright";
-import Footer from "@/components/Footer";
+import "../../globals.css";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -12,22 +9,21 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Sliceblaze",
-  description: "Your Business Digital Partner",
+  title: "Register - Sliceblaze",
+  description: "Create your account",
 };
 
-export default function RootLayout({
+export default function RegisterLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body
         className={`${outfit.variable} font-sans antialiased bg-white`}
         suppressHydrationWarning
       >
-        
         {children}
       </body>
     </html>

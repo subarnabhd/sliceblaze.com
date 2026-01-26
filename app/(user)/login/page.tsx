@@ -69,7 +69,7 @@ export default function LoginPage() {
       localStorage.setItem('userSession', JSON.stringify(session))
 
       // Redirect to user dashboard
-      router.push('/user/dashboard')
+      router.push('/dashboard')
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred. Please try again.'
       setError(errorMessage)

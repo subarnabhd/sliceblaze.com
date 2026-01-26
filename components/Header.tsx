@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
 interface UserSession {
   id: number;
@@ -13,28 +14,61 @@ interface UserSession {
   business_id: number | null;
 }
 
+interface UserBusiness {
+  id: number;
+  name: string;
+  username: string;
+  is_active: boolean;
+}
+
 export default function Header() {
   const [isVisible, setIsVisible] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [user, setUser] = useState<UserSession | null>(null);
+  const [userBusiness, setUserBusiness] = useState<UserBusiness | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
   const isHomePage = pathname === "/";
 
-  // Check for logged-in user
+  // Check for logged-in user and their business
   useEffect(() => {
     const userSession = localStorage.getItem('userSession');
     if (userSession) {
       try {
-        setUser(JSON.parse(userSession));
+        const userData = JSON.parse(userSession);
+        setUser(userData);
+        checkUserBusiness(userData.id);
       } catch (error) {
         console.error('Error parsing user session:', error);
         localStorage.removeItem('userSession');
       }
     }
   }, [pathname]);
+
+  // Check if user owns a business
+  const checkUserBusiness = async (userId: number) => {
+    if (!supabase) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('businesses')
+        .select('id, name, username, is_active')
+        .eq('user_id', userId)
+        .limit(1)
+        .single();
+
+      if (data) {
+        setUserBusiness(data);
+      } else {
+        setUserBusiness(null);
+      }
+    } catch (err) {
+      // No business found
+      setUserBusiness(null);
+    }
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -130,7 +164,7 @@ export default function Header() {
               Explore
             </Link>
             <Link
-              href="#contact"
+              href="/contact"
               className="text-gray-700 hover:text-[#ED1D33] font-medium transition-colors"
             >
               Contact
@@ -173,9 +207,35 @@ export default function Header() {
                 </button>
 
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-xs text-gray-500">Signed in as</p>
+                      <p className="text-sm font-semibold text-gray-900">{user.email}</p>
+                    </div>
+
+                    {/* Business Ownership Status */}
+                    {userBusiness ? (
+                      <div className="px-4 py-3 bg-green-50 border-b border-gray-100">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-xs font-semibold text-green-700">✓ Business Owner</span>
+                          {userBusiness.is_active && (
+                            <span className="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded-full">Active</span>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-700 font-medium">{userBusiness.name}</p>
+                        <p className="text-xs text-gray-500">@{userBusiness.username}</p>
+                      </div>
+                    ) : (
+                      <div className="px-4 py-3 bg-blue-50 border-b border-gray-100">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-xs font-semibold text-blue-700">🎯 Create Your Business</span>
+                        </div>
+                        <p className="text-xs text-gray-600">Start building your online presence today!</p>
+                      </div>
+                    )}
+
                     <Link
-                      href="/user/dashboard"
+                      href="/dashboard"
                       onClick={() => setDropdownOpen(false)}
                       className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
                     >
@@ -195,9 +255,9 @@ export default function Header() {
                       Dashboard
                     </Link>
 
-                    {user.business_id && (
+                    {userBusiness ? (
                       <Link
-                        href="/user/dashboard?tab=business"
+                        href="/manage-business"
                         onClick={() => setDropdownOpen(false)}
                         className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
                       >
@@ -211,12 +271,54 @@ export default function Header() {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                           />
                         </svg>
-                        Edit Business
+                        Manage My Business
+                      </Link>
+                    ) : (
+                      <Link
+                        href="/add-business"
+                        onClick={() => setDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2 text-sm text-[#ED1D33] hover:bg-red-50 transition font-medium"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 4v16m8-8H4"
+                          />
+                        </svg>
+                        Create Business
                       </Link>
                     )}
+
+                    <Link
+                      href={`/${user.username}`}
+                      onClick={() => setDropdownOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+                    >
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                      View Profile
+                    </Link>
 
                     <hr className="my-2 border-gray-200" />
 

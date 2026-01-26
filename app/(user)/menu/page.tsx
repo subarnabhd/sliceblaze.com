@@ -331,7 +331,7 @@ export default function UserMenuManagement() {
           <h1 className="text-2xl font-bold text-gray-800 mb-4">No Business Found</h1>
           <p className="text-gray-600 mb-4">Create a business first to manage menus.</p>
           <button
-            onClick={() => router.push('/user/dashboard')}
+            onClick={() => router.push('/dashboard')}
             className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828]"
           >
             Go to Dashboard
@@ -348,7 +348,7 @@ export default function UserMenuManagement() {
         <div className="px-8 py-6 flex justify-between items-center">
           <div>
             <button
-              onClick={() => router.push('/user/dashboard')}
+              onClick={() => router.push('/dashboard')}
               className="flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-2"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -628,7 +628,7 @@ export default function UserMenuManagement() {
                                 <h4 className="font-semibold text-gray-900">{item.name}</h4>
                                 <p className="text-sm text-gray-600 mt-1">{item.description}</p>
                               </div>
-                              <div className="text-[#ED1D33] font-bold ml-2">${item.price.toFixed(2)}</div>
+                              <div className="text-[#ED1D33] font-bold ml-2">Rs.{item.price.toFixed(2)}</div>
                             </div>
                             <div className="flex gap-2">
                               <button

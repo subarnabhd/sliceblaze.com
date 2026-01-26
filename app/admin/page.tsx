@@ -25,7 +25,7 @@ export default function AdminLoginPage() {
           loginTime: new Date().toISOString(),
         }))
         
-        router.push('/admin/dashboard')
+        router.push('/admin/overview')
       } else {
         setError('Invalid username or password')
       }

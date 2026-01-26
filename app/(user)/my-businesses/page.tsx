@@ -50,7 +50,7 @@ export default function MyBusinessesPage() {
 
   useEffect(() => {
     // Check if user is logged in
-    const session = localStorage.getItem('session')
+    const session = localStorage.getItem('userSession')
     if (!session) {
       router.push('/login')
       return
@@ -58,18 +58,19 @@ export default function MyBusinessesPage() {
 
     const userData = JSON.parse(session) as SessionUser
     setUser(userData)
-    fetchUserBusinesses()
+    fetchUserBusinesses(userData.userId)
   }, [router])
 
-  const fetchUserBusinesses = async () => {
+  const fetchUserBusinesses = async (userId: number) => {
     setLoading(true)
     try {
       if (!supabase) return
 
-      // For now, fetch all businesses (in production, filter by owner)
+      // Only fetch businesses owned by this user (created or assigned by admin)
       const { data, error } = await supabase
         .from('businesses')
         .select('*')
+        .eq('user_id', userId)
         .order('name')
 
       if (error) {
