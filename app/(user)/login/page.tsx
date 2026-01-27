@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase'
+import { login } from '@/lib/auth'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -25,50 +25,17 @@ export default function LoginPage() {
         return
       }
 
-      if (!supabase) {
-        setError('Database connection error')
+      // Use the auth utility to login
+      const result = await login(username, password)
+
+      if (!result.success) {
+        setError(result.error || 'Login failed')
         setLoading(false)
         return
       }
 
-      // Check if user exists
-      const { data: user, error: queryError } = await supabase
-        .from('users')
-        .select('*')
-        .eq('username', username)
-        .single()
-
-      if (queryError || !user) {
-        setError('Invalid username or password')
-        setLoading(false)
-        return
-      }
-
-      // Check password
-      if (user.password_hash !== password) {
-        setError('Invalid username or password')
-        setLoading(false)
-        return
-      }
-
-      if (!user.is_active) {
-        setError('Account is inactive. Please contact support.')
-        setLoading(false)
-        return
-      }
-
-      // Set session
-      const session = {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        full_name: user.full_name,
-        business_id: user.business_id
-      }
-
-      localStorage.setItem('userSession', JSON.stringify(session))
-
-      // Redirect to user dashboard
+      // Successful login - redirect to dashboard
+      // The dashboard will determine if user is owner or normal user
       router.push('/dashboard')
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred. Please try again.'

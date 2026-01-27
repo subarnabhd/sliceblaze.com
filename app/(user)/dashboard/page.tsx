@@ -1,9 +1,11 @@
-'use client'
+﻿'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { getUserSession, isOwner, logout as authLogout, refreshUserSession } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface Business {
   id: number
@@ -31,85 +33,324 @@ interface User {
   username: string
   email: string
   full_name: string
+  role: 'admin' | 'owner' | 'user'
+  business_id: number | null
+}
+
+interface DashboardStats {
+  totalMenuItems: number
+  totalWifiNetworks: number
+  activeMenuItems: number
+  businessViews: number
 }
 
 export default function UserDashboard() {
   const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
-  const [businesses, setBusinesses] = useState<Business[]>([])
+  const [business, setBusiness] = useState<Business | null>(null)
   const [loading, setLoading] = useState(true)
-  const [stats, setStats] = useState({
-    totalBusinesses: 0,
-    activeBusinesses: 0,
+  const [showEditForm, setShowEditForm] = useState(false)
+  const [showEditProfile, setShowEditProfile] = useState(false)
+  const [showChangePassword, setShowChangePassword] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [profileFormData, setProfileFormData] = useState({
+    full_name: '',
+    email: '',
+    username: '',
+  })
+  const [passwordFormData, setPasswordFormData] = useState({
+    current_password: '',
+    new_password: '',
+    confirm_password: '',
+  })
+  const [editFormData, setEditFormData] = useState({
+    name: '',
+    username: '',
+    address: '',
+    category: '',
+    phone: '',
+    email: '',
+    description: '',
+    website: '',
+    opening_hours: '',
+    facebook_url: '',
+    instagram_url: '',
+    twitter_url: '',
+  })
+  const [stats, setStats] = useState<DashboardStats>({
     totalMenuItems: 0,
-    totalWifiNetworks: 0
+    totalWifiNetworks: 0,
+    activeMenuItems: 0,
+    businessViews: 0
   })
 
-  useEffect(() => {
-    const session = localStorage.getItem('userSession')
+  const fetchOwnerData = useCallback(async (businessId: number) => {
+    if (!supabase) return
+
+    try {
+      // Fetch business data
+      const { data: businessData } = await supabase
+        .from('businesses')
+        .select('*')
+        .eq('id', businessId)
+        .single()
+
+      if (businessData) {
+        setBusiness(businessData)
+        // Prefill edit form data
+        setEditFormData({
+          name: businessData.name || '',
+          username: businessData.username || '',
+          address: businessData.address || '',
+          category: businessData.category || '',
+          phone: businessData.phone || '',
+          email: businessData.email || '',
+          description: businessData.description || '',
+          website: businessData.website || '',
+          opening_hours: businessData.opening_hours || '',
+          facebook_url: businessData.facebook_url || '',
+          instagram_url: businessData.instagram_url || '',
+          twitter_url: businessData.twitter_url || '',
+        })
+      }
+
+      // Fetch menu items
+      const { data: menuData } = await supabase
+        .from('menu_items')
+        .select('id, is_available')
+        .eq('business_id', businessId)
+
+      const totalMenuItems = menuData?.length || 0
+      const activeMenuItems = menuData?.filter(item => item.is_available).length || 0
+
+      // Fetch wifi networks
+      const { data: wifiData } = await supabase
+        .from('wifi_networks')
+        .select('id')
+        .eq('business_id', businessId)
+
+      const totalWifiNetworks = wifiData?.length || 0
+
+      setStats({
+        totalMenuItems,
+        totalWifiNetworks,
+        activeMenuItems,
+        businessViews: 0 // Placeholder for future implementation
+      })
+    } catch (error) {
+      console.error('Error fetching owner data:', error)
+    }
+  }, [])
+
+  const checkAuth = useCallback(async () => {
+    const session = getUserSession()
     if (!session) {
       router.push('/login')
       return
     }
 
-    const userData = JSON.parse(session)
-    setUser(userData)
-    fetchUserData(userData.id)
-  }, [router])
-
-  const fetchUserData = async (userId: number) => {
-    if (!supabase) {
-      setLoading(false)
+    // Refresh session from database to get latest data
+    const refreshedSession = await refreshUserSession(session.id)
+    if (!refreshedSession) {
+      router.push('/login')
       return
     }
 
+    setUser({
+      id: refreshedSession.id,
+      username: refreshedSession.username,
+      email: refreshedSession.email,
+      full_name: refreshedSession.full_name,
+      role: refreshedSession.role,
+      business_id: refreshedSession.business_id
+    })
+
+    // Prefill profile form data
+    setProfileFormData({
+      full_name: refreshedSession.full_name || '',
+      email: refreshedSession.email || '',
+      username: refreshedSession.username || '',
+    })
+
+    // If user is owner, fetch business data
+    if (isOwner(refreshedSession)) {
+      await fetchOwnerData(refreshedSession.business_id!)
+    }
+
+    setLoading(false)
+  }, [router, fetchOwnerData])
+
+  useEffect(() => {
+    checkAuth()
+  }, [checkAuth])
+
+  // Listen for change password event from header
+  useEffect(() => {
+    const handleOpenChangePassword = () => {
+      setShowChangePassword(true)
+    }
+
+    window.addEventListener('openChangePassword', handleOpenChangePassword)
+    return () => window.removeEventListener('openChangePassword', handleOpenChangePassword)
+  }, [])
+
+  const handleLogout = () => {
+    authLogout()
+    router.push('/login')
+  }
+
+  const handleEditFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setEditFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleProfileFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setProfileFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handlePasswordFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setPasswordFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!user || !supabase) return
+
+    setSaving(true)
     try {
-      // Fetch user's businesses
-      const { data: businessData } = await supabase
-        .from('businesses')
-        .select('*')
-        .eq('user_id', userId)
+      const { error } = await supabase
+        .from('users')
+        .update({
+          full_name: profileFormData.full_name,
+          email: profileFormData.email,
+          username: profileFormData.username,
+        })
+        .eq('id', user.id)
 
-      const userBusinesses = businessData || []
-      setBusinesses(userBusinesses)
-
-      // Fetch statistics
-      const businessIds = userBusinesses.map(b => b.id)
-      
-      let menuCount = 0
-      let wifiCount = 0
-
-      if (businessIds.length > 0) {
-        const { data: menuData } = await supabase
-          .from('menu_items')
-          .select('id')
-          .in('business_id', businessIds)
-
-        const { data: wifiData } = await supabase
-          .from('wifi_networks')
-          .select('id')
-          .in('business_id', businessIds)
-
-        menuCount = menuData?.length || 0
-        wifiCount = wifiData?.length || 0
+      if (error) {
+        alert('Error updating profile: ' + error.message)
+        return
       }
 
-      setStats({
-        totalBusinesses: userBusinesses.length,
-        activeBusinesses: userBusinesses.filter(b => b.is_active).length,
-        totalMenuItems: menuCount,
-        totalWifiNetworks: wifiCount
-      })
+      // Refresh user session
+      await refreshUserSession(user.id)
+      const newSession = await refreshUserSession(user.id)
+      if (newSession) {
+        setUser({
+          ...user,
+          full_name: newSession.full_name,
+          email: newSession.email,
+          username: newSession.username,
+        })
+      }
+
+      alert('Profile updated successfully!')
     } catch (error) {
-      console.error('Error fetching user data:', error)
+      console.error('Error saving profile:', error)
+      alert('An error occurred while saving')
     } finally {
-      setLoading(false)
+      setSaving(false)
     }
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('userSession')
-    router.push('/login')
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!user || !supabase) return
+
+    // Validate passwords
+    if (passwordFormData.new_password !== passwordFormData.confirm_password) {
+      alert('New passwords do not match')
+      return
+    }
+
+    if (passwordFormData.new_password.length < 6) {
+      alert('Password must be at least 6 characters long')
+      return
+    }
+
+    setSaving(true)
+    try {
+      // Verify current password
+      const { data: userData } = await supabase
+        .from('users')
+        .select('password_hash')
+        .eq('id', user.id)
+        .single()
+
+      if (userData?.password_hash !== passwordFormData.current_password) {
+        alert('Current password is incorrect')
+        setSaving(false)
+        return
+      }
+
+      // Update password
+      const { error } = await supabase
+        .from('users')
+        .update({ password_hash: passwordFormData.new_password })
+        .eq('id', user.id)
+
+      if (error) {
+        alert('Error changing password: ' + error.message)
+        return
+      }
+
+      // Clear password form
+      setPasswordFormData({
+        current_password: '',
+        new_password: '',
+        confirm_password: '',
+      })
+
+      alert('Password changed successfully!')
+    } catch (error) {
+      console.error('Error changing password:', error)
+      alert('An error occurred while changing password')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleSaveBusinessDetails = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!business || !supabase) return
+
+    setSaving(true)
+    try {
+      const { error } = await supabase
+        .from('businesses')
+        .update({
+          name: editFormData.name,
+          username: editFormData.username,
+          address: editFormData.address,
+          category: editFormData.category,
+          phone: editFormData.phone,
+          email: editFormData.email,
+          description: editFormData.description,
+          website: editFormData.website,
+          opening_hours: editFormData.opening_hours,
+          facebook_url: editFormData.facebook_url,
+          instagram_url: editFormData.instagram_url,
+          twitter_url: editFormData.twitter_url,
+        })
+        .eq('id', business.id)
+
+      if (error) {
+        alert('Error updating business: ' + error.message)
+        return
+      }
+
+      // Refresh business data
+      await fetchOwnerData(business.id)
+      setShowEditForm(false)
+      alert('Business details updated successfully!')
+    } catch (error) {
+      console.error('Error saving business:', error)
+      alert('An error occurred while saving')
+    } finally {
+      setSaving(false)
+    }
   }
 
   if (loading) {
@@ -125,17 +366,593 @@ export default function UserDashboard() {
 
   if (!user) return null
 
+  // Render Owner Dashboard
+  if (user && user.business_id !== null) {
+    return (
+      <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  Welcome back, {user.full_name?.split(' ')[0] || user.username}! ??
+                </h1>
+                <p className="text-gray-600 mt-1">Business Owner Dashboard</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/"
+                  className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition font-medium"
+                >
+                  Home
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition font-medium"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Menu Items</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalMenuItems}</p>
+                  <p className="text-sm text-green-600 mt-1">{stats.activeMenuItems} active</p>
+                </div>
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <span className="text-2xl">??</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">WiFi Networks</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalWifiNetworks}</p>
+                  <p className="text-sm text-gray-500 mt-1">Configured</p>
+                </div>
+                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <span className="text-2xl">??</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Business Status</p>
+                  <p className="text-xl font-bold text-gray-900 mt-2">
+                    {business?.is_active ? 'Active' : 'Inactive'}
+                  </p>
+                  <p className="text-sm text-gray-500 mt-1">{business?.category || 'N/A'}</p>
+                </div>
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                  <span className="text-2xl">??</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Profile Views</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">{stats.businessViews}</p>
+                  <p className="text-sm text-gray-500 mt-1">This month</p>
+                </div>
+                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <span className="text-2xl">???</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Business Overview */}
+          {business && (
+            <div className="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-200">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Your Business</h2>
+              <div className="flex items-start gap-6">
+                {business.logo_url ? (
+                  <Image
+                    src={business.logo_url}
+                    alt={business.name}
+                    width={96}
+                    height={96}
+                    className="rounded-lg object-cover border-2 border-gray-200"
+                  />
+                ) : (
+                  <div className="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
+                    <span className="text-4xl">??</span>
+                  </div>
+                )}
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-gray-900">{business.name}</h3>
+                  <p className="text-gray-600 mt-1">@{business.username}</p>
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {business.category && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <span>??</span>
+                        <span>{business.category}</span>
+                      </div>
+                    )}
+                    {business.address && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <span>??</span>
+                        <span>{business.address}</span>
+                      </div>
+                    )}
+                    {business.phone && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <span>??</span>
+                        <span>{business.phone}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Quick Actions */}
+          <div className="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-200">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <button
+                onClick={() => setShowEditForm(true)}
+                className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group w-full text-left"
+              >
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition">
+                  <span className="text-xl">??</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">Edit Business Profile</p>
+                  <p className="text-sm text-gray-600">Update business information</p>
+                </div>
+              </button>
+
+              <Link
+                href="/menu"
+                className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
+              >
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition">
+                  <span className="text-xl">??</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">Manage Menu</p>
+                  <p className="text-sm text-gray-600">Add, edit, or remove menu items</p>
+                </div>
+              </Link>
+
+              <Link
+                href="/wifi"
+                className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
+              >
+                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition">
+                  <span className="text-xl">??</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">Manage WiFi</p>
+                  <p className="text-sm text-gray-600">Configure WiFi networks</p>
+                </div>
+              </Link>
+
+              <Link
+                href={`/${business?.username}`}
+                className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
+              >
+                <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition">
+                  <span className="text-xl">???</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">View Public Profile</p>
+                  <p className="text-sm text-gray-600">See how customers see you</p>
+                </div>
+              </Link>
+
+              <button
+                onClick={() => setShowEditProfile(true)}
+                className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group w-full text-left"
+              >
+                <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center group-hover:bg-pink-200 transition">
+                  <span className="text-xl">??</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">Edit Personal Profile</p>
+                  <p className="text-sm text-gray-600">Update your account details</p>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Account Information */}
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Account Information</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">Full Name</p>
+                <p className="text-gray-900 font-medium">{user.full_name || 'Not set'}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">Email</p>
+                <p className="text-gray-900 font-medium">{user.email}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">Username</p>
+                <p className="text-gray-900 font-medium">@{user.username}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Edit Personal Profile Modal */}
+        {showEditProfile && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-gray-900">Edit Personal Profile</h2>
+                <button
+                  onClick={() => setShowEditProfile(false)}
+                  className="text-gray-400 hover:text-gray-600 transition"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="p-6 space-y-6">
+                {/* Profile Information Form */}
+                <form onSubmit={handleSaveProfile}>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Information</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                      <input
+                        type="text"
+                        name="full_name"
+                        value={profileFormData.full_name}
+                        onChange={handleProfileFormChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={profileFormData.email}
+                        onChange={handleProfileFormChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Username *</label>
+                      <input
+                        type="text"
+                        name="username"
+                        value={profileFormData.username}
+                        onChange={handleProfileFormChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-end gap-4 mt-6">
+                    <button
+                      type="submit"
+                      disabled={saving}
+                      className="px-6 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {saving ? 'Saving...' : 'Save Profile'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Change Password Modal */}
+        {showChangePassword && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl shadow-2xl max-w-md w-full">
+              <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-gray-900">Change Password</h2>
+                <button
+                  onClick={() => setShowChangePassword(false)}
+                  className="text-gray-400 hover:text-gray-600 transition"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="p-6">
+                <form onSubmit={handleChangePassword}>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Current Password *</label>
+                      <input
+                        type="password"
+                        name="current_password"
+                        value={passwordFormData.current_password}
+                        onChange={handlePasswordFormChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">New Password *</label>
+                      <input
+                        type="password"
+                        name="new_password"
+                        value={passwordFormData.new_password}
+                        onChange={handlePasswordFormChange}
+                        required
+                        minLength={6}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Confirm New Password *</label>
+                      <input
+                        type="password"
+                        name="confirm_password"
+                        value={passwordFormData.confirm_password}
+                        onChange={handlePasswordFormChange}
+                        required
+                        minLength={6}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-end gap-4 mt-6">
+                    <button
+                      type="button"
+                      onClick={() => setShowChangePassword(false)}
+                      className="px-6 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition font-medium"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={saving}
+                      className="px-6 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {saving ? 'Changing...' : 'Change Password'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Edit Business Details Modal */}
+        {showEditForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-gray-900">Edit Business Details</h2>
+                <button
+                  onClick={() => setShowEditForm(false)}
+                  className="text-gray-400 hover:text-gray-600 transition"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveBusinessDetails} className="p-6 space-y-6">
+                {/* Basic Information */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Business Name *</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={editFormData.name}
+                        onChange={handleEditFormChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Username *</label>
+                      <input
+                        type="text"
+                        name="username"
+                        value={editFormData.username}
+                        onChange={handleEditFormChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+                      <input
+                        type="text"
+                        name="category"
+                        value={editFormData.category}
+                        onChange={handleEditFormChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={editFormData.phone}
+                        onChange={handleEditFormChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={editFormData.email}
+                        onChange={handleEditFormChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Website</label>
+                      <input
+                        type="url"
+                        name="website"
+                        value={editFormData.website}
+                        onChange={handleEditFormChange}
+                        placeholder="https://"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                    <input
+                      type="text"
+                      name="address"
+                      value={editFormData.address}
+                      onChange={handleEditFormChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                    />
+                  </div>
+
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <textarea
+                      name="description"
+                      value={editFormData.description}
+                      onChange={handleEditFormChange}
+                      rows={4}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                    />
+                  </div>
+
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Opening Hours</label>
+                    <input
+                      type="text"
+                      name="opening_hours"
+                      value={editFormData.opening_hours}
+                      onChange={handleEditFormChange}
+                      placeholder="e.g., Mon-Fri: 9AM-5PM"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                {/* Social Media */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Social Media</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Facebook URL</label>
+                      <input
+                        type="url"
+                        name="facebook_url"
+                        value={editFormData.facebook_url}
+                        onChange={handleEditFormChange}
+                        placeholder="https://facebook.com/..."
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Instagram URL</label>
+                      <input
+                        type="url"
+                        name="instagram_url"
+                        value={editFormData.instagram_url}
+                        onChange={handleEditFormChange}
+                        placeholder="https://instagram.com/..."
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Twitter URL</label>
+                      <input
+                        type="url"
+                        name="twitter_url"
+                        value={editFormData.twitter_url}
+                        onChange={handleEditFormChange}
+                        placeholder="https://twitter.com/..."
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex items-center justify-end gap-4 pt-4 border-t border-gray-200">
+                  <button
+                    type="button"
+                    onClick={() => setShowEditForm(false)}
+                    disabled={saving}
+                    className="px-6 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    className="px-6 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {saving ? 'Saving...' : 'Save Changes'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // Render Normal User Dashboard
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Welcome back, {user.full_name?.split(' ')[0] || user.username}! 👋
+                Welcome, {user.full_name?.split(' ')[0] || user.username}! ??
               </h1>
-              <p className="text-gray-600 mt-1">Manage your businesses and grow your online presence</p>
+              <p className="text-gray-600 mt-1">Ready to start your business journey?</p>
             </div>
             <div className="flex items-center gap-3">
               <Link
@@ -155,231 +972,115 @@ export default function UserDashboard() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 hover:shadow-md transition">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">My Businesses</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalBusinesses}</p>
-                <p className="text-sm text-green-600 mt-1">{stats.activeBusinesses} active</p>
-              </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <span className="text-2xl">🏢</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 hover:shadow-md transition">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Menu Items</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalMenuItems}</p>
-                <p className="text-sm text-gray-500 mt-1">Across all businesses</p>
-              </div>
-              <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                <span className="text-2xl">🍕</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 hover:shadow-md transition">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">WiFi Networks</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalWifiNetworks}</p>
-                <p className="text-sm text-gray-500 mt-1">Configured</p>
-              </div>
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                <span className="text-2xl">📶</span>
-              </div>
-            </div>
-          </div>
-
+        {/* Welcome Card */}
+        <div className="bg-linear-to-br from-[#ED1D33] to-red-600 rounded-xl shadow-lg p-8 mb-8 text-white">
+          <h2 className="text-2xl font-bold mb-2">Get Started with SliceBlaze! ??</h2>
+          <p className="text-red-100 mb-6">
+            Create your business profile and start connecting with customers today.
+          </p>
           <Link
             href="/add-business"
-            className="bg-gradient-to-br from-[#ED1D33] to-red-600 rounded-xl shadow-sm p-6 border border-red-300 hover:shadow-md transition group cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#ED1D33] rounded-lg hover:bg-gray-100 transition font-semibold"
           >
-            <div className="flex flex-col items-center justify-center h-full text-center">
-              <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition">
-                <span className="text-3xl">➕</span>
-              </div>
-              <p className="text-white font-semibold text-lg">Add New Business</p>
-              <p className="text-red-100 text-sm mt-1">Start growing today</p>
-            </div>
+            <span>?</span>
+            Create Your Business
           </Link>
+        </div>
+
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+              <span className="text-2xl">??</span>
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Business Profile</h3>
+            <p className="text-gray-600 text-sm">
+              Create a professional profile for your business with photos, details, and contact information.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+              <span className="text-2xl">??</span>
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Digital Menu</h3>
+            <p className="text-gray-600 text-sm">
+              Share your menu online with beautiful formatting, prices, and item descriptions.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+              <span className="text-2xl">??</span>
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">WiFi Sharing</h3>
+            <p className="text-gray-600 text-sm">
+              Let customers easily connect to your WiFi with QR codes and password sharing.
+            </p>
+          </div>
         </div>
 
         {/* Quick Actions */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-200">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link
               href="/add-business"
               className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
             >
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition">
-                <span className="text-xl">🏢</span>
+                <span className="text-xl">??</span>
               </div>
               <div>
                 <p className="font-semibold text-gray-900">Create Business</p>
-                <p className="text-sm text-gray-600">Set up a new business profile</p>
+                <p className="text-sm text-gray-600">Set up your business profile</p>
               </div>
             </Link>
 
+            <button
+              onClick={() => setShowEditProfile(true)}
+              className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group w-full text-left"
+            >
+              <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition">
+                <span className="text-xl">??</span>
+              </div>
+              <div>
+                <p className="font-semibold text-gray-900">Edit Profile</p>
+                <p className="text-sm text-gray-600">Update your personal information</p>
+              </div>
+            </button>
+
             <Link
-              href="/my-businesses"
+              href="/search"
               className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
             >
               <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition">
-                <span className="text-xl">📋</span>
+                <span className="text-xl">??</span>
               </div>
               <div>
-                <p className="font-semibold text-gray-900">My Businesses</p>
-                <p className="text-sm text-gray-600">View and manage all businesses</p>
+                <p className="font-semibold text-gray-900">Explore Businesses</p>
+                <p className="text-sm text-gray-600">Find local businesses</p>
               </div>
             </Link>
 
             <Link
-              href={`/${user.username}`}
+              href="/contact"
               className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
             >
-              <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition">
-                <span className="text-xl">👤</span>
+              <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition">
+                <span className="text-xl">??</span>
               </div>
               <div>
-                <p className="font-semibold text-gray-900">View Profile</p>
-                <p className="text-sm text-gray-600">See your public profile</p>
+                <p className="font-semibold text-gray-900">Contact Support</p>
+                <p className="text-sm text-gray-600">Get help from our team</p>
               </div>
             </Link>
           </div>
         </div>
 
-        {/* My Businesses */}
+        {/* Account Information */}
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h2 className="text-xl font-bold text-gray-900">My Businesses</h2>
-              <p className="text-sm text-gray-600 mt-1">Manage your business profiles</p>
-            </div>
-            <Link
-              href="/add-business"
-              className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition font-medium flex items-center gap-2"
-            >
-              <span>➕</span>
-              Add Business
-            </Link>
-          </div>
-
-          {businesses.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-4xl">🏢</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">No businesses yet</h3>
-              <p className="text-gray-600 mb-6">Create your first business to get started</p>
-              <Link
-                href="/add-business"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition font-medium"
-              >
-                <span>➕</span>
-                Create Your First Business
-              </Link>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {businesses.map((business) => (
-                <div
-                  key={business.id}
-                  className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition group"
-                >
-                  {/* Cover Image */}
-                  <div 
-                    className="h-32 bg-gradient-to-br from-gray-200 to-gray-300 relative"
-                    style={{
-                      backgroundImage: business.cover_image_url ? `url(${business.cover_image_url})` : undefined,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center'
-                    }}
-                  >
-                    <div className="absolute top-3 right-3">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        business.is_active
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {business.is_active ? 'Active' : 'Inactive'}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Business Info */}
-                  <div className="p-5">
-                    <div className="flex items-start gap-3 mb-3">
-                      {business.logo_url ? (
-                        <img
-                          src={business.logo_url}
-                          alt={business.name}
-                          className="w-12 h-12 rounded-lg object-cover border-2 border-white shadow-sm"
-                        />
-                      ) : (
-                        <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <span className="text-xl">🏢</span>
-                        </div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-gray-900 truncate">{business.name}</h3>
-                        <p className="text-sm text-gray-600">@{business.username}</p>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2 mb-4">
-                      {business.category && (
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <span>📂</span>
-                          <span className="truncate">{business.category}</span>
-                        </div>
-                      )}
-                      {business.address && (
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <span>📍</span>
-                          <span className="truncate">{business.address}</span>
-                        </div>
-                      )}
-                      {business.phone && (
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <span>📞</span>
-                          <span className="truncate">{business.phone}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex gap-2">
-                      <Link
-                        href={`/${business.username}`}
-                        className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-center text-sm font-medium"
-                      >
-                        View
-                      </Link>
-                      <Link
-                        href={`/my-businesses?edit=${business.id}`}
-                        className="flex-1 px-3 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition text-center text-sm font-medium"
-                      >
-                        Manage
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Profile Section */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-6 border border-gray-200">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Account Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>

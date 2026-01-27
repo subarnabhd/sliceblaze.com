@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { getUserSession, isOwner } from '@/lib/auth'
 import { supabase, getBusinessWifi, addBusinessWifi, updateBusinessWifi, deleteBusinessWifi } from '@/lib/supabase'
 
 interface Business {
@@ -52,13 +53,26 @@ export default function WifiManagement() {
       return
     }
 
-    const userSession = localStorage.getItem('userSession')
+    const userSession = getUserSession()
     if (!userSession) {
       router.push('/login')
       return
     }
 
-    const userData = JSON.parse(userSession)
+    // Check if user is owner
+    if (!isOwner(userSession)) {
+      alert('You must be a business owner to manage WiFi.')
+      router.push('/dashboard')
+      return
+    }
+
+    const userData = {
+      id: userSession.id,
+      username: userSession.username,
+      email: userSession.email,
+      full_name: userSession.full_name,
+      business_id: userSession.business_id
+    }
     setUser(userData)
 
     if (userData.business_id) {

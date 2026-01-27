@@ -18,15 +18,6 @@ export default function RegisterLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <body
-        className={`${outfit.variable} font-sans antialiased bg-white`}
-        suppressHydrationWarning
-      >
-        {children}
-      </body>
-    </html>
-  );
+  return <>{children}</>;
 }
 

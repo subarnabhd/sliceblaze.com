@@ -10,6 +10,7 @@ interface Category {
   name: string
   description: string
   icon: string
+  image_url: string
   created_at: string
   business_count?: number
 }
@@ -20,13 +21,27 @@ export default function CategoryManagement() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [showModal, setShowModal] = useState(false)
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view'>('create')
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    icon: '📂'
+    icon: '📂',
+    image_url: ''
   })
+  const [uploading, setUploading] = useState(false)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string>('')
+
+  // Popular emoji options for categories
+  const emojiOptions = [
+    '🍽️', '☕', '🍺', '🍔', '🥖', '🍕', '🍣', '🍛', '🥡', '🍝',
+    '🌮', '🍰', '🍻', '🏪', '🏢', '🛒', '🎭', '🎨', '💼', '🏥',
+    '✈️', '🏋️', '💇', '🚗', '🏠', '🎓', '📚', '🎵', '🎮', '⚽',
+    '👔', '👗', '💍', '🔧', '🔨', '🌸', '🐾', '🍷', '🧁', '🥗',
+    '🍜', '🍱', '🥘', '🍲', '🥟', '🍞', '🥐', '🧀', '🥓', '🍳'
+  ]
 
   useEffect(() => {
     checkAuth()
@@ -96,9 +111,13 @@ export default function CategoryManagement() {
     setFormData({
       name: '',
       description: '',
-      icon: '📂'
+      icon: '📂',
+      image_url: ''
     })
+    setImageFile(null)
+    setImagePreview('')
     setShowModal(true)
+    setShowEmojiPicker(false)
   }
 
   const openEditModal = (category: Category) => {
@@ -107,8 +126,11 @@ export default function CategoryManagement() {
     setFormData({
       name: category.name,
       description: category.description || '',
-      icon: category.icon || '📂'
+      icon: category.icon || '📂',
+      image_url: category.image_url || ''
     })
+    setImageFile(null)
+    setImagePreview(category.image_url || '')
     setShowModal(true)
   }
 
@@ -118,40 +140,118 @@ export default function CategoryManagement() {
     setShowModal(true)
   }
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setImageFile(file)
+      // Create preview
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const uploadImage = async (): Promise<string | null> => {
+    if (!imageFile) return null
+
+    try {
+      setUploading(true)
+      const formData = new FormData()
+      formData.append('file', imageFile)
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error('Upload failed')
+      }
+
+      const data = await response.json()
+      return data.url
+    } catch (error) {
+      console.error('Error uploading image:', error)
+      alert('Failed to upload image')
+      return null
+    } finally {
+      setUploading(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    if (!supabase) {
+      alert('Database connection not available')
+      return
+    }
+
     try {
+      // Upload image if a new file was selected
+      let imageUrl = formData.image_url
+      if (imageFile) {
+        const uploadedUrl = await uploadImage()
+        if (uploadedUrl) {
+          imageUrl = uploadedUrl
+        }
+      }
+
       if (modalMode === 'create') {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('categories')
           .insert([{
             name: formData.name,
             description: formData.description,
-            icon: formData.icon
+            icon: formData.icon,
+            image_url: imageUrl
           }])
+          .select()
 
-        if (error) throw error
+        if (error) {
+          console.error('Insert error details:', JSON.stringify(error, null, 2))
+          alert(`Error creating category: ${error.message || error.hint || 'Please check if the categories table exists'}`)
+          return
+        }
         alert('Category created successfully!')
       } else if (modalMode === 'edit' && selectedCategory) {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('categories')
           .update({
             name: formData.name,
             description: formData.description,
-            icon: formData.icon
+            icon: formData.icon,
+            image_url: imageUrl
           })
           .eq('id', selectedCategory.id)
+          .select()
 
-        if (error) throw error
+        if (error) {
+          console.error('Update error details:', {
+            error,
+            message: error.message,
+            hint: error.hint,
+            details: error.details,
+            code: error.code,
+            full: JSON.stringify(error)
+          })
+          alert(`Error updating category: ${error.message || error.hint || 'Database error - check browser console'}`)
+          return
+        }
         alert('Category updated successfully!')
       }
 
       setShowModal(false)
+      setShowEmojiPicker(false)
+      setImageFile(null)
+      setImagePreview('')
       fetchCategories()
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving category:', error)
-      alert('Error saving category. Please try again.')
+      const errorMsg = error?.message || error?.error_description || 'Unknown error occurred'
+      alert(`Error: ${errorMsg}. Make sure the categories table exists in Supabase with columns: id, name, description, icon, image_url, created_at`)
     }
   }
 
@@ -265,6 +365,9 @@ export default function CategoryManagement() {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Image
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Icon
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -285,13 +388,26 @@ export default function CategoryManagement() {
                   {filteredCategories.map((category) => (
                     <tr key={category.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
+                        {category.image_url ? (
+                          <img 
+                            src={category.image_url} 
+                            alt={category.name}
+                            className="w-16 h-16 object-cover rounded-lg shadow-sm"
+                          />
+                        ) : (
+                          <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <span className="text-gray-400 text-xs">No image</span>
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-2xl">{category.icon}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">{category.name}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-gray-500">{category.description || '-'}</div>
+                        <div className="text-sm text-gray-500 max-w-xs truncate">{category.description || '-'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
@@ -352,6 +468,18 @@ export default function CategoryManagement() {
 
             {modalMode === 'view' && selectedCategory ? (
               <div className="space-y-4">
+                {selectedCategory.image_url && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Category Image</label>
+                    <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
+                      <img 
+                        src={selectedCategory.image_url} 
+                        alt={selectedCategory.name}
+                        className="w-full h-64 object-cover"
+                      />
+                    </div>
+                  </div>
+                )}
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Icon</label>
                   <p className="mt-1 text-4xl">{selectedCategory.icon}</p>
@@ -407,37 +535,130 @@ export default function CategoryManagement() {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
-                    placeholder="Category description..."
+                    placeholder="Brief description of this category..."
                     rows={3}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Icon (Emoji)
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Category Image URL
                   </label>
                   <input
-                    type="text"
-                    value={formData.icon}
-                    onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent text-2xl"
-                    placeholder="📂"
-                    maxLength={2}
+                    type="url"
+                    value={formData.image_url}
+                    onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                    placeholder="https://example.com/image.jpg"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Use an emoji to represent this category</p>
+                  <p className="text-xs text-gray-500 mt-1">Or upload an image below</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Upload Category Image
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#ED1D33] file:text-white hover:file:bg-red-700 file:cursor-pointer"
+                  />
+                  {(imagePreview || formData.image_url) && (
+                    <div className="mt-3 border-2 border-gray-200 rounded-lg overflow-hidden">
+                      <img 
+                        src={imagePreview || formData.image_url} 
+                        alt="Category preview" 
+                        className="w-full h-48 object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23f0f0f0" width="200" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EInvalid Image%3C/text%3E%3C/svg%3E'
+                        }}
+                      />
+                    </div>
+                  )}
+                  <p className="text-xs text-gray-500 mt-1">Optional: Upload or provide URL for a category image</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Icon (Emoji) *
+                  </label>
+                  
+                  {/* Current Icon Display */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-3xl border-2 border-gray-300">
+                      {formData.icon || '📂'}
+                    </div>
+                    <div className="flex-1">
+                      <input
+                        type="text"
+                        value={formData.icon}
+                        onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent text-2xl"
+                        placeholder="📂"
+                        maxLength={2}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Emoji Picker Toggle */}
+                  <button
+                    type="button"
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    className="text-sm text-[#ED1D33] hover:underline mb-2 flex items-center gap-1"
+                  >
+                    {showEmojiPicker ? '▼' : '▶'} {showEmojiPicker ? 'Hide' : 'Show'} emoji picker
+                  </button>
+
+                  {/* Emoji Grid */}
+                  {showEmojiPicker && (
+                    <div className="border-2 border-gray-200 rounded-lg p-3 bg-gray-50 max-h-48 overflow-y-auto">
+                      <div className="grid grid-cols-8 gap-2">
+                        {emojiOptions.map((emoji, index) => (
+                          <button
+                            key={index}
+                            type="button"
+                            onClick={() => {
+                              setFormData({ ...formData, icon: emoji })
+                              setShowEmojiPicker(false)
+                            }}
+                            className={`text-2xl p-2 rounded hover:bg-white transition ${
+                              formData.icon === emoji ? 'bg-[#ED1D33] bg-opacity-10 ring-2 ring-[#ED1D33]' : ''
+                            }`}
+                            title={emoji}
+                          >
+                            {emoji}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  <p className="text-xs text-gray-500 mt-2">
+                    Click an emoji above or type/paste one directly
+                  </p>
                 </div>
 
                 <div className="flex gap-3 mt-6">
                   <button
                     type="submit"
-                    className="flex-1 px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition"
+                    disabled={uploading}
+                    className="flex-1 px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    {modalMode === 'create' ? 'Create Category' : 'Update Category'}
+                    {uploading ? (
+                      <>
+                        <div className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-r-transparent"></div>
+                        Uploading...
+                      </>
+                    ) : (
+                      <>{modalMode === 'create' ? 'Create Category' : 'Update Category'}</>
+                    )}
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+                    disabled={uploading}
+                    className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Cancel
                   </button>

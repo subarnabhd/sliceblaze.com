@@ -1,9 +1,12 @@
+'use client'
+
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "../globals.css";
 import Header from "@/components/Header";
 import Copyright from "@/components/Copyright";
 import Footer from "@/components/Footer";
+import { usePathname } from "next/navigation";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -11,28 +14,21 @@ const outfit = Outfit({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-export const metadata: Metadata = {
-  title: "Sliceblaze",
-  description: "Your Business Digital Partner",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isAuthPage = pathname === '/login' || pathname === '/register';
+
   return (
-    <html lang="en">
-      <body
-        className={`${outfit.variable} font-sans antialiased bg-white`}
-        suppressHydrationWarning
-      >
-        <Header />
-        {children}
-        <Footer />
-        <Copyright />
-      </body>
-    </html>
+    <>
+      {!isAuthPage && <Header />}
+      {children}
+      {!isAuthPage && <Footer />}
+      {!isAuthPage && <Copyright />}
+    </>
   );
 }
 

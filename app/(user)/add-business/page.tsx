@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { getUserSession, refreshUserSession, isOwner } from '@/lib/auth'
 import Link from 'next/link'
 
 interface Category {
@@ -58,12 +59,6 @@ export default function AddBusinessPage() {
   const [checkingBusiness, setCheckingBusiness] = useState(true)
   const [existingBusiness, setExistingBusiness] = useState<Business | null>(null)
   const [categories, setCategories] = useState<Category[]>([])
-  const [activeTab, setActiveTab] = useState<'business' | 'menu' | 'wifi'>('business')
-  const [isEditing, setIsEditing] = useState(false)
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([])
-  const [wifiNetworks, setWiFiNetworks] = useState<WiFiNetwork[]>([])
-  const [editingMenuItem, setEditingMenuItem] = useState<MenuItem | null>(null)
-  const [editingWiFi, setEditingWiFi] = useState<WiFiNetwork | null>(null)
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -92,14 +87,28 @@ export default function AddBusinessPage() {
   }, [router])
 
   const checkUserSession = async () => {
-    const session = localStorage.getItem('userSession')
+    const session = getUserSession()
     if (!session) {
       router.push('/login')
       return
     }
 
-    const userData = JSON.parse(session)
-    await checkExistingBusiness(userData.id)
+    // Refresh session to get latest data
+    const refreshedSession = await refreshUserSession(session.id)
+    if (!refreshedSession) {
+      router.push('/login')
+      return
+    }
+
+    // Check if user is already an owner (has a business)
+    if (isOwner(refreshedSession)) {
+      setExistingBusiness({ id: refreshedSession.business_id! } as Business)
+      setCheckingBusiness(false)
+      setLoading(false)
+      return
+    }
+
+    await checkExistingBusiness(refreshedSession.id)
     await fetchCategories()
     setLoading(false)
   }
@@ -112,16 +121,17 @@ export default function AddBusinessPage() {
 
     try {
       // Check if user already has a business_id assigned
-      const { data: user, error } = await supabase
+      const { data: user } = await supabase
         .from('users')
         .select('business_id, businesses(*)')
         .eq('id', userId)
         .single()
 
       if (user && user.business_id && user.businesses) {
-        setExistingBusiness(user.businesses as Business)
+        const biz = Array.isArray(user.businesses) ? user.businesses[0] : user.businesses
+        setExistingBusiness(biz as Business)
         // Load business data into form for editing
-        const biz = user.businesses as Business
+        const businessData = biz as Business
         setFormData({
           name: biz.name || '',
           username: biz.username || '',
@@ -297,8 +307,11 @@ export default function AddBusinessPage() {
         }
       }
 
+      // Refresh session to update user role to owner
+      await refreshUserSession(userData.id)
+      
       alert('Business created successfully! You are now the owner.')
-      router.push('/my-businesses')
+      router.push('/dashboard')
     } catch (err) {
       console.error('Error:', err)
       alert('An error occurred while creating the business')
@@ -318,14 +331,32 @@ export default function AddBusinessPage() {
     )
   }
 
-  // If user already has a business, redirect to manage page
+  // If user already has a business, show message and redirect
   if (existingBusiness) {
-    router.push('/manage-business')
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ED1D33] mx-auto"></div>
-          <p className="mt-4 text-gray-600">Redirecting to manage business...</p>
+        <div className="max-w-md bg-white rounded-xl shadow-lg p-8 text-center">
+          <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl">⚠️</span>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">One Business Per Account</h2>
+          <p className="text-gray-600 mb-6">
+            You already have a business associated with your account. Each user can only create one business.
+          </p>
+          <div className="flex flex-col gap-3">
+            <Link
+              href="/manage-business"
+              className="px-6 py-3 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition font-semibold"
+            >
+              Manage Your Business
+            </Link>
+            <Link
+              href="/dashboard"
+              className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-semibold"
+            >
+              Go to Dashboard
+            </Link>
+          </div>
         </div>
       </div>
     )

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { getUserSession, isOwner } from '@/lib/auth'
 import { 
   supabase,
   getMenuCategories,
@@ -95,13 +96,23 @@ export default function UserMenuManagement() {
       return
     }
 
-    const userSession = localStorage.getItem('userSession')
+    const userSession = getUserSession()
     if (!userSession) {
       router.push('/login')
       return
     }
 
-    const userData = JSON.parse(userSession)
+    // Check if user is owner
+    if (!isOwner(userSession)) {
+      alert('You must be a business owner to manage menus.')
+      router.push('/dashboard')
+      return
+    }
+
+    const userData = {
+      id: userSession.id,
+      business_id: userSession.business_id
+    }
     setUser(userData)
 
     if (userData.business_id) {

@@ -2,6 +2,9 @@
 CREATE TABLE IF NOT EXISTS public.categories (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL UNIQUE,
+  description TEXT,
+  icon VARCHAR(10) DEFAULT '📂',
+  image_url TEXT,
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
