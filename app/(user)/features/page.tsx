@@ -105,7 +105,7 @@ export default function FeaturesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm text-white text-sm font-bold rounded-full mb-6">
-              <span className="text-lg">?</span>
+              <span className="text-lg">🚀</span>
               ALL FEATURES
             </div>
             <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
@@ -175,15 +175,23 @@ export default function FeaturesPage() {
 
                 {/* Feature Visual */}
                 <div className="flex-1">
-                  <div className={`relative bg-gradient-to-br ${feature.gradient} rounded-3xl p-12 shadow-2xl`}>
-                    <div className="bg-white rounded-2xl p-8 shadow-inner">
-                      <div className="space-y-4">
-                        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                        <div className="h-4 bg-gray-200 rounded w-full"></div>
-                        <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-                        <div className="h-32 bg-gray-100 rounded-lg mt-6 flex items-center justify-center">
-                          <span className="text-6xl">{feature.icon}</span>
+                  <div className={`relative rounded-3xl overflow-hidden shadow-2xl group`}>
+                    <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-10 group-hover:opacity-20 transition-opacity duration-300`}></div>
+                    <div className="relative bg-white p-10 border-2 border-gray-100 hover:border-gray-200 transition-all duration-300">
+                      <div className="flex items-center justify-center mb-8">
+                        <div className={`w-32 h-32 rounded-3xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center shadow-xl transform group-hover:scale-110 transition-transform duration-300`}>
+                          <span className="text-7xl">{feature.icon}</span>
                         </div>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="h-3 bg-gradient-to-r from-gray-200 to-gray-100 rounded-full w-4/5 mx-auto"></div>
+                        <div className="h-3 bg-gradient-to-r from-gray-200 to-gray-100 rounded-full w-full mx-auto"></div>
+                        <div className="h-3 bg-gradient-to-r from-gray-200 to-gray-100 rounded-full w-3/5 mx-auto"></div>
+                      </div>
+                      <div className="mt-8 grid grid-cols-3 gap-3">
+                        <div className={`h-16 rounded-xl bg-gradient-to-br ${feature.gradient} opacity-20`}></div>
+                        <div className={`h-16 rounded-xl bg-gradient-to-br ${feature.gradient} opacity-30`}></div>
+                        <div className={`h-16 rounded-xl bg-gradient-to-br ${feature.gradient} opacity-20`}></div>
                       </div>
                     </div>
                   </div>

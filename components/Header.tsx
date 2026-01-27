@@ -306,7 +306,7 @@ export default function Header() {
             </Link>
 
             <Link
-              href="#features"
+              href="/features"
               className="text-gray-700 hover:text-[#ED1D33] font-medium transition-colors"
             >
               Features
@@ -671,6 +671,27 @@ export default function Header() {
                 />
               </svg>
               Explore
+            </Link>
+
+            <Link
+              href="/features"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-[#ED1D33] rounded-lg transition-colors font-medium"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+              Features
             </Link>
 
             <Link

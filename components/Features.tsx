@@ -57,7 +57,7 @@ const Features = () => {
         {/* Section Header */}
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-linear-to-r from-red-100 to-pink-100 text-[#ED1D33] text-sm font-bold rounded-full mb-6">
-            <span className="text-lg">?</span>
+            <span className="text-lg">⚡</span>
             POWERFUL FEATURES
           </div>
           <h2 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
