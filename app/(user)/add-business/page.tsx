@@ -154,44 +154,12 @@ export default function AddBusinessPage() {
           brandprimarycolor: biz.brandprimarycolor || '#ED1D33',
           brandsecondarycolor: biz.brandsecondarycolor || '#000000',
         })
-        // Fetch menu items and wifi networks
-        await fetchMenuItems(biz.id)
-        await fetchWiFiNetworks(biz.id)
       }
     } catch (err) {
       // No business found, which is fine
       console.log('No existing business found')
     } finally {
       setCheckingBusiness(false)
-    }
-  }
-
-  const fetchMenuItems = async (businessId: number) => {
-    if (!supabase) return
-    try {
-      const { data, error } = await supabase
-        .from('menu_items')
-        .select('*')
-        .eq('business_id', businessId)
-        .order('name')
-      
-      if (data) setMenuItems(data)
-    } catch (err) {
-      console.error('Error fetching menu items:', err)
-    }
-  }
-
-  const fetchWiFiNetworks = async (businessId: number) => {
-    if (!supabase) return
-    try {
-      const { data, error } = await supabase
-        .from('wifi_networks')
-        .select('*')
-        .eq('business_id', businessId)
-      
-      if (data) setWiFiNetworks(data)
-    } catch (err) {
-      console.error('Error fetching wifi networks:', err)
     }
   }
 

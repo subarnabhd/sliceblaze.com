@@ -5,7 +5,7 @@ import Link from 'next/link'
 export default function FeaturesPage() {
   const mainFeatures = [
     {
-      icon: '??',
+      icon: '🏢',
       title: 'Professional Business Profiles',
       description: 'Create a stunning digital presence for your business with fully customizable profiles.',
       features: [
@@ -18,7 +18,7 @@ export default function FeaturesPage() {
       gradient: 'from-red-500 to-pink-500'
     },
     {
-      icon: '??',
+      icon: '📖',
       title: 'Smart Digital Menus',
       description: 'Showcase your products and services with beautiful, easy-to-manage digital menus.',
       features: [
@@ -31,7 +31,7 @@ export default function FeaturesPage() {
       gradient: 'from-blue-500 to-cyan-500'
     },
     {
-      icon: '??',
+      icon: '📶',
       title: 'WiFi QR Code Generator',
       description: 'Share your WiFi credentials securely with customers using QR codes.',
       features: [
@@ -44,7 +44,7 @@ export default function FeaturesPage() {
       gradient: 'from-purple-500 to-indigo-500'
     },
     {
-      icon: '??',
+      icon: '🔍',
       title: 'Enhanced Discoverability',
       description: 'Get found by local customers actively searching for businesses like yours.',
       features: [
@@ -57,7 +57,7 @@ export default function FeaturesPage() {
       gradient: 'from-green-500 to-emerald-500'
     },
     {
-      icon: '??',
+      icon: '📱',
       title: 'Mobile-First Design',
       description: 'Perfect experience across all devices - phones, tablets, and desktops.',
       features: [
@@ -70,7 +70,7 @@ export default function FeaturesPage() {
       gradient: 'from-orange-500 to-red-500'
     },
     {
-      icon: '?',
+      icon: '⚡',
       title: 'Instant Real-Time Updates',
       description: 'Make changes to your business information and see them live immediately.',
       features: [
@@ -85,14 +85,14 @@ export default function FeaturesPage() {
   ]
 
   const additionalFeatures = [
-    { icon: '??', title: 'Custom Themes', description: 'Choose from multiple themes or create your own' },
-    { icon: '??', title: 'Analytics Dashboard', description: 'Track views, clicks, and customer engagement' },
-    { icon: '??', title: 'Secure & Private', description: 'Your data is encrypted and protected' },
-    { icon: '??', title: 'Customer Reviews', description: 'Collect and display customer testimonials' },
-    { icon: '??', title: 'Email Notifications', description: 'Stay informed about updates and activities' },
-    { icon: '??', title: 'Multi-language', description: 'Support for multiple languages' },
-    { icon: '??', title: 'Custom URLs', description: 'Get your own branded web address' },
-    { icon: '?', title: 'Priority Support', description: '24/7 customer support for all users' }
+    { icon: '🎨', title: 'Custom Themes', description: 'Choose from multiple themes or create your own' },
+    { icon: '📊', title: 'Analytics Dashboard', description: 'Track views, clicks, and customer engagement' },
+    { icon: '🔒', title: 'Secure & Private', description: 'Your data is encrypted and protected' },
+    { icon: '💬', title: 'Customer Reviews', description: 'Collect and display customer testimonials' },
+    { icon: '📧', title: 'Email Notifications', description: 'Stay informed about updates and activities' },
+    { icon: '🌐', title: 'Multi-language', description: 'Support for multiple languages' },
+    { icon: '🔗', title: 'Custom URLs', description: 'Get your own branded web address' },
+    { icon: '⭐', title: 'Priority Support', description: '24/7 customer support for all users' }
   ]
 
   return (
