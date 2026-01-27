@@ -6,6 +6,16 @@ import { getUserSession, isOwner, logout as authLogout, refreshUserSession } fro
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import Image from 'next/image'
+import { 
+  ListIcon, 
+  EditIcon, 
+  UserCircleIcon, 
+  BusinessIcon,
+  SearchIcon,
+  ContactIcon,
+  PlusIcon
+} from '@/icons/Icons'
+import { DashboardIcon, UserIcon } from '@/icons/AccountSectionIcons'
 
 interface Business {
   id: number
@@ -376,7 +386,7 @@ export default function UserDashboard() {
             <div className="flex justify-between items-center">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">
-                  Welcome back, {user.full_name?.split(' ')[0] || user.username}! ??
+                  Welcome back, {user.full_name?.split(' ')[0] || user.username}!
                 </h1>
                 <p className="text-gray-600 mt-1">Business Owner Dashboard</p>
               </div>
@@ -409,7 +419,9 @@ export default function UserDashboard() {
                   <p className="text-sm text-green-600 mt-1">{stats.activeMenuItems} active</p>
                 </div>
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">??</span>
+                  <div className="scale-[2]">
+                    <ListIcon />
+                  </div>
                 </div>
               </div>
             </div>
@@ -422,7 +434,9 @@ export default function UserDashboard() {
                   <p className="text-sm text-gray-500 mt-1">Configured</p>
                 </div>
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">??</span>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 18h.01M8.929 14.928c.834-.834 1.963-1.308 3.071-1.308 1.108 0 2.237.474 3.071 1.308m-8.485-3.536c2.259-2.259 5.888-2.259 8.147 0m-11.314-3.536c3.898-3.898 10.243-3.898 14.142 0" stroke="#9333EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </div>
               </div>
             </div>
@@ -437,7 +451,9 @@ export default function UserDashboard() {
                   <p className="text-sm text-gray-500 mt-1">{business?.category || 'N/A'}</p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">??</span>
+                  <div className="scale-[2]">
+                    <BusinessIcon />
+                  </div>
                 </div>
               </div>
             </div>
@@ -450,7 +466,10 @@ export default function UserDashboard() {
                   <p className="text-sm text-gray-500 mt-1">This month</p>
                 </div>
                 <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">???</span>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="#F97316"/>
+                    <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke="#F97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </div>
               </div>
             </div>
@@ -471,7 +490,9 @@ export default function UserDashboard() {
                   />
                 ) : (
                   <div className="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
-                    <span className="text-4xl">??</span>
+                    <div className="scale-[3]">
+                      <BusinessIcon />
+                    </div>
                   </div>
                 )}
                 <div className="flex-1">
@@ -480,19 +501,27 @@ export default function UserDashboard() {
                   <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
                     {business.category && (
                       <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <span>??</span>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M2 4.5A2.5 2.5 0 014.5 2H5.879a2.5 2.5 0 011.767.732l5.622 5.622a2.5 2.5 0 010 3.536l-1.586 1.586a2.5 2.5 0 01-3.536 0L2.732 8.054A2.5 2.5 0 012 6.287V4.5z" stroke="#596D66" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          <circle cx="5.5" cy="5.5" r=".5" fill="#596D66"/>
+                        </svg>
                         <span>{business.category}</span>
                       </div>
                     )}
                     {business.address && (
                       <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <span>??</span>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M8 8.667a1.333 1.333 0 100-2.667 1.333 1.333 0 000 2.667z" fill="#596D66"/>
+                          <path d="M8 1.333c-2.577 0-4.667 2.09-4.667 4.667 0 3.5 4.667 8.667 4.667 8.667s4.667-5.167 4.667-8.667c0-2.577-2.09-4.667-4.667-4.667z" stroke="#596D66" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
                         <span>{business.address}</span>
                       </div>
                     )}
                     {business.phone && (
                       <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <span>??</span>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M14.667 11.28v2a1.333 1.333 0 01-1.454 1.333 13.194 13.194 0 01-5.753-2.046 13 13 0 01-4-4A13.194 13.194 0 011.414 2.787 1.333 1.333 0 012.74 1.333h2A1.333 1.333 0 016.073 2.5c.085.638.242 1.266.467 1.874a1.333 1.333 0 01-.3 1.406l-.847.847a10.667 10.667 0 004 4l.847-.847a1.333 1.333 0 011.406-.3c.608.225 1.236.382 1.874.467a1.333 1.333 0 011.167 1.353z" stroke="#596D66" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
                         <span>{business.phone}</span>
                       </div>
                     )}
@@ -511,7 +540,7 @@ export default function UserDashboard() {
                 className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group w-full text-left"
               >
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition">
-                  <span className="text-xl">??</span>
+                  <EditIcon />
                 </div>
                 <div>
                   <p className="font-semibold text-gray-900">Edit Business Profile</p>
@@ -524,7 +553,7 @@ export default function UserDashboard() {
                 className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
               >
                 <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition">
-                  <span className="text-xl">??</span>
+                  <ListIcon />
                 </div>
                 <div>
                   <p className="font-semibold text-gray-900">Manage Menu</p>
@@ -537,7 +566,9 @@ export default function UserDashboard() {
                 className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
               >
                 <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition">
-                  <span className="text-xl">??</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 18h.01M8.929 14.928c.834-.834 1.963-1.308 3.071-1.308 1.108 0 2.237.474 3.071 1.308m-8.485-3.536c2.259-2.259 5.888-2.259 8.147 0m-11.314-3.536c3.898-3.898 10.243-3.898 14.142 0" stroke="#9333EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </div>
                 <div>
                   <p className="font-semibold text-gray-900">Manage WiFi</p>
@@ -550,7 +581,10 @@ export default function UserDashboard() {
                 className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
               >
                 <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition">
-                  <span className="text-xl">???</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="#F97316"/>
+                    <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke="#F97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </div>
                 <div>
                   <p className="font-semibold text-gray-900">View Public Profile</p>
@@ -563,7 +597,7 @@ export default function UserDashboard() {
                 className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group w-full text-left"
               >
                 <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center group-hover:bg-pink-200 transition">
-                  <span className="text-xl">??</span>
+                  <UserIcon />
                 </div>
                 <div>
                   <p className="font-semibold text-gray-900">Edit Personal Profile</p>
@@ -950,7 +984,7 @@ export default function UserDashboard() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Welcome, {user.full_name?.split(' ')[0] || user.username}! ??
+                Welcome, {user.full_name?.split(' ')[0] || user.username}!
               </h1>
               <p className="text-gray-600 mt-1">Ready to start your business journey?</p>
             </div>
@@ -975,7 +1009,7 @@ export default function UserDashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Card */}
         <div className="bg-linear-to-br from-[#ED1D33] to-red-600 rounded-xl shadow-lg p-8 mb-8 text-white">
-          <h2 className="text-2xl font-bold mb-2">Get Started with SliceBlaze! ??</h2>
+          <h2 className="text-2xl font-bold mb-2">Get Started with SliceBlaze!</h2>
           <p className="text-red-100 mb-6">
             Create your business profile and start connecting with customers today.
           </p>
@@ -983,7 +1017,9 @@ export default function UserDashboard() {
             href="/add-business"
             className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#ED1D33] rounded-lg hover:bg-gray-100 transition font-semibold"
           >
-            <span>?</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 4v12m-6-6h12" stroke="#ED1D33" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
             Create Your Business
           </Link>
         </div>
@@ -992,7 +1028,9 @@ export default function UserDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-              <span className="text-2xl">??</span>
+              <div className="scale-[2]">
+                <BusinessIcon />
+              </div>
             </div>
             <h3 className="text-lg font-bold text-gray-900 mb-2">Business Profile</h3>
             <p className="text-gray-600 text-sm">
@@ -1002,7 +1040,9 @@ export default function UserDashboard() {
 
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
             <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-              <span className="text-2xl">??</span>
+              <div className="scale-[2]">
+                <ListIcon />
+              </div>
             </div>
             <h3 className="text-lg font-bold text-gray-900 mb-2">Digital Menu</h3>
             <p className="text-gray-600 text-sm">
@@ -1012,7 +1052,9 @@ export default function UserDashboard() {
 
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-              <span className="text-2xl">??</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 18h.01M8.929 14.928c.834-.834 1.963-1.308 3.071-1.308 1.108 0 2.237.474 3.071 1.308m-8.485-3.536c2.259-2.259 5.888-2.259 8.147 0m-11.314-3.536c3.898-3.898 10.243-3.898 14.142 0" stroke="#9333EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </div>
             <h3 className="text-lg font-bold text-gray-900 mb-2">WiFi Sharing</h3>
             <p className="text-gray-600 text-sm">
@@ -1030,7 +1072,9 @@ export default function UserDashboard() {
               className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
             >
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition">
-                <span className="text-xl">??</span>
+                <div className="scale-[1.5]">
+                  <BusinessIcon />
+                </div>
               </div>
               <div>
                 <p className="font-semibold text-gray-900">Create Business</p>
@@ -1043,7 +1087,7 @@ export default function UserDashboard() {
               className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group w-full text-left"
             >
               <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition">
-                <span className="text-xl">??</span>
+                <UserIcon />
               </div>
               <div>
                 <p className="font-semibold text-gray-900">Edit Profile</p>
@@ -1056,7 +1100,9 @@ export default function UserDashboard() {
               className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
             >
               <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition">
-                <span className="text-xl">??</span>
+                <div className="scale-[1.2]">
+                  <SearchIcon />
+                </div>
               </div>
               <div>
                 <p className="font-semibold text-gray-900">Explore Businesses</p>
@@ -1069,7 +1115,7 @@ export default function UserDashboard() {
               className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
             >
               <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition">
-                <span className="text-xl">??</span>
+                <ContactIcon />
               </div>
               <div>
                 <p className="font-semibold text-gray-900">Contact Support</p>

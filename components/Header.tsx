@@ -219,10 +219,10 @@ export default function Header() {
             </Link>
 
             {/* Business Dropdown */}
-            <div className="relative" ref={businessDropdownRef}>
+            <div className="relative pointer-events-auto" ref={businessDropdownRef}>
               <button
                 onClick={() => setBusinessDropdownOpen(!businessDropdownOpen)}
-                className="flex items-center gap-1 text-gray-700 hover:text-[#ED1D33] font-medium transition-colors"
+                className="flex items-center gap-1 text-gray-700 hover:text-[#ED1D33] font-medium transition-colors pointer-events-auto"
               >
                 Business
                 <svg
@@ -241,7 +241,7 @@ export default function Header() {
               </button>
 
               {businessDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-[60] pointer-events-auto">
                   <div className="px-4 py-2 border-b border-gray-100">
                     <p className="text-xs font-semibold text-gray-700">
                       Browse by Category
@@ -314,7 +314,7 @@ export default function Header() {
 
             <Link
               href="/contact"
-              className="text-gray-700 hover:text-[#ED1D33] font-medium transition-colors"
+              className="text-gray-700 hover:text-[#ED1D33] font-medium transition-colors pointer-events-auto relative z-10"
             >
               Contact
             </Link>

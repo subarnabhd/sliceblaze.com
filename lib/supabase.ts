@@ -1,10 +1,10 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 // Only create client if both env vars are present
-export const supabase = supabaseUrl && supabaseAnonKey 
+export const supabase: SupabaseClient | null = supabaseUrl && supabaseAnonKey 
   ? createClient(supabaseUrl, supabaseAnonKey) 
   : null
 
@@ -26,7 +26,7 @@ export async function getBusinesses() {
 }
 
 // Function to fetch a single business by username
-export async function getBusinessByUsername(username) {
+export async function getBusinessByUsername(username: string) {
   if (!supabase) return null
 
   const { data, error } = await supabase
@@ -45,7 +45,7 @@ export async function getBusinessByUsername(username) {
 }
 
 // Function to fetch business by ID
-export async function getBusinessById(id) {
+export async function getBusinessById(id: number) {
   if (!supabase) return null
 
   const { data, error } = await supabase
@@ -64,7 +64,7 @@ export async function getBusinessById(id) {
 }
 
 // Function to create a new business
-export async function createBusiness(businessData) {
+export async function createBusiness(businessData: any) {
   if (!supabase) {
     console.error('Supabase client not initialized')
     return null
@@ -119,7 +119,7 @@ export async function createBusiness(businessData) {
 }
 
 // Function to update business details
-export async function updateBusiness(businessId, updates) {
+export async function updateBusiness(businessId: number, updates: any) {
   if (!supabase) return null
 
   const { data, error } = await supabase
@@ -139,7 +139,7 @@ export async function updateBusiness(businessId, updates) {
 }
 
 // Function to get user with business details
-export async function getUserBusiness(userId) {
+export async function getUserBusiness(userId: string) {
   if (!supabase) return null
 
   const { data, error } = await supabase
@@ -194,7 +194,7 @@ export async function getAllUsers() {
 }
 
 // Create a new user
-export async function createUser(userData) {
+export async function createUser(userData: any) {
   if (!supabase) return null
 
   const { data, error } = await supabase
@@ -212,7 +212,7 @@ export async function createUser(userData) {
 }
 
 // Update user
-export async function updateUser(userId, updates) {
+export async function updateUser(userId: string, updates: any) {
   if (!supabase) return null
 
   const { data, error } = await supabase
@@ -231,7 +231,7 @@ export async function updateUser(userId, updates) {
 }
 
 // Delete user
-export async function deleteUser(userId) {
+export async function deleteUser(userId: string) {
   if (!supabase) return false
 
   const { error } = await supabase
@@ -252,7 +252,7 @@ export async function deleteUser(userId) {
 // ============= WiFi Management Functions =============
 
 // Get all WiFi networks for a business
-export async function getBusinessWifi(businessId) {
+export async function getBusinessWifi(businessId: number) {
   if (!supabase) return []
 
   const { data, error } = await supabase
@@ -270,7 +270,7 @@ export async function getBusinessWifi(businessId) {
 }
 
 // Add a new WiFi network for a business
-export async function addBusinessWifi(wifiData) {
+export async function addBusinessWifi(wifiData: any) {
   if (!supabase) return null
 
   const { data, error } = await supabase
@@ -288,7 +288,7 @@ export async function addBusinessWifi(wifiData) {
 }
 
 // Update a WiFi network
-export async function updateBusinessWifi(wifiId, updates) {
+export async function updateBusinessWifi(wifiId: number, updates: any) {
   if (!supabase) return null
 
   const { data, error } = await supabase
@@ -307,7 +307,7 @@ export async function updateBusinessWifi(wifiId, updates) {
 }
 
 // Delete a WiFi network
-export async function deleteBusinessWifi(wifiId) {
+export async function deleteBusinessWifi(wifiId: number) {
   if (!supabase) return false
 
   const { error } = await supabase
@@ -328,7 +328,7 @@ export async function deleteBusinessWifi(wifiId) {
 // ===== CATEGORY Functions =====
 
 // Get all menu categories for a business
-export async function getMenuCategories(businessId) {
+export async function getMenuCategories(businessId: number) {
   if (!supabase) {
     console.error('Error fetching menu categories: Supabase client not initialized')
     return []
@@ -349,7 +349,7 @@ export async function getMenuCategories(businessId) {
 }
 
 // Get full menu with categories, subcategories, and items
-export async function getFullMenu(businessId) {
+export async function getFullMenu(businessId: number) {
   if (!supabase) return []
 
   try {
@@ -384,7 +384,7 @@ export async function getFullMenu(businessId) {
 }
 
 // Add a new menu category
-export async function addMenuCategory(categoryData) {
+export async function addMenuCategory(categoryData: any) {
   if (!supabase) {
     console.error('Error adding menu category: Supabase client not initialized')
     return null
@@ -405,7 +405,7 @@ export async function addMenuCategory(categoryData) {
 }
 
 // Update a menu category
-export async function updateMenuCategory(categoryId, updates) {
+export async function updateMenuCategory(categoryId: number, updates: any) {
   if (!supabase) {
     console.error('Error updating menu category: Supabase client not initialized')
     return null
@@ -427,7 +427,7 @@ export async function updateMenuCategory(categoryId, updates) {
 }
 
 // Delete a menu category
-export async function deleteMenuCategory(categoryId) {
+export async function deleteMenuCategory(categoryId: number) {
   if (!supabase) {
     console.error('Error deleting menu category: Supabase client not initialized')
     return false
@@ -449,7 +449,7 @@ export async function deleteMenuCategory(categoryId) {
 // ===== SUBCATEGORY Functions =====
 
 // Get all subcategories for a category
-export async function getMenuSubcategories(categoryId) {
+export async function getMenuSubcategories(categoryId: number) {
   if (!supabase) {
     console.error('Error fetching menu subcategories: Supabase client not initialized')
     return []
@@ -470,7 +470,7 @@ export async function getMenuSubcategories(categoryId) {
 }
 
 // Add a new menu subcategory
-export async function addMenuSubcategory(subcategoryData) {
+export async function addMenuSubcategory(subcategoryData: any) {
   if (!supabase) {
     console.error('Error adding menu subcategory: Supabase client not initialized')
     return null
@@ -491,7 +491,7 @@ export async function addMenuSubcategory(subcategoryData) {
 }
 
 // Update a menu subcategory
-export async function updateMenuSubcategory(subcategoryId, updates) {
+export async function updateMenuSubcategory(subcategoryId: number, updates: any) {
   if (!supabase) {
     console.error('Error updating menu subcategory: Supabase client not initialized')
     return null
@@ -513,7 +513,7 @@ export async function updateMenuSubcategory(subcategoryId, updates) {
 }
 
 // Delete a menu subcategory
-export async function deleteMenuSubcategory(subcategoryId) {
+export async function deleteMenuSubcategory(subcategoryId: number) {
   if (!supabase) {
     console.error('Error deleting menu subcategory: Supabase client not initialized')
     return false
@@ -535,7 +535,7 @@ export async function deleteMenuSubcategory(subcategoryId) {
 // ===== ITEM Functions =====
 
 // Get all items for a subcategory
-export async function getMenuItems(subcategoryId) {
+export async function getMenuItems(subcategoryId: number) {
   if (!supabase) {
     console.error('Error fetching menu items: Supabase client not initialized')
     return []
@@ -556,7 +556,7 @@ export async function getMenuItems(subcategoryId) {
 }
 
 // Add a new menu item
-export async function addMenuItem(itemData) {
+export async function addMenuItem(itemData: any) {
   if (!supabase) {
     console.error('Error adding menu item: Supabase client not initialized')
     return null
@@ -577,7 +577,7 @@ export async function addMenuItem(itemData) {
 }
 
 // Update a menu item
-export async function updateMenuItem(itemId, updates) {
+export async function updateMenuItem(itemId: number, updates: any) {
   if (!supabase) {
     console.error('Error updating menu item: Supabase client not initialized')
     return null
@@ -599,7 +599,7 @@ export async function updateMenuItem(itemId, updates) {
 }
 
 // Delete a menu item
-export async function deleteMenuItem(itemId) {
+export async function deleteMenuItem(itemId: number) {
   if (!supabase) {
     console.error('Error deleting menu item: Supabase client not initialized')
     return false
