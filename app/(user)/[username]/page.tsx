@@ -79,7 +79,10 @@ interface MenuSubcategory {
   name: string
   display_order: number
   is_active: boolean
-  menu_items: unknown[]
+    menu_subcategories: MenuSubcategory[] // Moved to top level
+  }
+
+interface MenuSubcategory {
 }
 }
 
