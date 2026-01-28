@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "../globals.css";
 import Header from "@/components/Header";
-import Copyright from "@/components/Copyright";
 import Footer from "@/components/Footer";
 import { usePathname } from "next/navigation";
 
@@ -27,7 +26,6 @@ export default function RootLayout({
       {!isAuthPage && <Header />}
       {children}
       {!isAuthPage && <Footer />}
-      {!isAuthPage && <Copyright />}
     </>
   );
 }

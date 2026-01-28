@@ -13,33 +13,49 @@ interface Business {
   id: number
   name: string
   username: string
-  location: string
-  category: string
-  image: string
-  description: string
-  contact: string
-  whatsapp: string
-  website: string
-  openingHours: string
+  // New field names
+  address?: string
+  phone?: string
+  email?: string
+  logo?: string
+  logo_url?: string
+  cover_image?: string
+  cover_image_url?: string
+  photos?: string[]
+  opening_hours?: string
+  facebook_url?: string
+  instagram_url?: string
+  twitter_url?: string
+  primary_color?: string
+  secondary_color?: string
+  // Legacy field names (for backward compatibility)
+  location?: string
+  category?: string
+  image?: string
+  description?: string
+  contact?: string
+  whatsapp?: string
+  website?: string
+  openingHours?: string
   openinghours?: string
-  facebook: string
-  twitter: string
-  youtube: string
-  instagram: string
-  linkedin: string
-  tiktok: string
-  threads: string
-  googleMapUrl: string
+  facebook?: string
+  twitter?: string
+  youtube?: string
+  instagram?: string
+  linkedin?: string
+  tiktok?: string
+  threads?: string
+  googleMapUrl?: string
   googlemapurl?: string
-  getdirection: string
-  direction: string
-  menuUrl: string
+  getdirection?: string
+  direction?: string
+  menuUrl?: string
   menuurl?: string
-  wifiQrCode: string
+  wifiQrCode?: string
   wifiqrcode?: string
-  brandPrimaryColor: string
+  brandPrimaryColor?: string
   brandprimarycolor?: string
-  brandSecondaryColor: string
+  brandSecondaryColor?: string
   brandsecondarycolor?: string
 }
 
@@ -87,8 +103,9 @@ export default function BusinessProfilePage() {
           setMenu(menuData)
         console.log('Fetched business data:', data) // Debug log
         setBusiness(data)
-        if (data?.image) {
-          setImgSrc(data.image)
+        // Use new field name with fallback to old
+        if (data?.businesslogo || data?.logo_url || data?.logo || data?.image) {
+          setImgSrc(data.businesslogo || data.logo_url || data.logo || data.image)
         }
         // Fetch WiFi networks for the business
         if (data?.id) {
@@ -100,6 +117,19 @@ export default function BusinessProfilePage() {
     }
     fetchBusiness()
   }, [username])
+
+  // Helper functions to get values with fallback to old field names
+  const getAddress = () => business?.address || business?.location || ''
+  const getPhone = () => business?.phone || business?.contact || ''
+  const getEmail = () => business?.email || ''
+  const getLogoUrl = () => business?.businesslogo || business?.logo_url || business?.logo || business?.image || '/sample.svg'
+  const getCoverImageUrl = () => business?.cover_image_url || ''
+  const getOpeningHours = () => business?.opening_hours || business?.openingHours || business?.openinghours || ''
+  const getFacebookUrl = () => business?.facebook_url || business?.facebook || ''
+  const getInstagramUrl = () => business?.instagram_url || business?.instagram || ''
+  const getTwitterUrl = () => business?.twitter_url || business?.twitter || ''
+  const getPrimaryColor = () => business?.primary_color || business?.brandPrimaryColor || business?.brandprimarycolor || '#ED1D33'
+  const getSecondaryColor = () => business?.secondary_color || business?.brandSecondaryColor || business?.brandsecondarycolor || '#000000'
 
   if (loading) {
     return (
@@ -133,15 +163,15 @@ export default function BusinessProfilePage() {
         <div
           className="rounded-2xl border border-gray-200 bg-white/70 drop-shadow-xl backdrop-blur-lg transition-all duration-500 ease-in-out overflow-hidden mb-6"
           style={{
-            borderTop: `4px solid ${business.brandprimarycolor || business.brandPrimaryColor || "#ED1D33"}`,
+            borderTop: `4px solid ${getPrimaryColor()}`,
           }}
         >
           <div className="p-4 md:p-6 lg:p-8 bg-white">
             <div className="flex flex-col sm:flex-row items-start gap-4 md:gap-6">
               <div className="shrink-0">
                 <Image
-                  src={imgSrc}
-                  alt={`${business.name} logo - ${business.category} in ${business.location}`}
+                  src={getLogoUrl()}
+                  alt={`${business.name} logo - ${business.category} in ${getAddress()}`}
                   title={`${business.name} - ${business.category}`}
                   width={120}
                   height={120}
@@ -160,11 +190,8 @@ export default function BusinessProfilePage() {
                   <p
                     className="text-sm  px-3 py-1 rounded-full inline-block"
                     style={{
-                      color:
-                        business.brandprimarycolor ||
-                        business.brandPrimaryColor ||
-                        "#ED1D33",
-                      backgroundColor: `${business.brandprimarycolor || business.brandPrimaryColor || "#ED1D33"}20`,
+                      color: getPrimaryColor(),
+                      backgroundColor: `${getPrimaryColor()}20`,
                     }}
                   >
                     @{business.username}
@@ -234,7 +261,7 @@ export default function BusinessProfilePage() {
                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                       />
                     </svg>
-                    {business.location}
+                    {getAddress()}
                   </a>
                 ) : (
                   <p className="text-gray-500 flex items-center gap-2">
@@ -257,7 +284,7 @@ export default function BusinessProfilePage() {
                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                       />
                     </svg>
-                    {business.location}
+                    {getAddress()}
                   </p>
                 )}
               </div>
@@ -267,6 +294,25 @@ export default function BusinessProfilePage() {
               <p className="mt-6 text-gray-700 leading-relaxed">
                 {business.description}
               </p>
+            )}
+
+            {/* Business Photos Gallery */}
+            {business.photos && business.photos.length > 0 && (
+              <div className="mt-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Photos</h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  {business.photos.map((photo, index) => (
+                    <div key={index} className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer">
+                      <Image
+                        src={photo}
+                        alt={`${business.name} - Photo ${index + 1}`}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -278,7 +324,7 @@ export default function BusinessProfilePage() {
               Contact Information
             </h2>
             <div className="space-y-3">
-              {business.contact && (
+              {getPhone() && (
                 <div className="flex items-center gap-3">
                   <svg
                     className="w-5 h-5 text-gray-500"
@@ -293,7 +339,7 @@ export default function BusinessProfilePage() {
                       d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                     />
                   </svg>
-                  <span className="text-gray-700">{business.contact}</span>
+                  <span className="text-gray-700">{getPhone()}</span>
                 </div>
               )}
               {business.whatsapp && (
@@ -361,7 +407,7 @@ export default function BusinessProfilePage() {
                   View on Google Maps
                 </a>
               )}
-              {business.openingHours && (
+              {getOpeningHours() && (
                 <div className="flex items-center gap-3">
                   <svg
                     className="w-5 h-5 text-gray-500"
@@ -376,7 +422,7 @@ export default function BusinessProfilePage() {
                       d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <span className="text-gray-700">{business.openingHours}</span>
+                  <span className="text-gray-700">{getOpeningHours()}</span>
                 </div>
               )}
             </div>
@@ -386,9 +432,9 @@ export default function BusinessProfilePage() {
               Connect With Us
             </h2>
             <div className="space-y-3">
-              {business.facebook && (
+              {getFacebookUrl() && (
                 <a
-                  href={business.facebook}
+                  href={getFacebookUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-blue-600 hover:text-blue-700"
@@ -403,9 +449,9 @@ export default function BusinessProfilePage() {
                   Facebook
                 </a>
               )}
-              {business.instagram && (
+              {getInstagramUrl() && (
                 <a
-                  href={business.instagram}
+                  href={getInstagramUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-pink-600 hover:text-pink-700"
@@ -437,9 +483,9 @@ export default function BusinessProfilePage() {
                   TikTok
                 </a>
               )}
-              {business.twitter && (
+              {getTwitterUrl() && (
                 <a
-                  href={business.twitter}
+                  href={getTwitterUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-blue-400 hover:text-blue-500"

@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Copyright from "@/components/Copyright";
-import Footer from "@/components/Footer";
 import { generateOrganizationJsonLd } from "@/lib/json-ld";
 
 const outfit = Outfit({

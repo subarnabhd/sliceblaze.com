@@ -10,11 +10,8 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.91.0",
-<<<<<<< HEAD
     "@types/qrcode": "^1.5.6",
     "cloudinary": "^2.9.0",
-=======
->>>>>>> f28542084165a660a5ee7adaf53783d811b33bfd
     "next": "16.1.4",
     "next-cloudinary": "^6.17.5",
     "qrcode": "^1.5.4",

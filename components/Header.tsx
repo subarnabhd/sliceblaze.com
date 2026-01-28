@@ -29,21 +29,8 @@ interface CategoryWithCount {
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [user, setUser] = useState<UserSession | null>(() => {
-    // Initialize user from localStorage
-    if (typeof window !== 'undefined') {
-      const userSession = localStorage.getItem('userSession');
-      if (userSession) {
-        try {
-          return JSON.parse(userSession);
-        } catch (error) {
-          console.error('Error parsing user session:', error);
-          localStorage.removeItem('userSession');
-        }
-      }
-    }
-    return null;
-  });
+  const [mounted, setMounted] = useState(false);
+  const [user, setUser] = useState<UserSession | null>(null);
   const [userBusiness, setUserBusiness] = useState<UserBusiness | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [businessDropdownOpen, setBusinessDropdownOpen] = useState(false);
@@ -117,14 +104,26 @@ export default function Header() {
   // Check if user has a business when user changes
   useEffect(() => {
     if (user?.id) {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       checkUserBusiness(user.id);
     }
   }, [user?.id]);
 
+  // Load user session from localStorage after component mounts (client-side only)
+  useEffect(() => {
+    setMounted(true);
+    const userSession = localStorage.getItem('userSession');
+    if (userSession) {
+      try {
+        setUser(JSON.parse(userSession));
+      } catch (error) {
+        console.error('Error parsing user session:', error);
+        localStorage.removeItem('userSession');
+      }
+    }
+  }, []);
+
   // Fetch categories with business counts
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     fetchCategories();
   }, []);
 
@@ -219,7 +218,10 @@ export default function Header() {
             </Link>
 
             {/* Business Dropdown */}
-            <div className="relative pointer-events-auto" ref={businessDropdownRef}>
+            <div
+              className="relative pointer-events-auto"
+              ref={businessDropdownRef}
+            >
               <button
                 onClick={() => setBusinessDropdownOpen(!businessDropdownOpen)}
                 className="flex items-center gap-1 text-gray-700 hover:text-[#ED1D33] font-medium transition-colors pointer-events-auto"
@@ -241,7 +243,7 @@ export default function Header() {
               </button>
 
               {businessDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-[60] pointer-events-auto">
+                <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-60 pointer-events-auto">
                   <div className="px-4 py-2 border-b border-gray-100">
                     <p className="text-xs font-semibold text-gray-700">
                       Browse by Category
@@ -344,7 +346,15 @@ export default function Header() {
             </button>
 
             {/* Desktop User Menu */}
-            {user ? (
+
+            {!mounted ? (
+              <Link
+                className="hidden md:inline-block px-6 py-2.5 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-300 transition"
+                href="/login"
+              >
+                Login
+              </Link>
+            ) : user ? (
               <div className="hidden md:block relative" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -560,12 +570,25 @@ export default function Header() {
                 )}
               </div>
             ) : (
-              <Link
-                href="/login"
-                className="hidden md:inline-block px-6 py-2.5 bg-[#ED1D33] text-white text-sm font-semibold rounded-lg hover:bg-[#C91828] transition-colors shadow-sm hover:shadow-md"
-              >
-                LOGIN / SIGNUP
-              </Link>
+              <div className="flex gap-3">
+                
+                <Link
+                  className="hidden md:inline-block px-6 py-2.5 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-300 transition"
+                  href="/login"
+                >
+                  Login
+                </Link>
+
+                {/* Show Get Listed only if not logged in */}
+                {!user && (
+                  <Link
+                    className="hidden md:inline-block px-6 py-2.5 bg-[#ED1D33] text-white text-sm font-semibold rounded-lg hover:bg-[#D01828] transition "
+                    href="/add-business"
+                  >
+                    Get Listed
+                  </Link>
+                )}
+              </div>
             )}
           </div>
         </div>
@@ -579,8 +602,8 @@ export default function Header() {
             <Image
               src="/sliceblazelogo.svg"
               alt="SliceBlaze logo"
-              width={90}
-              height={30}
+              width={100}
+              height={40}
               priority
             />
             <button

@@ -11,22 +11,27 @@ interface Business {
   name: string
   username: string
   category: string
-  address: string
-  phone: string
-  email: string
+  location: string
+  contact: string
   is_active: boolean
   created_at: string
-  user_id?: number
   description?: string
   website?: string
-  logo_url?: string
-  cover_image_url?: string
-  opening_hours?: string
-  facebook_url?: string
-  instagram_url?: string
-  twitter_url?: string
-  primary_color?: string
-  secondary_color?: string
+  businesslogo?: string
+  businesscover?: string
+  businessphotos?: string[]
+  openinghours?: string
+  facebook?: string
+  instagram?: string
+  twitter?: string
+  tiktok?: string
+  whatsapp?: string
+  youtube?: string
+  linkedin?: string
+  threads?: string
+  googlemapurl?: string
+  brandprimarycolor?: string
+  brandsecondarycolor?: string
 }
 
 interface User {
@@ -43,33 +48,39 @@ export default function BusinessManagement() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterActive, setFilterActive] = useState<'all' | 'active' | 'inactive'>('all')
   const [showModal, setShowModal] = useState(false)
-  const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view' | 'assign'>('create')
+  const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view'>('create')
   const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(null)
   const [formData, setFormData] = useState({
     name: '',
     username: '',
     category: '',
-    address: '',
-    phone: '',
-    email: '',
+    location: '',
+    contact: '',
     is_active: true,
-    user_id: 0,
     description: '',
     website: '',
-    logo_url: '',
-    cover_image_url: '',
-    opening_hours: '',
-    facebook_url: '',
-    instagram_url: '',
-    twitter_url: '',
-    primary_color: '#ED1D33',
-    secondary_color: '#000000'
+    businesslogo: '',
+    businesscover: '',
+    businessphotos: [] as string[],
+    openinghours: '',
+    facebook: '',
+    instagram: '',
+    twitter: '',
+    tiktok: '',
+    whatsapp: '',
+    youtube: '',
+    linkedin: '',
+    threads: '',
+    googlemapurl: '',
+    brandprimarycolor: '#ED1D33',
+    brandsecondarycolor: '#000000'
   })
 
   useEffect(() => {
     checkAuth()
     fetchBusinesses()
     fetchUsers()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const checkAuth = () => {
@@ -145,21 +156,26 @@ export default function BusinessManagement() {
       name: '',
       username: '',
       category: '',
-      address: '',
-      phone: '',
-      email: '',
+      location: '',
+      contact: '',
       is_active: true,
-      user_id: 0,
       description: '',
       website: '',
-      logo_url: '',
-      cover_image_url: '',
-      opening_hours: '',
-      facebook_url: '',
-      instagram_url: '',
-      twitter_url: '',
-      primary_color: '#ED1D33',
-      secondary_color: '#000000'
+      businesslogo: '',
+      businesscover: '',
+      businessphotos: [],
+      openinghours: '',
+      facebook: '',
+      instagram: '',
+      twitter: '',
+      tiktok: '',
+      whatsapp: '',
+      youtube: '',
+      linkedin: '',
+      threads: '',
+      googlemapurl: '',
+      brandprimarycolor: '#ED1D33',
+      brandsecondarycolor: '#000000'
     })
     setShowModal(true)
   }
@@ -171,21 +187,26 @@ export default function BusinessManagement() {
       name: business.name,
       username: business.username,
       category: business.category,
-      address: business.address,
-      phone: business.phone,
-      email: business.email,
+      location: business.location,
+      contact: business.contact,
       is_active: business.is_active,
-      user_id: business.user_id || 0,
       description: business.description || '',
       website: business.website || '',
-      logo_url: business.logo_url || '',
-      cover_image_url: business.cover_image_url || '',
-      opening_hours: business.opening_hours || '',
-      facebook_url: business.facebook_url || '',
-      instagram_url: business.instagram_url || '',
-      twitter_url: business.twitter_url || '',
-      primary_color: business.primary_color || '#ED1D33',
-      secondary_color: business.secondary_color || '#000000'
+      businesslogo: business.businesslogo || '',
+      businesscover: business.businesscover || '',
+      businessphotos: business.businessphotos || [],
+      openinghours: business.openinghours || '',
+      facebook: business.facebook || '',
+      instagram: business.instagram || '',
+      twitter: business.twitter || '',
+      tiktok: business.tiktok || '',
+      whatsapp: business.whatsapp || '',
+      youtube: business.youtube || '',
+      linkedin: business.linkedin || '',
+      threads: business.threads || '',
+      googlemapurl: business.googlemapurl || '',
+      brandprimarycolor: business.brandprimarycolor || '#ED1D33',
+      brandsecondarycolor: business.brandsecondarycolor || '#000000'
     })
     setShowModal(true)
   }
@@ -193,16 +214,6 @@ export default function BusinessManagement() {
   const openViewModal = (business: Business) => {
     setModalMode('view')
     setSelectedBusiness(business)
-    setShowModal(true)
-  }
-
-  const openAssignModal = (business: Business) => {
-    setModalMode('assign')
-    setSelectedBusiness(business)
-    setFormData({
-      ...formData,
-      user_id: business.user_id || 0
-    })
     setShowModal(true)
   }
 
@@ -217,67 +228,89 @@ export default function BusinessManagement() {
             name: formData.name,
             username: formData.username,
             category: formData.category,
-            address: formData.address,
-            phone: formData.phone,
-            email: formData.email,
+            location: formData.location,
+            contact: formData.contact,
             is_active: formData.is_active,
-            user_id: formData.user_id || null,
             description: formData.description || null,
             website: formData.website || null,
-            logo_url: formData.logo_url || null,
-            cover_image_url: formData.cover_image_url || null,
-            opening_hours: formData.opening_hours || null,
-            facebook_url: formData.facebook_url || null,
-            instagram_url: formData.instagram_url || null,
-            twitter_url: formData.twitter_url || null,
-            primary_color: formData.primary_color || null,
-            secondary_color: formData.secondary_color || null
+            businesslogo: formData.businesslogo || null,
+            businesscover: formData.businesscover || null,
+            businessphotos: formData.businessphotos || null,
+            openinghours: formData.openinghours || null,
+            facebook: formData.facebook || null,
+            instagram: formData.instagram || null,
+            twitter: formData.twitter || null,
+            tiktok: formData.tiktok || null,
+            whatsapp: formData.whatsapp || null,
+            youtube: formData.youtube || null,
+            linkedin: formData.linkedin || null,
+            threads: formData.threads || null,
+            googlemapurl: formData.googlemapurl || null,
+            brandprimarycolor: formData.brandprimarycolor || null,
+            brandsecondarycolor: formData.brandsecondarycolor || null
           }])
 
-        if (error) throw error
+        if (error) {
+          console.error('Supabase error:', error)
+          throw new Error(error.message || 'Failed to create business')
+        }
         alert('Business created successfully!')
       } else if (modalMode === 'edit' && selectedBusiness) {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('businesses')
           .update({
             name: formData.name,
             username: formData.username,
             category: formData.category,
-            address: formData.address,
-            phone: formData.phone,
-            email: formData.email,
+            location: formData.location,
+            contact: formData.contact,
             is_active: formData.is_active,
-            user_id: formData.user_id || null,
             description: formData.description || null,
             website: formData.website || null,
-            logo_url: formData.logo_url || null,
-            cover_image_url: formData.cover_image_url || null,
-            opening_hours: formData.opening_hours || null,
-            facebook_url: formData.facebook_url || null,
-            instagram_url: formData.instagram_url || null,
-            twitter_url: formData.twitter_url || null,
-            primary_color: formData.primary_color || null,
-            secondary_color: formData.secondary_color || null
+            businesslogo: formData.businesslogo || null,
+            businesscover: formData.businesscover || null,
+            businessphotos: formData.businessphotos || null,
+            openinghours: formData.openinghours || null,
+            facebook: formData.facebook || null,
+            instagram: formData.instagram || null,
+            twitter: formData.twitter || null,
+            tiktok: formData.tiktok || null,
+            whatsapp: formData.whatsapp || null,
+            youtube: formData.youtube || null,
+            linkedin: formData.linkedin || null,
+            threads: formData.threads || null,
+            googlemapurl: formData.googlemapurl || null,
+            brandprimarycolor: formData.brandprimarycolor || null,
+            brandsecondarycolor: formData.brandsecondarycolor || null
           })
           .eq('id', selectedBusiness.id)
 
-        if (error) throw error
+        console.log('Update response:', { data, error, selectedBusinessId: selectedBusiness.id })
+        
+        if (error) {
+          console.error('Supabase error:', error)
+          console.error('Error details:', {
+            message: error.message,
+            details: error.details,
+            hint: error.hint,
+            code: error.code
+          })
+          throw new Error(error.message || error.details || 'Failed to update business')
+        }
         alert('Business updated successfully!')
-      } else if (modalMode === 'assign' && selectedBusiness) {
-        const { error } = await supabase
-          .from('businesses')
-          .update({ user_id: formData.user_id || null })
-          .eq('id', selectedBusiness.id)
-
-        if (error) throw error
-        alert('Business assigned successfully!')
+        fetchBusinesses() // Refresh the list
       }
 
       setShowModal(false)
       fetchBusinesses()
     } catch (error) {
       console.error('Error saving business:', error)
-      alert('Error saving business. Please try again.')
+      console.error('Error details:', JSON.stringify(error, null, 2))
+      if (error instanceof Error) {
+        console.error('Error message:', error.message)
+        console.error('Error stack:', error.stack)
+      }
+      alert(`Error saving business: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`)
     }
   }
 
@@ -428,8 +461,8 @@ export default function BusinessManagement() {
                       <div className="text-sm text-gray-500">{business.category}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">{business.phone}</div>
-                      <div className="text-sm text-gray-400">{business.email}</div>
+                      <div className="text-sm text-gray-500">{business.contact}</div>
+                      <div className="text-sm text-gray-400">{business.location}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -452,12 +485,6 @@ export default function BusinessManagement() {
                         className="text-indigo-600 hover:text-indigo-900 mr-3"
                       >
                         Edit
-                      </button>
-                      <button
-                        onClick={() => openAssignModal(business)}
-                        className="text-purple-600 hover:text-purple-900 mr-3"
-                      >
-                        Assign
                       </button>
                       <button
                         onClick={() => toggleBusinessStatus(business.id, business.is_active)}
@@ -495,7 +522,6 @@ export default function BusinessManagement() {
                 {modalMode === 'create' && 'Create New Business'}
                 {modalMode === 'edit' && 'Edit Business'}
                 {modalMode === 'view' && 'View Business Details'}
-                {modalMode === 'assign' && 'Assign Business to User'}
               </h3>
               <button
                 onClick={() => setShowModal(false)}
@@ -534,15 +560,11 @@ export default function BusinessManagement() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Phone</label>
-                    <p className="mt-1 text-gray-900">{selectedBusiness.phone}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Email</label>
-                    <p className="mt-1 text-gray-900">{selectedBusiness.email}</p>
+                    <p className="mt-1 text-gray-900">{selectedBusiness.contact}</p>
                   </div>
                   <div className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700">Address</label>
-                    <p className="mt-1 text-gray-900">{selectedBusiness.address}</p>
+                    <p className="mt-1 text-gray-900">{selectedBusiness.location}</p>
                   </div>
                   {selectedBusiness.description && (
                     <div className="col-span-2">
@@ -560,80 +582,74 @@ export default function BusinessManagement() {
                       </p>
                     </div>
                   )}
-                  {selectedBusiness.opening_hours && (
+                  {selectedBusiness.openinghours && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Opening Hours</label>
-                      <p className="mt-1 text-gray-900">{selectedBusiness.opening_hours}</p>
+                      <p className="mt-1 text-gray-900">{selectedBusiness.openinghours}</p>
                     </div>
                   )}
-                  {selectedBusiness.logo_url && (
+                  {selectedBusiness.image && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Logo URL</label>
-                      <p className="mt-1 text-gray-900 break-all">{selectedBusiness.logo_url}</p>
+                      <p className="mt-1 text-gray-900 break-all">{selectedBusiness.image}</p>
                     </div>
                   )}
-                  {selectedBusiness.cover_image_url && (
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Cover Image URL</label>
-                      <p className="mt-1 text-gray-900 break-all">{selectedBusiness.cover_image_url}</p>
-                    </div>
-                  )}
-                  {(selectedBusiness.facebook_url || selectedBusiness.instagram_url || selectedBusiness.twitter_url) && (
+                  {(selectedBusiness.facebook || selectedBusiness.instagram || selectedBusiness.twitter) && (
                     <div className="col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-2">Social Media</label>
                       <div className="space-y-1">
-                        {selectedBusiness.facebook_url && (
+                        {selectedBusiness.facebook && (
                           <p className="text-gray-900">
                             <span className="font-medium">Facebook:</span>{' '}
-                            <a href={selectedBusiness.facebook_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                              {selectedBusiness.facebook_url}
+                            <a href={selectedBusiness.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                              {selectedBusiness.facebook}
                             </a>
                           </p>
                         )}
-                        {selectedBusiness.instagram_url && (
+                        {selectedBusiness.instagram && (
                           <p className="text-gray-900">
                             <span className="font-medium">Instagram:</span>{' '}
-                            <a href={selectedBusiness.instagram_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                              {selectedBusiness.instagram_url}
+                            <a href={selectedBusiness.instagram} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                              {selectedBusiness.instagram}
                             </a>
                           </p>
                         )}
-                        {selectedBusiness.twitter_url && (
+                        {selectedBusiness.twitter && (
                           <p className="text-gray-900">
                             <span className="font-medium">Twitter:</span>{' '}
-                            <a href={selectedBusiness.twitter_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                              {selectedBusiness.twitter_url}
+                            <a href={selectedBusiness.twitter} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                              {selectedBusiness.twitter}
                             </a>
                           </p>
                         )}
                       </div>
                     </div>
                   )}
-                  {(selectedBusiness.primary_color || selectedBusiness.secondary_color) && (
+                  {(selectedBusiness.brandprimarycolor || selectedBusiness.brandsecondarycolor) && (
                     <div className="col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-2">Brand Colors</label>
                       <div className="flex gap-4">
-                        {selectedBusiness.primary_color && (
+                        {selectedBusiness.brandprimarycolor && (
                           <div className="flex items-center gap-2">
                             <div 
                               className="w-10 h-10 rounded border border-gray-300" 
-                              style={{ backgroundColor: selectedBusiness.primary_color }}
+                              style={{ backgroundColor: selectedBusiness.brandprimarycolor }}
                             ></div>
                             <div>
                               <p className="text-xs text-gray-500">Primary</p>
-                              <p className="text-sm font-medium text-gray-900">{selectedBusiness.primary_color}</p>
+                              <p className="text-sm font-medium text-gray-900">{selectedBusiness.brandprimarycolor}</p>
                             </div>
                           </div>
                         )}
-                        {selectedBusiness.secondary_color && (
+                        {selectedBusiness.brandsecondarycolor && (
                           <div className="flex items-center gap-2">
                             <div 
                               className="w-10 h-10 rounded border border-gray-300" 
-                              style={{ backgroundColor: selectedBusiness.secondary_color }}
+                              style={{ backgroundColor: selectedBusiness.brandsecondarycolor }}
                             ></div>
                             <div>
                               <p className="text-xs text-gray-500">Secondary</p>
-                              <p className="text-sm font-medium text-gray-900">{selectedBusiness.secondary_color}</p>
+                              <p className="text-sm font-medium text-gray-900">{selectedBusiness.brandsecondarycolor}</p>
                             </div>
                           </div>
                         )}
@@ -652,41 +668,6 @@ export default function BusinessManagement() {
                   Close
                 </button>
               </div>
-            ) : modalMode === 'assign' && selectedBusiness ? (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Assign to User
-                  </label>
-                  <select
-                    value={formData.user_id}
-                    onChange={(e) => setFormData({ ...formData, user_id: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
-                  >
-                    <option value={0}>Unassigned</option>
-                    {users.map((user) => (
-                      <option key={user.id} value={user.id}>
-                        {user.username} ({user.email})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex gap-3 mt-6">
-                  <button
-                    type="submit"
-                    className="flex-1 px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition"
-                  >
-                    Assign Business
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                    className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -697,7 +678,7 @@ export default function BusinessManagement() {
                     <input
                       type="text"
                       required
-                      value={formData.name}
+                      value={formData.name || ''}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       placeholder="Pizza Paradise"
@@ -711,7 +692,7 @@ export default function BusinessManagement() {
                     <input
                       type="text"
                       required
-                      value={formData.username}
+                      value={formData.username || ''}
                       onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       placeholder="pizzaparadise"
@@ -724,7 +705,7 @@ export default function BusinessManagement() {
                     </label>
                     <select
                       required
-                      value={formData.category}
+                      value={formData.category || ''}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                     >
@@ -752,24 +733,10 @@ export default function BusinessManagement() {
                     <input
                       type="tel"
                       required
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      value={formData.contact || ''}
+                      onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       placeholder="+1234567890"
-                    />
-                  </div>
-
-                  <div className="col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Email *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
-                      placeholder="contact@pizzaparadise.com"
                     />
                   </div>
 
@@ -779,8 +746,8 @@ export default function BusinessManagement() {
                     </label>
                     <textarea
                       required
-                      value={formData.address}
-                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                      value={formData.location || ''}
+                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       placeholder="123 Main St, City, Country"
                       rows={2}
@@ -792,7 +759,7 @@ export default function BusinessManagement() {
                       Description
                     </label>
                     <textarea
-                      value={formData.description}
+                      value={formData.description || ''}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       placeholder="Brief description of your business..."
@@ -806,7 +773,7 @@ export default function BusinessManagement() {
                     </label>
                     <input
                       type="url"
-                      value={formData.website}
+                      value={formData.website || ''}
                       onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       placeholder="https://example.com"
@@ -819,36 +786,68 @@ export default function BusinessManagement() {
                     </label>
                     <input
                       type="text"
-                      value={formData.opening_hours}
-                      onChange={(e) => setFormData({ ...formData, opening_hours: e.target.value })}
+                      value={formData.openinghours || ''}
+                      onChange={(e) => setFormData({ ...formData, openinghours: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       placeholder="Mon-Fri 9AM-5PM"
                     />
                   </div>
 
                   <div className="col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Business Logo
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Business Logo *
                     </label>
                     <CloudinaryUpload
-                      onUploadComplete={(url) => setFormData({ ...formData, logo_url: url })}
-                      currentImage={formData.logo_url}
+                      currentImage={formData.businesslogo}
+                      onUploadComplete={(url) => setFormData({ ...formData, businesslogo: url })}
                       folder="businesses/logos"
-                      maxSize={5}
                     />
                   </div>
 
                   <div className="col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Cover Image
                     </label>
                     <CloudinaryUpload
-                      onUploadComplete={(url) => setFormData({ ...formData, cover_image_url: url })}
-                      currentImage={formData.cover_image_url}
+                      currentImage={formData.businesscover}
+                      onUploadComplete={(url) => setFormData({ ...formData, businesscover: url })}
                       folder="businesses/covers"
-                      maxSize={5}
                     />
-                    />
+                  </div>
+
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Business Photos (Max 10)
+                    </label>
+                    <div className="space-y-2">
+                      {formData.businessphotos.map((photo, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <img src={photo} alt={`Photo ${index + 1}`} className="w-16 h-16 rounded object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newPhotos = formData.businessphotos.filter((_, i) => i !== index)
+                              setFormData({ ...formData, businessphotos: newPhotos })
+                            }}
+                            className="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                      {formData.businessphotos.length < 10 && (
+                        <CloudinaryUpload
+                          currentImage=""
+                          onUploadComplete={(url) => {
+                            if (formData.businessphotos.length < 10) {
+                              setFormData({ ...formData, businessphotos: [...formData.businessphotos, url] })
+                            }
+                          }}
+                          folder="businesses/photos"
+                        />
+                      )}
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">{formData.businessphotos.length}/10 photos uploaded</p>
                   </div>
 
                   <div className="col-span-2">
@@ -858,24 +857,66 @@ export default function BusinessManagement() {
                     <div className="grid grid-cols-1 gap-3">
                       <input
                         type="url"
-                        value={formData.facebook_url}
-                        onChange={(e) => setFormData({ ...formData, facebook_url: e.target.value })}
+                        value={formData.facebook || ''}
+                        onChange={(e) => setFormData({ ...formData, facebook: e.target.value })}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="Facebook URL"
                       />
                       <input
                         type="url"
-                        value={formData.instagram_url}
-                        onChange={(e) => setFormData({ ...formData, instagram_url: e.target.value })}
+                        value={formData.instagram || ''}
+                        onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="Instagram URL"
                       />
                       <input
                         type="url"
-                        value={formData.twitter_url}
-                        onChange={(e) => setFormData({ ...formData, twitter_url: e.target.value })}
+                        value={formData.twitter || ''}
+                        onChange={(e) => setFormData({ ...formData, twitter: e.target.value })}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="Twitter URL"
+                      />
+                      <input
+                        type="url"
+                        value={formData.tiktok || ''}
+                        onChange={(e) => setFormData({ ...formData, tiktok: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                        placeholder="TikTok URL"
+                      />
+                      <input
+                        type="url"
+                        value={formData.youtube || ''}
+                        onChange={(e) => setFormData({ ...formData, youtube: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                        placeholder="YouTube URL"
+                      />
+                      <input
+                        type="url"
+                        value={formData.linkedin || ''}
+                        onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                        placeholder="LinkedIn URL"
+                      />
+                      <input
+                        type="url"
+                        value={formData.threads || ''}
+                        onChange={(e) => setFormData({ ...formData, threads: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                        placeholder="Threads URL"
+                      />
+                      <input
+                        type="tel"
+                        value={formData.whatsapp || ''}
+                        onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                        placeholder="WhatsApp Number (e.g., 9851234567)"
+                      />
+                      <input
+                        type="url"
+                        value={formData.googlemapurl || ''}
+                        onChange={(e) => setFormData({ ...formData, googlemapurl: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                        placeholder="Google Maps URL"
                       />
                     </div>
                   </div>
@@ -887,14 +928,14 @@ export default function BusinessManagement() {
                     <div className="flex items-center gap-3">
                       <input
                         type="color"
-                        value={formData.primary_color}
-                        onChange={(e) => setFormData({ ...formData, primary_color: e.target.value })}
+                        value={formData.brandprimarycolor || '#ED1D33'}
+                        onChange={(e) => setFormData({ ...formData, brandprimarycolor: e.target.value })}
                         className="h-10 w-20 border border-gray-300 rounded cursor-pointer"
                       />
                       <input
                         type="text"
-                        value={formData.primary_color}
-                        onChange={(e) => setFormData({ ...formData, primary_color: e.target.value })}
+                        value={formData.brandprimarycolor || '#ED1D33'}
+                        onChange={(e) => setFormData({ ...formData, brandprimarycolor: e.target.value })}
                         className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="#ED1D33"
                       />
@@ -908,36 +949,18 @@ export default function BusinessManagement() {
                     <div className="flex items-center gap-3">
                       <input
                         type="color"
-                        value={formData.secondary_color}
-                        onChange={(e) => setFormData({ ...formData, secondary_color: e.target.value })}
+                        value={formData.brandsecondarycolor || '#000000'}
+                        onChange={(e) => setFormData({ ...formData, brandsecondarycolor: e.target.value })}
                         className="h-10 w-20 border border-gray-300 rounded cursor-pointer"
                       />
                       <input
                         type="text"
-                        value={formData.secondary_color}
-                        onChange={(e) => setFormData({ ...formData, secondary_color: e.target.value })}
+                        value={formData.brandsecondarycolor || '#000000'}
+                        onChange={(e) => setFormData({ ...formData, brandsecondarycolor: e.target.value })}
                         className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="#000000"
                       />
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Assign to User
-                    </label>
-                    <select
-                      value={formData.user_id}
-                      onChange={(e) => setFormData({ ...formData, user_id: parseInt(e.target.value) })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
-                    >
-                      <option value={0}>Unassigned</option>
-                      {users.map((user) => (
-                        <option key={user.id} value={user.id}>
-                          {user.username} ({user.email})
-                        </option>
-                      ))}
-                    </select>
                   </div>
 
                   <div>

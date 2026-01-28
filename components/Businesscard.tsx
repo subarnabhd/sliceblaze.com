@@ -9,7 +9,7 @@ interface BusinesscardProps {
   name: string;
   location: string;
   category: string;
-  image: string;
+  businesslogo: string;
 }
 
 export default function Businesscard({
@@ -17,9 +17,9 @@ export default function Businesscard({
   name,
   location,
   category,
-  image,
+  businesslogo,
 }: BusinesscardProps) {
-  const [imgSrc, setImgSrc] = useState(image || "/sample.svg");
+  const [imgSrc, setImgSrc] = useState(businesslogo || "/sample.svg");
 
   return (
     <Link

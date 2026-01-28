@@ -6,6 +6,7 @@ import { getUserSession, isOwner, logout as authLogout, refreshUserSession } fro
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import Image from 'next/image'
+import CloudinaryUpload from '@/components/CloudinaryUpload'
 import { 
   ListIcon, 
   EditIcon, 
@@ -21,20 +22,26 @@ interface Business {
   id: number
   name: string
   username: string
-  address: string
+  location: string
   category: string
-  phone: string
-  email: string
+  contact: string
   description: string
   website: string
-  opening_hours: string
-  logo_url: string
-  cover_image_url: string
-  facebook_url: string
-  instagram_url: string
-  twitter_url: string
-  primary_color: string
-  secondary_color: string
+  openinghours: string
+  logo: string
+  cover_image: string
+  photos: string[]
+  facebook: string
+  instagram: string
+  twitter: string
+  tiktok?: string
+  youtube?: string
+  linkedin?: string
+  threads?: string
+  whatsapp?: string
+  googlemapurl?: string
+  brandprimarycolor: string
+  brandsecondarycolor: string
   is_active: boolean
 }
 
@@ -76,16 +83,26 @@ export default function UserDashboard() {
   const [editFormData, setEditFormData] = useState({
     name: '',
     username: '',
-    address: '',
+    location: '',
     category: '',
-    phone: '',
-    email: '',
+    contact: '',
     description: '',
     website: '',
-    opening_hours: '',
-    facebook_url: '',
-    instagram_url: '',
-    twitter_url: '',
+    openinghours: '',
+    businesslogo: '',
+    businesscover: '',
+    businessphotos: [] as string[],
+    facebook: '',
+    instagram: '',
+    twitter: '',
+    tiktok: '',
+    youtube: '',
+    linkedin: '',
+    threads: '',
+    whatsapp: '',
+    googlemapurl: '',
+    brandprimarycolor: '',
+    brandsecondarycolor: '',
   })
   const [stats, setStats] = useState<DashboardStats>({
     totalMenuItems: 0,
@@ -111,16 +128,26 @@ export default function UserDashboard() {
         setEditFormData({
           name: businessData.name || '',
           username: businessData.username || '',
-          address: businessData.address || '',
+          location: businessData.location || '',
           category: businessData.category || '',
-          phone: businessData.phone || '',
-          email: businessData.email || '',
+          contact: businessData.contact || '',
           description: businessData.description || '',
           website: businessData.website || '',
-          opening_hours: businessData.opening_hours || '',
-          facebook_url: businessData.facebook_url || '',
-          instagram_url: businessData.instagram_url || '',
-          twitter_url: businessData.twitter_url || '',
+          openinghours: businessData.openinghours || '',
+          businesslogo: businessData.businesslogo || '',
+          businesscover: businessData.businesscover || '',
+          businessphotos: businessData.businessphotos || [],
+          facebook: businessData.facebook || '',
+          instagram: businessData.instagram || '',
+          twitter: businessData.twitter || '',
+          tiktok: businessData.tiktok || '',
+          youtube: businessData.youtube || '',
+          linkedin: businessData.linkedin || '',
+          threads: businessData.threads || '',
+          whatsapp: businessData.whatsapp || '',
+          googlemapurl: businessData.googlemapurl || '',
+          brandprimarycolor: businessData.brandprimarycolor || '',
+          brandsecondarycolor: businessData.brandsecondarycolor || '',
         })
       }
 
@@ -333,16 +360,26 @@ export default function UserDashboard() {
         .update({
           name: editFormData.name,
           username: editFormData.username,
-          address: editFormData.address,
+          location: editFormData.location,
           category: editFormData.category,
-          phone: editFormData.phone,
-          email: editFormData.email,
+          contact: editFormData.contact,
           description: editFormData.description,
           website: editFormData.website,
-          opening_hours: editFormData.opening_hours,
-          facebook_url: editFormData.facebook_url,
-          instagram_url: editFormData.instagram_url,
-          twitter_url: editFormData.twitter_url,
+          openinghours: editFormData.openinghours,
+          businesslogo: editFormData.businesslogo,
+          businesscover: editFormData.businesscover,
+          businessphotos: editFormData.businessphotos,
+          facebook: editFormData.facebook,
+          instagram: editFormData.instagram,
+          twitter: editFormData.twitter,
+          tiktok: editFormData.tiktok,
+          youtube: editFormData.youtube,
+          linkedin: editFormData.linkedin,
+          threads: editFormData.threads,
+          whatsapp: editFormData.whatsapp,
+          googlemapurl: editFormData.googlemapurl,
+          brandprimarycolor: editFormData.brandprimarycolor,
+          brandsecondarycolor: editFormData.brandsecondarycolor,
         })
         .eq('id', business.id)
 
@@ -480,9 +517,9 @@ export default function UserDashboard() {
             <div className="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-200">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Your Business</h2>
               <div className="flex items-start gap-6">
-                {business.logo_url ? (
+                {business.logo ? (
                   <Image
-                    src={business.logo_url}
+                    src={business.logo}
                     alt={business.name}
                     width={96}
                     height={96}
@@ -508,16 +545,16 @@ export default function UserDashboard() {
                         <span>{business.category}</span>
                       </div>
                     )}
-                    {business.address && (
+                    {business.location && (
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M8 8.667a1.333 1.333 0 100-2.667 1.333 1.333 0 000 2.667z" fill="#596D66"/>
                           <path d="M8 1.333c-2.577 0-4.667 2.09-4.667 4.667 0 3.5 4.667 8.667 4.667 8.667s4.667-5.167 4.667-8.667c0-2.577-2.09-4.667-4.667-4.667z" stroke="#596D66" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
-                        <span>{business.address}</span>
+                        <span>{business.location}</span>
                       </div>
                     )}
-                    {business.phone && (
+                    {business.contact && (
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M14.667 11.28v2a1.333 1.333 0 01-1.454 1.333 13.194 13.194 0 01-5.753-2.046 13 13 0 01-4-4A13.194 13.194 0 011.414 2.787 1.333 1.333 0 012.74 1.333h2A1.333 1.333 0 016.073 2.5c.085.638.242 1.266.467 1.874a1.333 1.333 0 01-.3 1.406l-.847.847a10.667 10.667 0 004 4l.847-.847a1.333 1.333 0 011.406-.3c.608.225 1.236.382 1.874.467a1.333 1.333 0 011.167 1.353z" stroke="#596D66" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -535,62 +572,97 @@ export default function UserDashboard() {
           <div className="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-200">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <button
-                onClick={() => setShowEditForm(true)}
-                className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group w-full text-left"
-              >
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition">
-                  <EditIcon />
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Edit Business Profile</p>
-                  <p className="text-sm text-gray-600">Update business information</p>
-                </div>
-              </button>
+              {business ? (
+                <>
+                  <button
+                    onClick={() => setShowEditForm(true)}
+                    className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group w-full text-left"
+                  >
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition">
+                      <EditIcon />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">Edit Business Profile</p>
+                      <p className="text-sm text-gray-600">Update business information</p>
+                    </div>
+                  </button>
 
-              <Link
-                href="/menu"
-                className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
-              >
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition">
-                  <ListIcon />
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Manage Menu</p>
-                  <p className="text-sm text-gray-600">Add, edit, or remove menu items</p>
-                </div>
-              </Link>
+                  <Link
+                    href="/menu"
+                    className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
+                  >
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition">
+                      <ListIcon />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">Manage Menu</p>
+                      <p className="text-sm text-gray-600">Add, edit, or remove menu items</p>
+                    </div>
+                  </Link>
 
-              <Link
-                href="/wifi"
-                className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
-              >
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 18h.01M8.929 14.928c.834-.834 1.963-1.308 3.071-1.308 1.108 0 2.237.474 3.071 1.308m-8.485-3.536c2.259-2.259 5.888-2.259 8.147 0m-11.314-3.536c3.898-3.898 10.243-3.898 14.142 0" stroke="#9333EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Manage WiFi</p>
-                  <p className="text-sm text-gray-600">Configure WiFi networks</p>
-                </div>
-              </Link>
+                  <Link
+                    href="/wifi"
+                    className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
+                  >
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 18h.01M8.929 14.928c.834-.834 1.963-1.308 3.071-1.308 1.108 0 2.237.474 3.071 1.308m-8.485-3.536c2.259-2.259 5.888-2.259 8.147 0m-11.314-3.536c3.898-3.898 10.243-3.898 14.142 0" stroke="#9333EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">Manage WiFi</p>
+                      <p className="text-sm text-gray-600">Configure WiFi networks</p>
+                    </div>
+                  </Link>
 
-              <Link
-                href={`/${business?.username}`}
-                className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
-              >
-                <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="#F97316"/>
-                    <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke="#F97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">View Public Profile</p>
-                  <p className="text-sm text-gray-600">See how customers see you</p>
-                </div>
-              </Link>
+                  <Link
+                    href={`/${business?.username}`}
+                    className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
+                  >
+                    <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="#F97316"/>
+                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke="#F97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">View Business Profile</p>
+                      <p className="text-sm text-gray-600">See how customers see your business</p>
+                    </div>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href={`/profile/${user?.username}`}
+                    className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
+                  >
+                    <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="#F97316"/>
+                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke="#F97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">View My Profile</p>
+                      <p className="text-sm text-gray-600">See your public profile</p>
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="/add-business"
+                    className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
+                  >
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition">
+                      <PlusIcon />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">Add Business</p>
+                      <p className="text-sm text-gray-600">Register your business on Sliceblaze</p>
+                    </div>
+                  </Link>
+                </>
+              )}
 
               <button
                 onClick={() => setShowEditProfile(true)}
@@ -838,22 +910,11 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Contact Phone</label>
                       <input
                         type="tel"
-                        name="phone"
-                        value={editFormData.phone}
-                        onChange={handleEditFormChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={editFormData.email}
+                        name="contact"
+                        value={editFormData.contact}
                         onChange={handleEditFormChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       />
@@ -873,11 +934,11 @@ export default function UserDashboard() {
                   </div>
 
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Location / Address</label>
                     <input
                       type="text"
-                      name="address"
-                      value={editFormData.address}
+                      name="location"
+                      value={editFormData.location}
                       onChange={handleEditFormChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                     />
@@ -898,8 +959,8 @@ export default function UserDashboard() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Opening Hours</label>
                     <input
                       type="text"
-                      name="opening_hours"
-                      value={editFormData.opening_hours}
+                      name="openinghours"
+                      value={editFormData.openinghours}
                       onChange={handleEditFormChange}
                       placeholder="e.g., Mon-Fri: 9AM-5PM"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
@@ -907,16 +968,101 @@ export default function UserDashboard() {
                   </div>
                 </div>
 
-                {/* Social Media */}
+                {/* Images */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Social Media</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Business Images</h3>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Business Logo *</label>
+                        <CloudinaryUpload
+                          currentImageUrl={editFormData.businesslogo}
+                          onUploadComplete={(url) => setEditFormData(prev => ({ ...prev, businesslogo: url }))}
+                          folder="businesses/logos"
+                        />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Cover Image</label>
+                        <CloudinaryUpload
+                          currentImageUrl={editFormData.businesscover}
+                          onUploadComplete={(url) => setEditFormData(prev => ({ ...prev, businesscover: url }))}
+                          folder="businesses/covers"
+                        />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Business Photos (Max 10)</label>
+                      <div className="space-y-2">
+                        {editFormData.businessphotos.map((photo, index) => (
+                          <div key={index} className="flex items-center gap-2">
+                            <Image src={photo} alt={`Photo ${index + 1}`} width={60} height={60} className="rounded object-cover" />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newPhotos = editFormData.businessphotos.filter((_, i) => i !== index)
+                                setEditFormData(prev => ({ ...prev, businessphotos: newPhotos }))
+                              }}
+                              className="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        ))}
+                        {editFormData.businessphotos.length < 10 && (
+                          <CloudinaryUpload
+                            currentImageUrl=""
+                            onUploadComplete={(url) => {
+                              if (editFormData.businessphotos.length < 10) {
+                                setEditFormData(prev => ({ ...prev, businessphotos: [...prev.businessphotos, url] }))
+                              }
+                            }}
+                            folder="businesses/photos"
+                          />
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">{editFormData.businessphotos.length}/10 photos uploaded</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Branding */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Brand Colors</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Facebook URL</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Primary Color</label>
+                      <input
+                        type="color"
+                        name="brandprimarycolor"
+                        value={editFormData.brandprimarycolor}
+                        onChange={handleEditFormChange}
+                        className="w-full h-10 rounded-lg border border-gray-300"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Secondary Color</label>
+                      <input
+                        type="color"
+                        name="brandsecondarycolor"
+                        value={editFormData.brandsecondarycolor}
+                        onChange={handleEditFormChange}
+                        className="w-full h-10 rounded-lg border border-gray-300"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Social Media */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Social Media & Links</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Facebook</label>
                       <input
                         type="url"
-                        name="facebook_url"
-                        value={editFormData.facebook_url}
+                        name="facebook"
+                        value={editFormData.facebook}
                         onChange={handleEditFormChange}
                         placeholder="https://facebook.com/..."
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
@@ -924,11 +1070,11 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Instagram URL</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Instagram</label>
                       <input
                         type="url"
-                        name="instagram_url"
-                        value={editFormData.instagram_url}
+                        name="instagram"
+                        value={editFormData.instagram}
                         onChange={handleEditFormChange}
                         placeholder="https://instagram.com/..."
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
@@ -936,13 +1082,85 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Twitter URL</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Twitter</label>
                       <input
                         type="url"
-                        name="twitter_url"
-                        value={editFormData.twitter_url}
+                        name="twitter"
+                        value={editFormData.twitter}
                         onChange={handleEditFormChange}
                         placeholder="https://twitter.com/..."
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">TikTok</label>
+                      <input
+                        type="url"
+                        name="tiktok"
+                        value={editFormData.tiktok}
+                        onChange={handleEditFormChange}
+                        placeholder="https://tiktok.com/@..."
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">YouTube</label>
+                      <input
+                        type="url"
+                        name="youtube"
+                        value={editFormData.youtube}
+                        onChange={handleEditFormChange}
+                        placeholder="https://youtube.com/..."
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">LinkedIn</label>
+                      <input
+                        type="url"
+                        name="linkedin"
+                        value={editFormData.linkedin}
+                        onChange={handleEditFormChange}
+                        placeholder="https://linkedin.com/company/..."
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Threads</label>
+                      <input
+                        type="url"
+                        name="threads"
+                        value={editFormData.threads}
+                        onChange={handleEditFormChange}
+                        placeholder="https://threads.net/@..."
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">WhatsApp</label>
+                      <input
+                        type="tel"
+                        name="whatsapp"
+                        value={editFormData.whatsapp}
+                        onChange={handleEditFormChange}
+                        placeholder="+1234567890"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Google Maps URL</label>
+                      <input
+                        type="url"
+                        name="googlemapurl"
+                        value={editFormData.googlemapurl}
+                        onChange={handleEditFormChange}
+                        placeholder="https://maps.google.com/..."
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       />
                     </div>

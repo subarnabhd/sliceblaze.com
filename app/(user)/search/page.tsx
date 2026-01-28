@@ -12,7 +12,7 @@ interface Business {
   username: string
   location: string
   category: string
-  image: string
+  businesslogo: string
   description: string
   contact: string
   brandPrimaryColor: string
@@ -292,10 +292,10 @@ function SearchPageContent() {
                     >
                       <div className="bg-white p-5 flex flex-col  border border-gray-200 rounded-lg  hover:shadow-lg transition overflow-hidden h-full">
                         {/* Business Image */}
-                        {business.image && (
+                        {business.businesslogo && (
                           <div className="relative w-full h-48 bg-gray-200 overflow-hidden">
                             <Image
-                              src={business.image}
+                              src={business.businesslogo}
                               alt={business.name}
                               fill
                               className="object-cover group-hover:scale-105 transition"
