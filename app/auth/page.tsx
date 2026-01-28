@@ -1,14 +1,7 @@
 'use client'
 
-import { Metadata } from 'next'
 import { useMemo } from 'react'
 import Link from 'next/link'
-
-export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Authentication redirect page for Sliceblaze.",
-  robots: { index: false, follow: false },
-};
 
 interface User {
   userId: number
