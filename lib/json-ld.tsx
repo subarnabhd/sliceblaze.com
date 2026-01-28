@@ -1,28 +1,28 @@
 interface Business {
-  id: number
-  name: string
-  username: string
-  location: string
-  category: string
-  image: string
-  description: string
-  contact: string
-  whatsapp: string
-  website: string
-  openingHours: string
+  id?: number
+  name?: string
+  username?: string
+  location?: string
+  category?: string
+  image?: string
+  description?: string
+  contact?: string
+  whatsapp?: string
+  website?: string
+  openingHours?: string
   openinghours?: string
-  facebook: string
-  twitter: string
-  youtube: string
-  instagram: string
-  linkedin: string
-  tiktok: string
-  threads: string
-  googleMapUrl: string
+  facebook?: string
+  twitter?: string
+  youtube?: string
+  instagram?: string
+  linkedin?: string
+  tiktok?: string
+  threads?: string
+  googleMapUrl?: string
   googlemapurl?: string
-  brandPrimaryColor: string
+  brandPrimaryColor?: string
   brandprimarycolor?: string
-  brandSecondaryColor: string
+  brandSecondaryColor?: string
   brandsecondarycolor?: string
 }
 
