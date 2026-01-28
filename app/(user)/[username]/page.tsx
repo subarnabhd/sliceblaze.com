@@ -72,7 +72,7 @@ interface MenuCategory {
   name: string
   display_order: number
   is_active: boolean
-  menu_subcategories: any[]
+  menu_subcategories: unknown[]
 }
 
 export default function BusinessProfilePage() {
@@ -82,7 +82,7 @@ export default function BusinessProfilePage() {
   const [wifiNetworks, setWifiNetworks] = useState<WifiNetwork[]>([])
   const [menu, setMenu] = useState<MenuCategory[]>([])
   const [loading, setLoading] = useState(true)
-  const [imgSrc, setImgSrc] = useState('/sample.svg')
+  // const [imgSrc, setImgSrc] = useState('/sample.svg')
   const [copied, setCopied] = useState(false)
 
   const copyToClipboard = () => {
@@ -121,15 +121,15 @@ export default function BusinessProfilePage() {
   // Helper functions to get values with fallback to old field names
   const getAddress = () => business?.address || business?.location || ''
   const getPhone = () => business?.phone || business?.contact || ''
-  const getEmail = () => business?.email || ''
+  // const getEmail = () => business?.email || ''
   const getLogoUrl = () => business?.logo_url || business?.logo || business?.image || '/sample.svg'
-  const getCoverImageUrl = () => business?.cover_image_url || ''
+  // const getCoverImageUrl = () => business?.cover_image_url || ''
   const getOpeningHours = () => business?.opening_hours || business?.openingHours || business?.openinghours || ''
   const getFacebookUrl = () => business?.facebook_url || business?.facebook || ''
   const getInstagramUrl = () => business?.instagram_url || business?.instagram || ''
   const getTwitterUrl = () => business?.twitter_url || business?.twitter || ''
   const getPrimaryColor = () => business?.primary_color || business?.brandPrimaryColor || business?.brandprimarycolor || '#ED1D33'
-  const getSecondaryColor = () => business?.secondary_color || business?.brandSecondaryColor || business?.brandsecondarycolor || '#000000'
+  // const getSecondaryColor = () => business?.secondary_color || business?.brandSecondaryColor || business?.brandsecondarycolor || '#000000'
 
   if (loading) {
     return (
