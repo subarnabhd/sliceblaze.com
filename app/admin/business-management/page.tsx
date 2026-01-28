@@ -43,7 +43,6 @@ interface User {
 export default function BusinessManagement() {
   const router = useRouter()
   const [businesses, setBusinesses] = useState<Business[]>([])
-  const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterActive, setFilterActive] = useState<'all' | 'active' | 'inactive'>('all')
@@ -822,7 +821,7 @@ export default function BusinessManagement() {
                     <div className="space-y-2">
                       {formData.businessphotos.map((photo, index) => (
                         <div key={index} className="flex items-center gap-2">
-                          <img src={photo} alt={`Photo ${index + 1}`} className="w-16 h-16 rounded object-cover" />
+                          <Image src={photo} alt={`Photo ${index + 1}`} width={64} height={64} className="w-16 h-16 rounded object-cover" />
                           <button
                             type="button"
                             onClick={() => {

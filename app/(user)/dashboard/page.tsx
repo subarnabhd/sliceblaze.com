@@ -976,7 +976,7 @@ export default function UserDashboard() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Business Logo *</label>
                         <CloudinaryUpload
-                          currentImageUrl={editFormData.businesslogo}
+                          currentImage={editFormData.businesslogo}
                           onUploadComplete={(url) => setEditFormData(prev => ({ ...prev, businesslogo: url }))}
                           folder="businesses/logos"
                         />
@@ -985,7 +985,7 @@ export default function UserDashboard() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Cover Image</label>
                         <CloudinaryUpload
-                          currentImageUrl={editFormData.businesscover}
+                          currentImage={editFormData.businesscover}
                           onUploadComplete={(url) => setEditFormData(prev => ({ ...prev, businesscover: url }))}
                           folder="businesses/covers"
                         />
@@ -1011,7 +1011,7 @@ export default function UserDashboard() {
                         ))}
                         {editFormData.businessphotos.length < 10 && (
                           <CloudinaryUpload
-                            currentImageUrl=""
+                            currentImage=""
                             onUploadComplete={(url) => {
                               if (editFormData.businessphotos.length < 10) {
                                 setEditFormData(prev => ({ ...prev, businessphotos: [...prev.businessphotos, url] }))

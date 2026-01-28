@@ -72,7 +72,15 @@ interface MenuCategory {
   name: string
   display_order: number
   is_active: boolean
-  menu_subcategories: unknown[]
+  menu_subcategories: MenuSubcategory[]
+
+interface MenuSubcategory {
+  id: number
+  name: string
+  display_order: number
+  is_active: boolean
+  menu_items: unknown[]
+}
 }
 
 export default function BusinessProfilePage() {
@@ -174,7 +182,6 @@ export default function BusinessProfilePage() {
                   width={120}
                   height={120}
                   className="rounded-lg object-cover"
-                  onError={() => setImgSrc("/sample.svg")}
                   itemProp="image"
                   loading="eager"
                   priority
