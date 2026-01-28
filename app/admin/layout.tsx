@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "../globals.css";
 
@@ -7,9 +8,16 @@ const outfit = Outfit({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-export const metadata = {
-  title: "Admin Panel - Sliceblaze",
-  description: "Admin dashboard for Sliceblaze",
+export const metadata: Metadata = {
+  title: {
+    default: "Admin Panel - Sliceblaze",
+    template: "%s | Admin - Sliceblaze"
+  },
+  description: "Admin dashboard for Sliceblaze - Manage businesses, users, categories, menus, and more.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function AdminLayout({

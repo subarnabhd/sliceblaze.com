@@ -1,10 +1,17 @@
 'use client'
 
+import { Metadata } from 'next'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { getUserSession } from '@/lib/auth'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: "User Profile",
+  description: "View user profile and information on Sliceblaze.",
+  robots: { index: false, follow: false },
+};
 
 interface User {
   id: number

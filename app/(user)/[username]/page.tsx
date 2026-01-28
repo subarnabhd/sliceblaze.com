@@ -7,6 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import WifiConnect from '@/components/WifiConnect'
 import MenuDisplay from '@/components/MenuDisplay'
+import { generateBusinessJsonLd } from '@/lib/json-ld'
 
 interface Business {
   id: number
@@ -124,6 +125,9 @@ export default function BusinessProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
+      {/* JSON-LD Structured Data */}
+      {business && generateBusinessJsonLd(business)}
+      
       <div className="container mx-auto px-4">
         {/* Business Header */}
         <div
@@ -137,11 +141,15 @@ export default function BusinessProfilePage() {
               <div className="shrink-0">
                 <Image
                   src={imgSrc}
-                  alt={business.name}
+                  alt={`${business.name} logo - ${business.category} in ${business.location}`}
+                  title={`${business.name} - ${business.category}`}
                   width={120}
                   height={120}
                   className="rounded-lg object-cover"
                   onError={() => setImgSrc("/sample.svg")}
+                  itemProp="image"
+                  loading="eager"
+                  priority
                 />
               </div>
               <div className="flex-1 w-full">

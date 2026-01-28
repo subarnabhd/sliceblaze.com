@@ -1,33 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile } from 'fs/promises'
-import path from 'path'
+import { uploadToCloudinary } from '@/lib/cloudinary'
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
     const file = formData.get('file') as File
-    
+    const folder = (formData.get('folder') as string) || 'sliceblaze'
+
     if (!file) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
     }
 
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif']
+    if (!validTypes.includes(file.type)) {
+      return NextResponse.json(
+        { error: 'Invalid file type. Only images are allowed.' },
+        { status: 400 }
+      )
+    }
 
-    // Create unique filename
-    const timestamp = Date.now()
-    const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
-    const filename = `${timestamp}-${sanitizedName}`
-    
-    // Save to public/business directory
-    const filepath = path.join(process.cwd(), 'public', 'business', filename)
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024 // 5MB
+    if (file.size > maxSize) {
+      return NextResponse.json(
+        { error: 'File size too large. Maximum size is 5MB.' },
+        { status: 400 }
+      )
+    }
 
-    await writeFile(filepath, buffer)
+    // Upload to Cloudinary
+    const result = await uploadToCloudinary(file, folder)
 
-    return NextResponse.json({ 
-      success: true, 
-      filename: filename,
-      url: `/business/${filename}`
+    return NextResponse.json({
+      success: true,
+      filename: result.publicId,
+      url: result.url,
+      data: result,
     })
   } catch (error) {
     console.error('Upload error:', error)
