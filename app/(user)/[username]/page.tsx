@@ -104,8 +104,8 @@ export default function BusinessProfilePage() {
         console.log('Fetched business data:', data) // Debug log
         setBusiness(data)
         // Use new field name with fallback to old
-        if (data?.businesslogo || data?.logo_url || data?.logo || data?.image) {
-          setImgSrc(data.businesslogo || data.logo_url || data.logo || data.image)
+        if (data?.logo_url || data?.logo || data?.image) {
+          setImgSrc(data.logo_url || data.logo || data.image)
         }
         // Fetch WiFi networks for the business
         if (data?.id) {
@@ -122,7 +122,7 @@ export default function BusinessProfilePage() {
   const getAddress = () => business?.address || business?.location || ''
   const getPhone = () => business?.phone || business?.contact || ''
   const getEmail = () => business?.email || ''
-  const getLogoUrl = () => business?.businesslogo || business?.logo_url || business?.logo || business?.image || '/sample.svg'
+  const getLogoUrl = () => business?.logo_url || business?.logo || business?.image || '/sample.svg'
   const getCoverImageUrl = () => business?.cover_image_url || ''
   const getOpeningHours = () => business?.opening_hours || business?.openingHours || business?.openinghours || ''
   const getFacebookUrl = () => business?.facebook_url || business?.facebook || ''
