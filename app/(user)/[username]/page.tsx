@@ -73,17 +73,14 @@ interface MenuCategory {
   display_order: number
   is_active: boolean
   menu_subcategories: MenuSubcategory[]
+}
 
 interface MenuSubcategory {
   id: number
   name: string
   display_order: number
   is_active: boolean
-    menu_subcategories: MenuSubcategory[] // Moved to top level
-  }
-
-interface MenuSubcategory {
-}
+  menu_items: unknown[]
 }
 
 export default function BusinessProfilePage() {
