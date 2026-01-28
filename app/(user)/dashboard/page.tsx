@@ -559,7 +559,7 @@ export default function UserDashboard() {
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M14.667 11.28v2a1.333 1.333 0 01-1.454 1.333 13.194 13.194 0 01-5.753-2.046 13 13 0 01-4-4A13.194 13.194 0 011.414 2.787 1.333 1.333 0 012.74 1.333h2A1.333 1.333 0 016.073 2.5c.085.638.242 1.266.467 1.874a1.333 1.333 0 01-.3 1.406l-.847.847a10.667 10.667 0 004 4l.847-.847a1.333 1.333 0 011.406-.3c.608.225 1.236.382 1.874.467a1.333 1.333 0 011.167 1.353z" stroke="#596D66" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
-                        <span>{business.phone}</span>
+                        <span>{business.contact}</span>
                       </div>
                     )}
                   </div>

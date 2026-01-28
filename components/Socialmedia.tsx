@@ -9,7 +9,7 @@ import {
   YoutubeIcon,
 } from "@/icons/SocialIcons";
 
-const Socialmedia = () => {
+const SocialMedia = () => {
   return (
     <div
       aria-label="Social media links"
@@ -91,4 +91,4 @@ const Socialmedia = () => {
   );
 };
 
-export default Socialmedia;
+export default SocialMedia;
