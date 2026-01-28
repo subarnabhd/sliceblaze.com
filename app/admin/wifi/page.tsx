@@ -192,7 +192,7 @@ export default function AdminWifiManagement() {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow p-6 sticky top-8">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Select Business</h2>
-              <div className="space-y-2 max-h-[600px] overflow-y-auto">
+              <div className="space-y-2 max-h-150 overflow-y-auto">
                 {businesses.map((business) => (
                   <button
                     key={business.id}

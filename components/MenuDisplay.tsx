@@ -96,7 +96,7 @@ export default function MenuDisplay({ menu, brandColor = '#ED1D33', currencySymb
                         className="flex gap-4 p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors"
                       >
                         {item.image && (
-                          <div className="flex-shrink-0">
+                          <div className="shrink-0">
                             <Image
                               src={item.image}
                               alt={item.name}

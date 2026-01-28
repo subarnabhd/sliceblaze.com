@@ -3,10 +3,7 @@ import Link from "next/link";
 import {
   FacebookIcon,
   InstagramIcon,
-  LinkedinIcon,
-  TiktokIcon,
-  TwitterIcon,
-  YoutubeIcon,
+  LinkedinIcon
 } from "@/icons/SocialIcons";
 
 const SocialMedia = () => {
@@ -58,7 +55,7 @@ const SocialMedia = () => {
         rel="noopener noreferrer"
         aria-label="Vhandar TikTok profile"
         title="Visit Vhandar on TikTok"
-        className="w-[42px] h-[42px] p-3 text-lg color-neutral-1 rounded-full bg-gray-400 hover:bg-gray-500 flex items-center justify-center"
+        className="w-10.5 h-10.5 p-3 text-lg color-neutral-1 rounded-full bg-gray-400 hover:bg-gray-500 flex items-center justify-center"
       >
         <TiktokIcon />
         <span className="sr-only">TikTok</span>
@@ -70,7 +67,7 @@ const SocialMedia = () => {
         rel="noopener noreferrer"
         aria-label="Vhandar YouTube channel"
         title="Visit Vhandar on YouTube"
-        className="w-[42px] h-[42px] p-3 text-lg color-neutral-1 rounded-full bg-gray-400 hover:bg-gray-500 flex items-center justify-center"
+        className="w-10.5 h-10.5 p-3 text-lg color-neutral-1 rounded-full bg-gray-400 hover:bg-gray-500 flex items-center justify-center"
       >
         <YoutubeIcon />
         <span className="sr-only">YouTube</span>
@@ -82,7 +79,7 @@ const SocialMedia = () => {
         rel="noopener noreferrer"
         aria-label="Vhandar LinkedIn profile"
         title="Visit Vhandar on LinkedIn"
-        className="w-[42px] h-[42px] p-3 text-lg color-neutral-1 rounded-full bg-gray-400 hover:bg-gray-500 flex items-center justify-center"
+        className="w-10.5 h-10.5 p-3 text-lg color-neutral-1 rounded-full bg-gray-400 hover:bg-gray-500 flex items-center justify-center"
       >
         <LinkedinIcon />
         <span className="sr-only">LinkedIn</span>

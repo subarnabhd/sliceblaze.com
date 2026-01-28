@@ -75,12 +75,22 @@ interface MenuCategory {
   menu_subcategories: MenuSubcategory[]
 }
 
+interface MenuItem {
+  id: number
+  name: string
+  description: string
+  price: number
+  image?: string
+  is_active: boolean
+  display_order: number
+}
+
 interface MenuSubcategory {
   id: number
   name: string
   display_order: number
   is_active: boolean
-  menu_items: unknown[]
+  menu_items: MenuItem[]
 }
 
 export default function BusinessProfilePage() {

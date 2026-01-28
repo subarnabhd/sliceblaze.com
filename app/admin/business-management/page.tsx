@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
+import Image from "next/image";
 import CloudinaryUpload from '@/components/CloudinaryUpload'
 
 interface Business {
@@ -32,6 +33,7 @@ interface Business {
   googlemapurl?: string
   brandprimarycolor?: string
   brandsecondarycolor?: string
+  image?: string
 }
 
 interface User {
@@ -43,6 +45,7 @@ interface User {
 export default function BusinessManagement() {
   const router = useRouter()
   const [businesses, setBusinesses] = useState<Business[]>([])
+  const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterActive, setFilterActive] = useState<'all' | 'active' | 'inactive'>('all')
@@ -585,12 +588,6 @@ export default function BusinessManagement() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Opening Hours</label>
                       <p className="mt-1 text-gray-900">{selectedBusiness.openinghours}</p>
-                    </div>
-                  )}
-                  {selectedBusiness.image && (
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Logo URL</label>
-                      <p className="mt-1 text-gray-900 break-all">{selectedBusiness.image}</p>
                     </div>
                   )}
                   {(selectedBusiness.facebook || selectedBusiness.instagram || selectedBusiness.twitter) && (

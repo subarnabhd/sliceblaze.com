@@ -8,7 +8,7 @@ const Homebanner = () => {
   const router = useRouter();
   
   return (
-    <div className="flex flex-col items-center justify-center h-[600px] bg-[#ED1D33] font-sans text-white">
+    <div className="flex flex-col items-center justify-center h-150 bg-[#ED1D33] font-sans text-white">
       {/* Logo */}
       <Image
         src="/sliceblazelogo_white.svg"

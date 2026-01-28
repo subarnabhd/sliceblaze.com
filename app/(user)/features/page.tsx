@@ -96,9 +96,9 @@ export default function FeaturesPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white">
+    <div className="min-h-screen bg-linear-to-b from-white via-gray-50 to-white">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-[#ED1D33] to-red-700 text-white py-24 overflow-hidden">
+      <div className="relative bg-linear-to-br from-[#ED1D33] to-red-700 text-white py-24 overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-10"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full filter blur-3xl opacity-10 translate-x-1/2 -translate-y-1/2"></div>
         
@@ -152,7 +152,7 @@ export default function FeaturesPage() {
               >
                 {/* Feature Content */}
                 <div className="flex-1">
-                  <div className={`inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br ${feature.gradient} text-white mb-6 shadow-xl`}>
+                  <div className={`inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-linear-to-br ${feature.gradient} text-white mb-6 shadow-xl`}>
                     <span className="text-5xl">{feature.icon}</span>
                   </div>
                   <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -176,22 +176,22 @@ export default function FeaturesPage() {
                 {/* Feature Visual */}
                 <div className="flex-1">
                   <div className={`relative rounded-3xl overflow-hidden shadow-2xl group`}>
-                    <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-10 group-hover:opacity-20 transition-opacity duration-300`}></div>
+                    <div className={`absolute inset-0 bg-linear-to-br ${feature.gradient} opacity-10 group-hover:opacity-20 transition-opacity duration-300`}></div>
                     <div className="relative bg-white p-10 border-2 border-gray-100 hover:border-gray-200 transition-all duration-300">
                       <div className="flex items-center justify-center mb-8">
-                        <div className={`w-32 h-32 rounded-3xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center shadow-xl transform group-hover:scale-110 transition-transform duration-300`}>
+                        <div className={`w-32 h-32 rounded-3xl bg-linear-to-br ${feature.gradient} flex items-center justify-center shadow-xl transform group-hover:scale-110 transition-transform duration-300`}>
                           <span className="text-7xl">{feature.icon}</span>
                         </div>
                       </div>
                       <div className="space-y-4">
-                        <div className="h-3 bg-gradient-to-r from-gray-200 to-gray-100 rounded-full w-4/5 mx-auto"></div>
-                        <div className="h-3 bg-gradient-to-r from-gray-200 to-gray-100 rounded-full w-full mx-auto"></div>
-                        <div className="h-3 bg-gradient-to-r from-gray-200 to-gray-100 rounded-full w-3/5 mx-auto"></div>
+                        <div className="h-3 bg-linear-to-r from-gray-200 to-gray-100 rounded-full w-4/5 mx-auto"></div>
+                        <div className="h-3 bg-linear-to-r from-gray-200 to-gray-100 rounded-full w-full mx-auto"></div>
+                        <div className="h-3 bg-linear-to-r from-gray-200 to-gray-100 rounded-full w-3/5 mx-auto"></div>
                       </div>
                       <div className="mt-8 grid grid-cols-3 gap-3">
-                        <div className={`h-16 rounded-xl bg-gradient-to-br ${feature.gradient} opacity-20`}></div>
-                        <div className={`h-16 rounded-xl bg-gradient-to-br ${feature.gradient} opacity-30`}></div>
-                        <div className={`h-16 rounded-xl bg-gradient-to-br ${feature.gradient} opacity-20`}></div>
+                        <div className={`h-16 rounded-xl bg-linear-to-br ${feature.gradient} opacity-20`}></div>
+                        <div className={`h-16 rounded-xl bg-linear-to-br ${feature.gradient} opacity-30`}></div>
+                        <div className={`h-16 rounded-xl bg-linear-to-br ${feature.gradient} opacity-20`}></div>
                       </div>
                     </div>
                   </div>
@@ -203,7 +203,7 @@ export default function FeaturesPage() {
       </div>
 
       {/* Additional Features Grid */}
-      <div className="py-24 bg-gradient-to-b from-gray-50 to-white">
+      <div className="py-24 bg-linear-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
@@ -236,7 +236,7 @@ export default function FeaturesPage() {
       </div>
 
       {/* Final CTA */}
-      <div className="py-24 bg-gradient-to-r from-[#ED1D33] to-red-600">
+      <div className="py-24 bg-linear-to-r from-[#ED1D33] to-red-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">
             Ready to Get Started?

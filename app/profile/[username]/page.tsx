@@ -110,7 +110,7 @@ export default function UserProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -132,7 +132,7 @@ export default function UserProfilePage() {
         {/* Profile Card */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           {/* Cover */}
-          <div className="h-32 bg-gradient-to-r from-[#ED1D33] to-red-600"></div>
+          <div className="h-32 bg-linear-to-r from-[#ED1D33] to-red-600"></div>
           
           {/* Profile Content */}
           <div className="px-6 pb-6">
@@ -198,7 +198,7 @@ export default function UserProfilePage() {
               {!user.business_id && isOwnProfile && (
                 <div className="mt-8 p-6 bg-blue-50 rounded-xl border border-blue-200">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
                       <span className="text-2xl">🚀</span>
                     </div>
                     <div className="flex-1">
