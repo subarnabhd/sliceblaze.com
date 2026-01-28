@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import SocialMedia from './SocialMedia';
+import SliceSocialMedia from './SliceSocialMedia';
 
 
 const Footer = () => {
@@ -22,7 +22,7 @@ const Footer = () => {
           />
         </Link>
         <p className=" text-sm text-gray-600">Your Business Digital Partner</p>
-        <SocialMedia />
+        <SliceSocialMedia />
       </div>
       <div className="py-5 border-t border-gray-200 flex  bottom-0 w-full bg-white z-40">
         <p className="m-auto text-sm">
