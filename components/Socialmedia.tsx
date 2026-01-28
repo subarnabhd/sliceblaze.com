@@ -22,7 +22,7 @@ const SocialMedia = () => {
         rel="noopener noreferrer"
         aria-label="Vhandar Facebook page"
         title="Visit Vhandar on Facebook"
-        className="w-[42px] h-[42px] p-3 text-lg color-neutral-1 rounded-full bg-gray-400 hover:bg-gray-500 flex items-center justify-center"
+        className="w-10.5 h-10.5 p-3 text-lg color-neutral-1 rounded-full bg-gray-400 hover:bg-gray-500 flex items-center justify-center"
       >
         <FacebookIcon />
         <span className="sr-only">Facebook</span>
@@ -34,7 +34,7 @@ const SocialMedia = () => {
         rel="noopener noreferrer"
         aria-label="Vhandar Instagram profile"
         title="Visit Vhandar on Instagram"
-        className="w-[42px] h-[42px] p-3 text-lg color-neutral-1 rounded-full bg-gray-400 hover:bg-gray-500 flex items-center justify-center"
+        className="w-10.5 h-10.5 p-3 text-lg color-neutral-1 rounded-full bg-gray-400 hover:bg-gray-500 flex items-center justify-center"
       >
         <InstagramIcon />
         <span className="sr-only">Instagram</span>
@@ -46,7 +46,7 @@ const SocialMedia = () => {
         rel="noopener noreferrer"
         aria-label="Vhandar Twitter profile"
         title="Visit Vhandar on Twitter"
-        className="w-[42px] h-[42px] p-3 text-lg color-neutral-1 rounded-full bg-gray-400 hover:bg-gray-500 flex items-center justify-center"
+        className="w-10.5 h-10.5 p-3 text-lg color-neutral-1 rounded-full bg-gray-400 hover:bg-gray-500 flex items-center justify-center"
       >
         <TwitterIcon />
         <span className="sr-only">Twitter</span>
