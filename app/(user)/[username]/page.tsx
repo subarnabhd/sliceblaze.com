@@ -104,9 +104,7 @@ export default function BusinessProfilePage() {
         console.log('Fetched business data:', data) // Debug log
         setBusiness(data)
         // Use new field name with fallback to old
-        if (data?.logo_url || data?.logo || data?.image) {
-          setImgSrc(data.logo_url || data.logo || data.image)
-        }
+        // (imgSrc logic removed)
         // Fetch WiFi networks for the business
         if (data?.id) {
           const wifi = await getBusinessWifi(data.id)
