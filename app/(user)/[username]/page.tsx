@@ -139,7 +139,7 @@ export default function BusinessProfilePage() {
   // const getEmail = () => business?.email || ''
   const getLogoUrl = () => business?.businesslogo || business?.logo_url || business?.logo || business?.image || '/sample.svg'
   // const getCoverImageUrl = () => business?.cover_image_url || ''
-  const getOpeningHours = () => business?.opening_hours || business?.openingHours || business?.openinghours || ''
+  const getOpeningHours = () => business?.opening_hours || business?.openinghours || ''
   const getFacebookUrl = () => business?.facebook_url || business?.facebook || ''
   const getInstagramUrl = () => business?.instagram_url || business?.instagram || ''
   const getTwitterUrl = () => business?.twitter_url || business?.twitter || ''
@@ -253,9 +253,9 @@ export default function BusinessProfilePage() {
                 <p className="text-lg text-gray-600 mb-1">
                   {business.category}
                 </p>
-                {(business.googleMapUrl || business.googlemapurl) ? (
+                {business.googlemapurl ? (
                   <a
-                    href={(business.googleMapUrl || business.googlemapurl)?.replace('/embed', '')}
+                    href={business.googlemapurl?.replace('/embed', '')}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-500 hover:text-[#ED1D33] flex items-center gap-2 transition-colors"
@@ -400,10 +400,10 @@ export default function BusinessProfilePage() {
                   {business.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
                 </a>
               )}
-              {(business.googleMapUrl || business.googlemapurl) && (
+              {business.googlemapurl && (
                 <a
                   href={(
-                    business.googleMapUrl || business.googlemapurl
+                    business.googlemapurl
                   )?.replace("/embed", "")}
                   target="_blank"
                   rel="noopener noreferrer"
