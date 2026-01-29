@@ -1,3 +1,18 @@
+/**
+ * Sign in or sign up with Google using Supabase OAuth
+ */
+export async function signInWithGoogle() {
+  if (!supabase) return { error: 'Supabase not initialized' };
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
+    if (error) {
+      return { error: error.message };
+    }
+    return { error: null };
+  } catch (err) {
+    return { error: (err as Error).message };
+  }
+}
 import { supabase } from './supabase'
 
 export interface UserSession {
