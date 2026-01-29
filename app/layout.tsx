@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import { generateOrganizationJsonLd } from "@/lib/json-ld";
+import AuthSyncer from "@/components/AuthSyncer";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -79,7 +80,7 @@ export default function RootLayout({
         className={`${outfit.variable} font-sans antialiased bg-white`}
         suppressHydrationWarning
       >
-        
+        <AuthSyncer />
         {children}
       </body>
     </html>

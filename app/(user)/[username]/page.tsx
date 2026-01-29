@@ -17,6 +17,7 @@ interface Business {
   address?: string
   phone?: string
   email?: string
+  businesslogo?: string
   logo?: string
   logo_url?: string
   cover_image?: string
@@ -25,7 +26,7 @@ interface Business {
   opening_hours?: string
   facebook_url?: string
   instagram_url?: string
-  twitter_url?: string
+  twitter_url?: string  
   primary_color?: string
   secondary_color?: string
   // Legacy field names (for backward compatibility)
@@ -36,7 +37,6 @@ interface Business {
   contact?: string
   whatsapp?: string
   website?: string
-  openingHours?: string
   openinghours?: string
   facebook?: string
   twitter?: string
@@ -45,7 +45,6 @@ interface Business {
   linkedin?: string
   tiktok?: string
   threads?: string
-  googleMapUrl?: string
   googlemapurl?: string
   getdirection?: string
   direction?: string
@@ -138,7 +137,7 @@ export default function BusinessProfilePage() {
   const getAddress = () => business?.address || business?.location || ''
   const getPhone = () => business?.phone || business?.contact || ''
   // const getEmail = () => business?.email || ''
-  const getLogoUrl = () => business?.logo_url || business?.logo || business?.image || '/sample.svg'
+  const getLogoUrl = () => business?.businesslogo || business?.logo_url || business?.logo || business?.image || '/sample.svg'
   // const getCoverImageUrl = () => business?.cover_image_url || ''
   const getOpeningHours = () => business?.opening_hours || business?.openingHours || business?.openinghours || ''
   const getFacebookUrl = () => business?.facebook_url || business?.facebook || ''
@@ -195,6 +194,10 @@ export default function BusinessProfilePage() {
                   itemProp="image"
                   loading="eager"
                   priority
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/sample.svg';
+                  }}
                 />
               </div>
               <div className="flex-1 w-full">

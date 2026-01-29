@@ -52,7 +52,7 @@ const SliceSocialMedia = () => {
         <span className="sr-only">LinkedIn</span>
       </Link>
 
-      <Link
+      {/* <Link
         href="https://www.tiktok.com/@sliceblaze"
         target="_blank"
         rel="noopener noreferrer"
@@ -86,7 +86,7 @@ const SliceSocialMedia = () => {
       >
         <YoutubeIcon />
         <span className="sr-only">YouTube</span>
-      </Link>
+      </Link> */}
     </div>
   );
 };
