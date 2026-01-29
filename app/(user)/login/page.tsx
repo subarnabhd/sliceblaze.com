@@ -5,13 +5,6 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { login, signInWithGoogle } from '@/lib/auth'
-  const handleGoogleSignIn = async () => {
-    setError('');
-    setLoading(true);
-    const { error } = await signInWithGoogle();
-    if (error) setError(error);
-    setLoading(false);
-  };
 
 export default function LoginPage() {
   const router = useRouter()
