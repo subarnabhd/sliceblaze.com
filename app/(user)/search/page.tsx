@@ -10,6 +10,7 @@ interface Business {
   id: number;
   name: string;
   username: string;
+  address: string;
   location: string;
   category: string;
   business_logo: string;
@@ -25,7 +26,7 @@ interface Category {
   is_active: boolean
 }
 
-function BusinessCardSkeleton() {
+function BusinessProfileCardSkeleton() {
   return (
     
     <div className="container bg-white border border-gray-200 rounded-lg overflow-hidden h-full animate-pulse">
@@ -58,6 +59,7 @@ function BusinessCardSkeleton() {
 }
 
 function SearchPageContent() {
+    const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -170,8 +172,12 @@ function SearchPageContent() {
       <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Discover Businesses</h1>
-          <p className="text-gray-500 text-sm">Browse and filter businesses by category</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Discover Businesses
+          </h1>
+          <p className="text-gray-500 text-sm">
+            Browse and filter businesses by category
+          </p>
         </div>
 
         {/* Search Bar */}
@@ -188,10 +194,17 @@ function SearchPageContent() {
               />
               <button
                 type={searchQuery ? "button" : "submit"}
-                onClick={searchQuery ? () => handleSearchChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>) : undefined}
+                onClick={
+                  searchQuery
+                    ? () =>
+                        handleSearchChange({
+                          target: { value: "" },
+                        } as React.ChangeEvent<HTMLInputElement>)
+                    : undefined
+                }
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 px-4 py-1.5 bg-[#ED1D33] text-white rounded-md hover:bg-[#C91828] transition font-medium text-sm"
               >
-                {searchQuery ? 'Clear' : 'Search'}
+                {searchQuery ? "Clear" : "Search"}
               </button>
             </div>
           </form>
@@ -199,14 +212,16 @@ function SearchPageContent() {
 
         {/* Category Filter - Prominent Display */}
         <div className="mb-6">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">Filter by Category</h2>
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">
+            Filter by Category
+          </h2>
           <div className="flex flex-wrap gap-3">
             <button
-              onClick={() => setSelectedCategory('')}
+              onClick={() => setSelectedCategory("")}
               className={`px-5 py-2.5 rounded-full font-medium transition-all ${
-                selectedCategory === ''
-                  ? 'bg-[#ED1D33] text-white shadow-md'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:border-[#ED1D33] hover:text-[#ED1D33]'
+                selectedCategory === ""
+                  ? "bg-[#ED1D33] text-white shadow-md"
+                  : "bg-white text-gray-700 border border-gray-300 hover:border-[#ED1D33] hover:text-[#ED1D33]"
               }`}
             >
               All Categories
@@ -217,8 +232,8 @@ function SearchPageContent() {
                 onClick={() => setSelectedCategory(cat.name)}
                 className={`px-5 py-2.5 rounded-full font-medium transition-all ${
                   selectedCategory === cat.name
-                    ? 'bg-[#ED1D33] text-white shadow-md'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:border-[#ED1D33] hover:text-[#ED1D33]'
+                    ? "bg-[#ED1D33] text-white shadow-md"
+                    : "bg-white text-gray-700 border border-gray-300 hover:border-[#ED1D33] hover:text-[#ED1D33]"
                 }`}
               >
                 {cat.name}
@@ -234,8 +249,18 @@ function SearchPageContent() {
               onClick={clearFilters}
               className="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition font-medium text-sm flex items-center gap-2"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
               Clear All Filters
             </button>
@@ -244,94 +269,155 @@ function SearchPageContent() {
 
         {/* Results Section */}
         <div>
-            {loading ? (
+          {loading ? (
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+              {[...Array(8)].map((_, i) => (
+                <BusinessProfileCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : error ? (
+            <div
+              className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative"
+              role="alert"
+            >
+              <strong className="font-bold">Error!</strong>
+              <span className="block sm:inline"> {error}</span>
+            </div>
+          ) : filteredBusinesses.length === 0 ? (
+            <div className="bg-white rounded-lg shadow p-12 text-center">
+              <h3 className="text-xl font-bold text-gray-800 mb-2">
+                No businesses found
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Try adjusting your search or filters
+              </p>
+              <button
+                onClick={clearFilters}
+                className="px-6 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] transition font-medium"
+              >
+                Clear All Filters
+              </button>
+            </div>
+          ) : (
+            <div>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {filteredBusinesses.length} Business
+                  {filteredBusinesses.length !== 1 ? "es" : ""} Found
+                </h2>
+                {searchQuery && (
+                  <p className="text-gray-600 mt-1">
+                    Search results for:{" "}
+                    <span className="font-semibold text-gray-800">
+                      &quot;{searchQuery}&quot;
+                    </span>
+                  </p>
+                )}
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[...Array(8)].map((_, i) => (
-                  <BusinessCardSkeleton key={i} />
-                ))}
-              </div>
-            ) : error ? (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
-                <strong className="font-bold">Error!</strong>
-                <span className="block sm:inline"> {error}</span>
-              </div>
-            ) : filteredBusinesses.length === 0 ? (
-              <div className="bg-white rounded-lg shadow p-12 text-center">
-                <h3 className="text-xl font-bold text-gray-800 mb-2">
-                  No businesses found
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  Try adjusting your search or filters
-                </p>
-                <button
-                  onClick={clearFilters}
-                  className="px-6 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] transition font-medium"
-                >
-                  Clear All Filters
-                </button>
-              </div>
-            ) : (
-              <div>
-                <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    {filteredBusinesses.length} Business{filteredBusinesses.length !== 1 ? 'es' : ''} Found
-                  </h2>
-                  {searchQuery && (
-                    <p className="text-gray-600 mt-1">
-                      Search results for: <span className="font-semibold text-gray-800">&quot;{searchQuery}&quot;</span>
-                    </p>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {filteredBusinesses.map((business) => (
-                    <Link
-                      key={business.id}
-                      href={`/${business.username}`}
-                      className="group"
+                {filteredBusinesses.map((business, idx) => (
+                  <Link
+                    key={business.id}
+                    href={`/${business.username}`}
+                    className="group"
+                  >
+                    <div
+                      className="bg-white p-5 flex flex-col  border border-gray-200 rounded-lg  hover:shadow-lg transition overflow-hidden h-full"
+                      onMouseEnter={() => setHoveredCard(idx)}
+                      onMouseLeave={() => setHoveredCard(null)}
                     >
-                      <div className="bg-white p-5 flex flex-col  border border-gray-200 rounded-lg  hover:shadow-lg transition overflow-hidden h-full">
-                        {/* Business Image */}
-                        {business.business_logo && (
-                          <div className="relative w-full h-48 bg-gray-200 overflow-hidden">
-                            <Image
-                              src={business.business_logo}
-                              alt={business.name}
-                              fill
-                              className="object-cover group-hover:scale-105 transition"
-                            />
-                          </div>
-                        )}
+                      {/* Business Image */}
+                      {business.business_logo && (
+                        <div className="relative w-full h-48 bg-gray-200 overflow-hidden">
+                          <Image
+                            src={business.business_logo}
+                            alt={business.name}
+                            fill
+                            className="object-cover group-hover:scale-105 transition"
+                          />
+                        </div>
+                      )}
 
-                        {/* Business Info */}
-                        <div className="">
-                          <div className="flex items-start justify-between mb-2">
-                            <h3 className="text-lg font-bold text-gray-800 group-hover:text-[#ED1D33] transition">
-                              {business.name}
-                            </h3>
-                            {business.brand_primary_color && (
-                              <div
-                                className="w-4 h-4 rounded-full shrink-0"
-                                style={{ backgroundColor: business.brand_primary_color }}
-                                title="Brand Color"
-                              />
-                            )}
-                          </div>
+                      {/* Business Info */}
+                      <div className="">
+                        <div className="flex items-start justify-between mb-2">
+                          <h3
+                            className="text-lg font-bold transition"
+                            style={{
+                              cursor: "pointer",
+                              color: hoveredCard === idx ? (business.brand_primary_color || "#ED1D33") : "#1F2937",
+                            }}
+                          >
+                            {business.name}
+                          </h3>
+                        </div>
 
-                          {/* Category Badge */}
-                          <div className="mb-3">
-                            <span className="inline-block px-3 py-1 bg-red-100 text-[#ED1D33] rounded-full text-xs font-semibold">
-                              {business.category}
+                        {/* Category Badge */}
+                        <div className="mb-3">
+                          {typeof business.category === 'string' && business.category.includes(',') ? (
+                            <>
+                              {business.category.split(',').map((cat, i) => (
+                                <span key={`badge-${i}`} className="inline-block px-3 py-1 rounded-full text-xs mr-1 last:mr-0" style={{
+                                  color: business.brand_primary_color || "#ED1D33",
+                                  backgroundColor: business.brand_primary_color
+                                    ? `${business.brand_primary_color}1F` // 12% opacity in hex
+                                    : "#ED1D331F",
+                                }}>
+                                  {cat.trim()}
+                                </span>
+                              ))}
+                              {business.category.split(',').length > 1 && business.category.split(',').map((_, i, arr) => (
+                                i < arr.length - 1 ? <span key={`bullet-${i}`} className="mx-1 align-middle">&bull;</span> : null
+                              ))}
+                            </>
+                          ) : (
+                            <span
+                              className="inline-block px-3 py-1 rounded-full text-xs "
+                              style={{
+                                color: business.brand_primary_color || "#ED1D33",
+                                backgroundColor: business.brand_primary_color
+                                  ? `${business.brand_primary_color}1F` // 12% opacity in hex
+                                  : "#ED1D331F",
+                              }}
+                            >
+                              {business.category || ''}
                             </span>
-                          </div>
+                          )}
+                        </div>
 
-                          {/* Description */}
-                          <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                            {business.description}
-                          </p>
+                        {/* Description */}
+                        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                          {business.description}
+                        </p>
 
-                          {/* Location */}
-                          <div className="flex items-center text-gray-600 text-sm mb-3">
+                        {/* Location */}
+                        <div className="flex items-center text-gray-600 text-sm mb-3">
+                          <svg
+                            className="w-4 h-4 mr-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                          </svg>
+                          {business.address}
+                        </div>
+
+                        {/* Contact */}
+                        {business.contact && (
+                          <div className="flex items-center text-gray-600 text-sm">
                             <svg
                               className="w-4 h-4 mr-2"
                               fill="none"
@@ -342,61 +428,35 @@ function SearchPageContent() {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 strokeWidth={2}
-                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                               />
                             </svg>
-                            {business.location}
+                            {business.contact}
                           </div>
-
-                          {/* Contact */}
-                          {business.contact && (
-                            <div className="flex items-center text-gray-600 text-sm">
-                              <svg
-                                className="w-4 h-4 mr-2"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                                />
-                              </svg>
-                              {business.contact}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* View Details Button */}
-                      
-                          <button
-                            className="w-full px-4 py-2 mt-4 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] transition font-medium text-sm"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              router.push(`/${business.username}`)
-                            }}
-                          >
-                            View Details
-                          </button>
-                      
+                        )}
                       </div>
-                    </Link>
-                  ))}
-                </div>
+
+                      {/* View Details Button */}
+
+                      <button
+                        className="w-full px-4 py-2 mt-2 cursor-pointer group-hover:bg-[#ED1D33] rounded-lg  group-hover:text-white group-hover:border-[#ED1D33rounded-lg transition-colors text-gray-600   border border-gray-300  font-medium text-sm group-hover:text-white  group-hover:border-white   "
+                        onClick={e => {
+                          e.preventDefault();
+                          router.push(`/${business.username}`);
+                        }}
+                      >
+                        View Details
+                      </button>
+                    </div>
+                  </Link>
+                ))}
               </div>
-            )}
+            </div>
+          )}
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function SearchPage() {

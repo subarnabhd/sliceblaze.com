@@ -249,7 +249,7 @@ setTimeout(() => {
 │     │
 │     ├─ UserDashboard (/user/dashboard)
 │     │  ├─ SearchBar component
-│     │  ├─ BusinessCard component (×n)
+│     │  ├─ BusinessProfileCard component (×n)
 │     │  └─ Pagination component
 │     │
 │     └─ BusinessBrowser (/business)

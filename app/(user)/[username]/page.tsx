@@ -1,6 +1,5 @@
 "use client"
 
-type PaymentMethod = 'Fonepay' | 'Nepalpay' | 'Cash' | 'Credit Card' | 'Debit Card' | 'Bank Transfer';
 
 interface BusinessProfile {
   id: number;
@@ -200,6 +199,21 @@ export default function BusinessProfilePage() {
       {business && generateBusinessJsonLd(business)}
 
       <div className="container mx-auto px-4">
+        {/* Business Cover Image */}
+        <div className="w-full mb-6 rounded-2xl overflow-hidden border border-gray-200">
+          <Image
+            src={business.business_cover || "/sample.svg"}
+            alt={`${business.name} cover`}
+            width={1200}
+            height={320}
+            className="w-full h-48 md:h-64 object-cover object-center"
+            priority
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = "/sample.svg";
+            }}
+          />
+        </div>
         {/* Business Header */}
         <div
           className="rounded-2xl border border-gray-200 bg-white/70 drop-shadow-xl backdrop-blur-lg transition-all duration-500 ease-in-out overflow-hidden mb-6"
@@ -341,9 +355,9 @@ export default function BusinessProfilePage() {
             )}
 
             {/* Business Photos Gallery */}
-            {business.business_photos && business.business_photos.length > 0 && (
-              <div className="mt-8">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Photos</h2>
+            <div className="mt-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Photos</h2>
+              {business.business_photos && business.business_photos.length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                   {business.business_photos.map((photo, index) => (
                     <div
@@ -359,8 +373,12 @@ export default function BusinessProfilePage() {
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
+              ) : (
+                <div className="text-gray-500 text-center py-8 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+                  Photos are not available
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
