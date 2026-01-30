@@ -34,7 +34,7 @@ const HBanner = () => {
           <input
             type="text"
             placeholder="Search for businesses, categories, or descriptions..."
-            className="w-full px-6 py-3 rounded-xl bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent text-sm sm:text-base md:text-lg"
+            className="w-full px-5 py-5  rounded-xl bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent text-sm sm:text-base md:text-normal font-normal hover:border-gray-800"
             onClick={() => router.push("/search?focus=true")}
             onFocus={() => router.push("/search?focus=true")}
             readOnly
@@ -42,7 +42,7 @@ const HBanner = () => {
           <button
             type="button"
             onClick={() => router.push("/search?focus=true")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 px-5 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] transition font-semibold text-sm sm:text-base md:text-lg shadow"
+            className="absolute right-3 top-1/2 -translate-y-1/2 px-5 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-[#C91828] transition font-semibold text-sm sm:text-base md:text-md shadow"
           >
             Search
           </button>
