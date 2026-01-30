@@ -1,21 +1,19 @@
 'use client'
 
-import Categorycount from "@/components/Categorycount";
 import Features from "@/components/Features";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import HBanner from "@/components/HBanner";
-import { useRouter } from "next/navigation";
+import CategoryCounter from "@/components/CategoryCounter";
 
 export default function Home() {
-  const router = useRouter();
 
 
   return (
     <div>
       <Header />
       <HBanner />
-      <Categorycount />
+      <CategoryCounter />
       <Features />
       <Footer />
     </div>
