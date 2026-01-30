@@ -19,10 +19,7 @@ interface Business {
   tiktok?: string
   threads?: string
   google_map_url?: string
-  google_map_url?: string
   brand_primary_color?: string
-  brand_primary_color?: string
-  brand_secondary_color?: string
   brand_secondary_color?: string
 }
 
