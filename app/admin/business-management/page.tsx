@@ -18,7 +18,7 @@ interface Business {
   created_at: string
   description?: string
   website?: string
-  businesslogo?: string
+  business_logo?: string
   businesscover?: string
   businessphotos?: string[]
   openinghours?: string
@@ -30,9 +30,9 @@ interface Business {
   youtube?: string
   linkedin?: string
   threads?: string
-  googlemapurl?: string
-  brandprimarycolor?: string
-  brandsecondarycolor?: string
+  google_map_url?: string
+  brand_primary_color?: string
+  brand_secondary_color?: string
   image?: string
 }
 
@@ -61,7 +61,7 @@ export default function BusinessManagement() {
     is_active: true,
     description: '',
     website: '',
-    businesslogo: '',
+    business_logo: '',
     businesscover: '',
     businessphotos: [] as string[],
     openinghours: '',
@@ -73,9 +73,9 @@ export default function BusinessManagement() {
     youtube: '',
     linkedin: '',
     threads: '',
-    googlemapurl: '',
-    brandprimarycolor: '#ED1D33',
-    brandsecondarycolor: '#000000'
+    google_map_url: '',
+    brand_primary_color: '#ED1D33',
+    brand_secondary_color: '#000000'
   })
 
   useEffect(() => {
@@ -163,7 +163,7 @@ export default function BusinessManagement() {
       is_active: true,
       description: '',
       website: '',
-      businesslogo: '',
+      business_logo: '',
       businesscover: '',
       businessphotos: [],
       openinghours: '',
@@ -175,9 +175,9 @@ export default function BusinessManagement() {
       youtube: '',
       linkedin: '',
       threads: '',
-      googlemapurl: '',
-      brandprimarycolor: '#ED1D33',
-      brandsecondarycolor: '#000000'
+      google_map_url: '',
+      brand_primary_color: '#ED1D33',
+      brand_secondary_color: '#000000'
     })
     setShowModal(true)
   }
@@ -194,7 +194,7 @@ export default function BusinessManagement() {
       is_active: business.is_active,
       description: business.description || '',
       website: business.website || '',
-      businesslogo: business.businesslogo || '',
+      business_logo: business.business_logo || '',
       businesscover: business.businesscover || '',
       businessphotos: business.businessphotos || [],
       openinghours: business.openinghours || '',
@@ -206,9 +206,9 @@ export default function BusinessManagement() {
       youtube: business.youtube || '',
       linkedin: business.linkedin || '',
       threads: business.threads || '',
-      googlemapurl: business.googlemapurl || '',
-      brandprimarycolor: business.brandprimarycolor || '#ED1D33',
-      brandsecondarycolor: business.brandsecondarycolor || '#000000'
+      google_map_url: business.google_map_url || '',
+      brand_primary_color: business.brand_primary_color || '#ED1D33',
+      brand_secondary_color: business.brand_secondary_color || '#000000'
     })
     setShowModal(true)
   }
@@ -235,7 +235,7 @@ export default function BusinessManagement() {
             is_active: formData.is_active,
             description: formData.description || null,
             website: formData.website || null,
-            businesslogo: formData.businesslogo || null,
+            business_logo: formData.business_logo || null,
             businesscover: formData.businesscover || null,
             businessphotos: formData.businessphotos || null,
             openinghours: formData.openinghours || null,
@@ -247,9 +247,9 @@ export default function BusinessManagement() {
             youtube: formData.youtube || null,
             linkedin: formData.linkedin || null,
             threads: formData.threads || null,
-            googlemapurl: formData.googlemapurl || null,
-            brandprimarycolor: formData.brandprimarycolor || null,
-            brandsecondarycolor: formData.brandsecondarycolor || null
+            google_map_url: formData.google_map_url || null,
+            brand_primary_color: formData.brand_primary_color || null,
+            brand_secondary_color: formData.brand_secondary_color || null
           }])
 
         if (error) {
@@ -269,7 +269,7 @@ export default function BusinessManagement() {
             is_active: formData.is_active,
             description: formData.description || null,
             website: formData.website || null,
-            businesslogo: formData.businesslogo || null,
+            business_logo: formData.business_logo || null,
             businesscover: formData.businesscover || null,
             businessphotos: formData.businessphotos || null,
             openinghours: formData.openinghours || null,
@@ -281,9 +281,9 @@ export default function BusinessManagement() {
             youtube: formData.youtube || null,
             linkedin: formData.linkedin || null,
             threads: formData.threads || null,
-            googlemapurl: formData.googlemapurl || null,
-            brandprimarycolor: formData.brandprimarycolor || null,
-            brandsecondarycolor: formData.brandsecondarycolor || null
+            google_map_url: formData.google_map_url || null,
+            brand_primary_color: formData.brand_primary_color || null,
+            brand_secondary_color: formData.brand_secondary_color || null
           })
           .eq('id', selectedBusiness.id)
 
@@ -621,31 +621,31 @@ export default function BusinessManagement() {
                       </div>
                     </div>
                   )}
-                  {(selectedBusiness.brandprimarycolor || selectedBusiness.brandsecondarycolor) && (
+                  {(selectedBusiness.brand_primary_color || selectedBusiness.brand_secondary_color) && (
                     <div className="col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-2">Brand Colors</label>
                       <div className="flex gap-4">
-                        {selectedBusiness.brandprimarycolor && (
+                        {selectedBusiness.brand_primary_color && (
                           <div className="flex items-center gap-2">
                             <div 
                               className="w-10 h-10 rounded border border-gray-300" 
-                              style={{ backgroundColor: selectedBusiness.brandprimarycolor }}
+                              style={{ backgroundColor: selectedBusiness.brand_primary_color }}
                             ></div>
                             <div>
                               <p className="text-xs text-gray-500">Primary</p>
-                              <p className="text-sm font-medium text-gray-900">{selectedBusiness.brandprimarycolor}</p>
+                              <p className="text-sm font-medium text-gray-900">{selectedBusiness.brand_primary_color}</p>
                             </div>
                           </div>
                         )}
-                        {selectedBusiness.brandsecondarycolor && (
+                        {selectedBusiness.brand_secondary_color && (
                           <div className="flex items-center gap-2">
                             <div 
                               className="w-10 h-10 rounded border border-gray-300" 
-                              style={{ backgroundColor: selectedBusiness.brandsecondarycolor }}
+                              style={{ backgroundColor: selectedBusiness.brand_secondary_color }}
                             ></div>
                             <div>
                               <p className="text-xs text-gray-500">Secondary</p>
-                              <p className="text-sm font-medium text-gray-900">{selectedBusiness.brandsecondarycolor}</p>
+                              <p className="text-sm font-medium text-gray-900">{selectedBusiness.brand_secondary_color}</p>
                             </div>
                           </div>
                         )}
@@ -794,8 +794,8 @@ export default function BusinessManagement() {
                       Business Logo *
                     </label>
                     <CloudinaryUpload
-                      currentImage={formData.businesslogo}
-                      onUploadComplete={(url) => setFormData({ ...formData, businesslogo: url })}
+                      currentImage={formData.business_logo}
+                      onUploadComplete={(url) => setFormData({ ...formData, business_logo: url })}
                       folder="businesses/logos"
                     />
                   </div>
@@ -909,8 +909,8 @@ export default function BusinessManagement() {
                       />
                       <input
                         type="url"
-                        value={formData.googlemapurl || ''}
-                        onChange={(e) => setFormData({ ...formData, googlemapurl: e.target.value })}
+                        value={formData.google_map_url || ''}
+                        onChange={(e) => setFormData({ ...formData, google_map_url: e.target.value })}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="Google Maps URL"
                       />
@@ -924,14 +924,14 @@ export default function BusinessManagement() {
                     <div className="flex items-center gap-3">
                       <input
                         type="color"
-                        value={formData.brandprimarycolor || '#ED1D33'}
-                        onChange={(e) => setFormData({ ...formData, brandprimarycolor: e.target.value })}
+                        value={formData.brand_primary_color || '#ED1D33'}
+                        onChange={(e) => setFormData({ ...formData, brand_primary_color: e.target.value })}
                         className="h-10 w-20 border border-gray-300 rounded cursor-pointer"
                       />
                       <input
                         type="text"
-                        value={formData.brandprimarycolor || '#ED1D33'}
-                        onChange={(e) => setFormData({ ...formData, brandprimarycolor: e.target.value })}
+                        value={formData.brand_primary_color || '#ED1D33'}
+                        onChange={(e) => setFormData({ ...formData, brand_primary_color: e.target.value })}
                         className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="#ED1D33"
                       />
@@ -945,14 +945,14 @@ export default function BusinessManagement() {
                     <div className="flex items-center gap-3">
                       <input
                         type="color"
-                        value={formData.brandsecondarycolor || '#000000'}
-                        onChange={(e) => setFormData({ ...formData, brandsecondarycolor: e.target.value })}
+                        value={formData.brand_secondary_color || '#000000'}
+                        onChange={(e) => setFormData({ ...formData, brand_secondary_color: e.target.value })}
                         className="h-10 w-20 border border-gray-300 rounded cursor-pointer"
                       />
                       <input
                         type="text"
-                        value={formData.brandsecondarycolor || '#000000'}
-                        onChange={(e) => setFormData({ ...formData, brandsecondarycolor: e.target.value })}
+                        value={formData.brand_secondary_color || '#000000'}
+                        onChange={(e) => setFormData({ ...formData, brand_secondary_color: e.target.value })}
                         className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="#000000"
                       />

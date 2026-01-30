@@ -80,21 +80,21 @@ BEGIN
   END IF;
 END $$;
 
--- Add primary_color field (migrate from brandPrimaryColor)
+-- Add primary_color field (migrate from brand_primary_color)
 DO $$ 
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='businesses' AND column_name='primary_color') THEN
     ALTER TABLE businesses ADD COLUMN primary_color TEXT DEFAULT '#ED1D33';
-    UPDATE businesses SET primary_color = "brandPrimaryColor" WHERE "brandPrimaryColor" IS NOT NULL;
+    UPDATE businesses SET primary_color = "brand_primary_color" WHERE "brand_primary_color" IS NOT NULL;
   END IF;
 END $$;
 
--- Add secondary_color field (migrate from brandSecondaryColor)
+-- Add secondary_color field (migrate from brand_secondary_color)
 DO $$ 
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='businesses' AND column_name='secondary_color') THEN
     ALTER TABLE businesses ADD COLUMN secondary_color TEXT DEFAULT '#000000';
-    UPDATE businesses SET secondary_color = "brandSecondaryColor" WHERE "brandSecondaryColor" IS NOT NULL;
+    UPDATE businesses SET secondary_color = "brand_secondary_color" WHERE "brand_secondary_color" IS NOT NULL;
   END IF;
 END $$;
 

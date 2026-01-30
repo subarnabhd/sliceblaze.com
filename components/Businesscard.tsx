@@ -7,19 +7,20 @@ import Link from "next/link";
 interface BusinesscardProps {
   username: string;
   name: string;
-  location: string;
-  category: string;
-  businesslogo: string;
+  address?: string;
+  category?: string;
+  business_logo?: string;
+}
 }
 
 export default function Businesscard({
   username,
   name,
-  location,
+  address,
   category,
-  businesslogo,
+  business_logo,
 }: BusinesscardProps) {
-  const [imgSrc, setImgSrc] = useState(businesslogo || "/sample.svg");
+  const [imgSrc, setImgSrc] = useState(business_logo || "/sample.svg");
 
   return (
     <Link
@@ -40,10 +41,14 @@ export default function Businesscard({
 
       <div>
         <h3 className="text-base font-semibold text-gray-900">{name}</h3>
-        <p className="text-sm text-gray-500 mt-1">{location}</p>
-        <span className="inline-block mt-2 text-xs px-3 py-1 rounded-full bg-red-50 text-red-500">
-          {category}
-        </span>
+        {address && (
+          <p className="text-sm text-gray-500 mt-1">{address}</p>
+        )}
+        {category && (
+          <span className="inline-block mt-2 text-xs px-3 py-1 rounded-full bg-red-50 text-red-500">
+            {category}
+          </span>
+        )}
         <span className="block mt-4 text-sm font-medium text-red-500">
           Explore →
         </span>

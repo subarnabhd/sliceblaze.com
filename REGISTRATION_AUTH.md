@@ -174,11 +174,11 @@ CREATE TABLE businesses (
   instagram VARCHAR(255),
   tiktok VARCHAR(255),
   menuUrl VARCHAR(255),
-  googleMapUrl VARCHAR(255),
+  google_map_url VARCHAR(255),
   direction TEXT,
   wifiQrCode VARCHAR(255),
-  brandPrimaryColor VARCHAR(7),
-  brandSecondaryColor VARCHAR(7),
+  brand_primary_color VARCHAR(7),
+  brand_secondary_color VARCHAR(7),
   created_at TIMESTAMP
 );
 ```

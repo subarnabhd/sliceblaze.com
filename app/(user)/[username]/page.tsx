@@ -1,4 +1,44 @@
-'use client'
+"use client"
+
+type PaymentMethod = 'Fonepay' | 'Nepalpay' | 'Cash' | 'Credit Card' | 'Debit Card' | 'Bank Transfer';
+
+interface BusinessProfile {
+  id: number;
+  username: string;
+  name: string;
+  address?: string;
+  category?: string;
+  business_logo?: string;
+  description?: string;
+  mobile?: string;
+  opening_hours?: string;
+  closing_hour?: string;
+  facebook?: string;
+  instagram?: string;
+  tiktok?: string;
+  google_map_url?: string;
+  brand_primary_color?: string;
+  brand_secondary_color?: string;
+  created_at?: string;
+  is_active?: boolean;
+  whatsapp?: string;
+  website?: string;
+  twitter?: string;
+  youtube?: string;
+  linkedin?: string;
+  threads?: string;
+  business_cover?: string;
+  business_photos?: string[];
+  pan_number?: string;
+  employees?: number;
+  country?: string;
+  district?: string;
+  city?: string;
+  payment_methods?: string[];
+  established_date?: string;
+  phone?: string;
+  email?: string;
+}
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
@@ -10,52 +50,41 @@ import MenuDisplay from '@/components/MenuDisplay'
 import { generateBusinessJsonLd } from '@/lib/json-ld'
 
 interface Business {
-  id: number
-  name: string
-  username: string
-  // New field names
-  address?: string
-  phone?: string
-  email?: string
-  businesslogo?: string
-  logo?: string
-  logo_url?: string
-  cover_image?: string
-  cover_image_url?: string
-  photos?: string[]
-  opening_hours?: string
-  facebook_url?: string
-  instagram_url?: string
-  twitter_url?: string  
-  primary_color?: string
-  secondary_color?: string
-  // Legacy field names (for backward compatibility)
-  location?: string
-  category?: string
-  image?: string
-  description?: string
-  contact?: string
-  whatsapp?: string
-  website?: string
-  openinghours?: string
-  facebook?: string
-  twitter?: string
-  youtube?: string
-  instagram?: string
-  linkedin?: string
-  tiktok?: string
-  threads?: string
-  googlemapurl?: string
-  getdirection?: string
-  direction?: string
-  menuUrl?: string
-  menuurl?: string
-  wifiQrCode?: string
-  wifiqrcode?: string
-  brandPrimaryColor?: string
-  brandprimarycolor?: string
-  brandSecondaryColor?: string
-  brandsecondarycolor?: string
+  id: number;
+  username: string;
+  name: string;
+  address?: string;
+  category?: string;
+  business_logo?: string;
+  description?: string;
+  mobile?: string;
+  opening_hours?: string;
+  closing_hour?: string;
+  facebook?: string;
+  instagram?: string;
+  tiktok?: string;
+  google_map_url?: string;
+  brand_primary_color?: string;
+  brand_secondary_color?: string;
+  created_at?: string;
+  is_active?: boolean;
+  whatsapp?: string;
+  website?: string;
+  twitter?: string;
+  youtube?: string;
+  linkedin?: string;
+  threads?: string;
+  business_cover?: string;
+  business_photos?: string[];
+  pan_number?: string;
+  employees?: number;
+  country?: string;
+  district?: string;
+  city?: string;
+  payment_methods?: string[];
+  established_date?: string;
+  phone?: string;
+  email?: string;
 }
 
 interface WifiNetwork {
@@ -134,17 +163,14 @@ export default function BusinessProfilePage() {
   }, [username])
 
   // Helper functions to get values with fallback to old field names
-  const getAddress = () => business?.address || business?.location || ''
-  const getPhone = () => business?.phone || business?.contact || ''
-  // const getEmail = () => business?.email || ''
-  const getLogoUrl = () => business?.businesslogo || business?.logo_url || business?.logo || business?.image || '/sample.svg'
-  // const getCoverImageUrl = () => business?.cover_image_url || ''
-  const getOpeningHours = () => business?.opening_hours || business?.openinghours || ''
-  const getFacebookUrl = () => business?.facebook_url || business?.facebook || ''
-  const getInstagramUrl = () => business?.instagram_url || business?.instagram || ''
-  const getTwitterUrl = () => business?.twitter_url || business?.twitter || ''
-  const getPrimaryColor = () => business?.primary_color || business?.brandPrimaryColor || business?.brandprimarycolor || '#ED1D33'
-  // const getSecondaryColor = () => business?.secondary_color || business?.brandSecondaryColor || business?.brandsecondarycolor || '#000000'
+  const getAddress = () => business?.address || ''
+  const getPhone = () => business?.phone || ''
+  const getLogoUrl = () => business?.business_logo || '/sample.svg'
+  const getOpeningHours = () => business?.opening_hours || ''
+  const getFacebookUrl = () => business?.facebook || ''
+  const getInstagramUrl = () => business?.instagram || ''
+  const getTwitterUrl = () => business?.twitter || ''
+  const getPrimaryColor = () => business?.brand_primary_color || '#ED1D33'
 
   if (loading) {
     return (
@@ -172,7 +198,7 @@ export default function BusinessProfilePage() {
     <div className="min-h-screen bg-gray-50 py-8">
       {/* JSON-LD Structured Data */}
       {business && generateBusinessJsonLd(business)}
-      
+
       <div className="container mx-auto px-4">
         {/* Business Header */}
         <div
@@ -196,7 +222,7 @@ export default function BusinessProfilePage() {
                   priority
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.src = '/sample.svg';
+                    target.src = "/sample.svg";
                   }}
                 />
               </div>
@@ -253,9 +279,9 @@ export default function BusinessProfilePage() {
                 <p className="text-lg text-gray-600 mb-1">
                   {business.category}
                 </p>
-                {business.googlemapurl ? (
+                {business.google_map_url ? (
                   <a
-                    href={business.googlemapurl?.replace('/embed', '')}
+                    href={business.google_map_url?.replace("/embed", "")}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-500 hover:text-[#ED1D33] flex items-center gap-2 transition-colors"
@@ -315,12 +341,15 @@ export default function BusinessProfilePage() {
             )}
 
             {/* Business Photos Gallery */}
-            {business.photos && business.photos.length > 0 && (
+            {business.business_photos && business.business_photos.length > 0 && (
               <div className="mt-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Photos</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                  {business.photos.map((photo, index) => (
-                    <div key={index} className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer">
+                  {business.business_photos.map((photo, index) => (
+                    <div
+                      key={index}
+                      className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer"
+                    >
                       <Image
                         src={photo}
                         alt={`${business.name} - Photo ${index + 1}`}
@@ -379,7 +408,11 @@ export default function BusinessProfilePage() {
               )}
               {business.website && (
                 <a
-                  href={business.website.startsWith('http') ? business.website : `https://${business.website}`}
+                  href={
+                    business.website.startsWith("http")
+                      ? business.website
+                      : `https://${business.website}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-blue-600 hover:text-blue-700 break-all"
@@ -397,14 +430,14 @@ export default function BusinessProfilePage() {
                       d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
                     />
                   </svg>
-                  {business.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                  {business.website
+                    .replace(/^https?:\/\//, "")
+                    .replace(/\/$/, "")}
                 </a>
               )}
-              {business.googlemapurl && (
+              {business.google_map_url && (
                 <a
-                  href={(
-                    business.googlemapurl
-                  )?.replace("/embed", "")}
+                  href={business.google_map_url?.replace("/embed", "")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-[#ED1D33] hover:text-[#C91828]"
@@ -569,29 +602,7 @@ export default function BusinessProfilePage() {
                   Threads
                 </a>
               )}
-              {business.menuUrl && (
-                <a
-                  href={business.menuUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-green-600 hover:text-green-700"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                    />
-                  </svg>
-                  View Menu
-                </a>
-              )}
+             
             </div>
           </div>
         </div>
@@ -603,9 +614,13 @@ export default function BusinessProfilePage() {
         {/* WiFi Networks */}
         {wifiNetworks && wifiNetworks.length > 0 && (
           <div className="mt-4 md:mt-6">
-            <WifiConnect 
-              wifiNetworks={wifiNetworks} 
-              brandColor={business.brandprimarycolor || business.brandPrimaryColor || '#ED1D33'}
+            <WifiConnect
+              wifiNetworks={wifiNetworks}
+              brandColor={
+                business.brand_primary_color ||
+                business.brand_primary_color ||
+                "#ED1D33"
+              }
             />
           </div>
         )}
@@ -613,34 +628,19 @@ export default function BusinessProfilePage() {
         {/* Menu Display */}
         {menu && menu.length > 0 && (
           <div className="mt-4 md:mt-6">
-            <MenuDisplay 
-              menu={menu} 
-              brandColor={business.brandprimarycolor || business.brandPrimaryColor || '#ED1D33'}
+            <MenuDisplay
+              menu={menu}
+              brandColor={
+                business.brand_primary_color ||
+                business.brand_primary_color ||
+                "#ED1D33"
+              }
               currencySymbol="$"
             />
           </div>
         )}
 
-      
-
-        {/* Legacy WiFi QR Code (kept for backward compatibility) */}
-        {business.wifiQrCode && (
-          <div className="mt-4 md:mt-6 bg-white rounded-lg shadow p-4 md:p-6">
-            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">Free WiFi</h2>
-            <div className="flex justify-center">
-              <Image
-                src={business.wifiQrCode}
-                alt="WiFi QR Code"
-                width={200}
-                height={200}
-                className="rounded border border-gray-200 w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52"
-              />
-            </div>
-            <p className="text-center text-gray-600 mt-3 text-sm md:text-base">
-              Scan to connect to our WiFi
-            </p>
-          </div>
-        )}
+        
       </div>
     </div>
   );

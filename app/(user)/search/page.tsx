@@ -7,16 +7,16 @@ import Image from 'next/image'
 import { getBusinesses, supabase } from '@/lib/supabase'
 
 interface Business {
-  id: number
-  name: string
-  username: string
-  location: string
-  category: string
-  businesslogo: string
-  description: string
-  contact: string
-  brandPrimaryColor: string
-  openingHours?: string
+  id: number;
+  name: string;
+  username: string;
+  location: string;
+  category: string;
+  business_logo: string;
+  description: string;
+  contact: string;
+  brand_primary_color: string;
+  opening_hours?: string;
 }
 
 interface Category {
@@ -278,7 +278,7 @@ function SearchPageContent() {
                   </h2>
                   {searchQuery && (
                     <p className="text-gray-600 mt-1">
-                      Search results for: <span className="font-semibold text-gray-800">"{searchQuery}"</span>
+                      Search results for: <span className="font-semibold text-gray-800">&quot;{searchQuery}&quot;</span>
                     </p>
                   )}
                 </div>
@@ -292,10 +292,10 @@ function SearchPageContent() {
                     >
                       <div className="bg-white p-5 flex flex-col  border border-gray-200 rounded-lg  hover:shadow-lg transition overflow-hidden h-full">
                         {/* Business Image */}
-                        {business.businesslogo && (
+                        {business.business_logo && (
                           <div className="relative w-full h-48 bg-gray-200 overflow-hidden">
                             <Image
-                              src={business.businesslogo}
+                              src={business.business_logo}
                               alt={business.name}
                               fill
                               className="object-cover group-hover:scale-105 transition"
@@ -309,10 +309,10 @@ function SearchPageContent() {
                             <h3 className="text-lg font-bold text-gray-800 group-hover:text-[#ED1D33] transition">
                               {business.name}
                             </h3>
-                            {business.brandPrimaryColor && (
+                            {business.brand_primary_color && (
                               <div
                                 className="w-4 h-4 rounded-full shrink-0"
-                                style={{ backgroundColor: business.brandPrimaryColor }}
+                                style={{ backgroundColor: business.brand_primary_color }}
                                 title="Brand Color"
                               />
                             )}

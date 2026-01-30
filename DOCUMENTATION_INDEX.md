@@ -152,8 +152,8 @@ id, email, username, full_name, password_hash, role, is_active, created_at
 ```sql
 id, name, username, category, location, contact, description, 
 openingHours, image, facebook, instagram, tiktok, menuUrl, 
-googleMapUrl, direction, wifiQrCode, brandPrimaryColor, 
-brandSecondaryColor, created_at
+google_map_url, direction, wifiQrCode, brand_primary_color, 
+brand_secondary_color, created_at
 ```
 
 ### Categories Table

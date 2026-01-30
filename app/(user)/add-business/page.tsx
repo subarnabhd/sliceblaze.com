@@ -32,9 +32,9 @@ interface Business {
   threads: string
   whatsapp: string
   website: string
-  googlemapurl: string
-  brandprimarycolor: string
-  brandsecondarycolor: string
+  google_map_url: string
+  brand_primary_color: string
+  brand_secondary_color: string
   is_active: boolean
 }
 
@@ -78,9 +78,9 @@ export default function AddBusinessPage() {
     threads: '',
     whatsapp: '',
     website: '',
-    googlemapurl: '',
-    brandprimarycolor: '#ED1D33',
-    brandsecondarycolor: '#000000',
+    google_map_url: '',
+    brand_primary_color: '#ED1D33',
+    brand_secondary_color: '#000000',
   })
 
   useEffect(() => {
@@ -151,9 +151,9 @@ export default function AddBusinessPage() {
           threads: biz.threads || '',
           whatsapp: biz.whatsapp || '',
           website: biz.website || '',
-          googlemapurl: biz.googlemapurl || '',
-          brandprimarycolor: biz.brandprimarycolor || '#ED1D33',
-          brandsecondarycolor: biz.brandsecondarycolor || '#000000',
+          google_map_url: biz.google_map_url || '',
+          brand_primary_color: biz.brand_primary_color || '#ED1D33',
+          brand_secondary_color: biz.brand_secondary_color || '#000000',
         })
       }
     } catch (err) {
@@ -242,9 +242,9 @@ export default function AddBusinessPage() {
         threads: formData.threads || null,
         whatsapp: formData.whatsapp || null,
         website: formData.website || null,
-        googlemapurl: formData.googlemapurl || null,
-        brandprimarycolor: formData.brandprimarycolor || null,
-        brandsecondarycolor: formData.brandsecondarycolor || null,
+        google_map_url: formData.google_map_url || null,
+        brand_primary_color: formData.brand_primary_color || null,
+        brand_secondary_color: formData.brand_secondary_color || null,
         is_active: true
       }
 
@@ -487,8 +487,8 @@ export default function AddBusinessPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Google Map URL</label>
                 <input
                   type="url"
-                  name="googlemapurl"
-                  value={formData.googlemapurl}
+                  name="google_map_url"
+                  value={formData.google_map_url}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                   placeholder="https://maps.google.com/?q=Your+Business"
@@ -614,16 +614,16 @@ export default function AddBusinessPage() {
                 <div className="flex items-center gap-3">
                   <input
                     type="color"
-                    value={formData.brandprimarycolor}
+                    value={formData.brand_primary_color}
                     onChange={handleChange}
-                    name="brandprimarycolor"
+                    name="brand_primary_color"
                     className="h-10 w-20 border border-gray-300 rounded cursor-pointer"
                   />
                   <input
                     type="text"
-                    value={formData.brandprimarycolor}
+                    value={formData.brand_primary_color}
                     onChange={handleChange}
-                    name="brandprimarycolor"
+                    name="brand_primary_color"
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                     placeholder="#ED1D33"
                   />
@@ -635,16 +635,16 @@ export default function AddBusinessPage() {
                 <div className="flex items-center gap-3">
                   <input
                     type="color"
-                    value={formData.brandsecondarycolor}
+                    value={formData.brand_secondary_color}
                     onChange={handleChange}
-                    name="brandsecondarycolor"
+                    name="brand_secondary_color"
                     className="h-10 w-20 border border-gray-300 rounded cursor-pointer"
                   />
                   <input
                     type="text"
-                    value={formData.brandsecondarycolor}
+                    value={formData.brand_secondary_color}
                     onChange={handleChange}
-                    name="brandsecondarycolor"
+                    name="brand_secondary_color"
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                     placeholder="#000000"
                   />

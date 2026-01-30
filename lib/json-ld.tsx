@@ -18,12 +18,12 @@ interface Business {
   linkedin?: string
   tiktok?: string
   threads?: string
-  googleMapUrl?: string
-  googlemapurl?: string
-  brandPrimaryColor?: string
-  brandprimarycolor?: string
-  brandSecondaryColor?: string
-  brandsecondarycolor?: string
+  google_map_url?: string
+  google_map_url?: string
+  brand_primary_color?: string
+  brand_primary_color?: string
+  brand_secondary_color?: string
+  brand_secondary_color?: string
 }
 
 export function generateBusinessJsonLd(business: Business) {

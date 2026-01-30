@@ -39,9 +39,9 @@ interface Business {
   linkedin?: string
   threads?: string
   whatsapp?: string
-  googlemapurl?: string
-  brandprimarycolor: string
-  brandsecondarycolor: string
+  google_map_url?: string
+  brand_primary_color: string
+  brand_secondary_color: string
   is_active: boolean
 }
 
@@ -89,7 +89,7 @@ export default function UserDashboard() {
     description: '',
     website: '',
     openinghours: '',
-    businesslogo: '',
+    business_logo: '',
     businesscover: '',
     businessphotos: [] as string[],
     facebook: '',
@@ -100,9 +100,9 @@ export default function UserDashboard() {
     linkedin: '',
     threads: '',
     whatsapp: '',
-    googlemapurl: '',
-    brandprimarycolor: '',
-    brandsecondarycolor: '',
+    google_map_url: '',
+    brand_primary_color: '',
+    brand_secondary_color: '',
   })
   const [stats, setStats] = useState<DashboardStats>({
     totalMenuItems: 0,
@@ -134,7 +134,7 @@ export default function UserDashboard() {
           description: businessData.description || '',
           website: businessData.website || '',
           openinghours: businessData.openinghours || '',
-          businesslogo: businessData.businesslogo || '',
+          business_logo: businessData.business_logo || '',
           businesscover: businessData.businesscover || '',
           businessphotos: businessData.businessphotos || [],
           facebook: businessData.facebook || '',
@@ -145,9 +145,9 @@ export default function UserDashboard() {
           linkedin: businessData.linkedin || '',
           threads: businessData.threads || '',
           whatsapp: businessData.whatsapp || '',
-          googlemapurl: businessData.googlemapurl || '',
-          brandprimarycolor: businessData.brandprimarycolor || '',
-          brandsecondarycolor: businessData.brandsecondarycolor || '',
+          google_map_url: businessData.google_map_url || '',
+          brand_primary_color: businessData.brand_primary_color || '',
+          brand_secondary_color: businessData.brand_secondary_color || '',
         })
       }
 
@@ -366,7 +366,7 @@ export default function UserDashboard() {
           description: editFormData.description,
           website: editFormData.website,
           openinghours: editFormData.openinghours,
-          businesslogo: editFormData.businesslogo,
+          business_logo: editFormData.business_logo,
           businesscover: editFormData.businesscover,
           businessphotos: editFormData.businessphotos,
           facebook: editFormData.facebook,
@@ -377,9 +377,9 @@ export default function UserDashboard() {
           linkedin: editFormData.linkedin,
           threads: editFormData.threads,
           whatsapp: editFormData.whatsapp,
-          googlemapurl: editFormData.googlemapurl,
-          brandprimarycolor: editFormData.brandprimarycolor,
-          brandsecondarycolor: editFormData.brandsecondarycolor,
+          google_map_url: editFormData.google_map_url,
+          brand_primary_color: editFormData.brand_primary_color,
+          brand_secondary_color: editFormData.brand_secondary_color,
         })
         .eq('id', business.id)
 
@@ -976,8 +976,8 @@ export default function UserDashboard() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Business Logo *</label>
                         <CloudinaryUpload
-                          currentImage={editFormData.businesslogo}
-                          onUploadComplete={(url) => setEditFormData(prev => ({ ...prev, businesslogo: url }))}
+                          currentImage={editFormData.business_logo}
+                          onUploadComplete={(url) => setEditFormData(prev => ({ ...prev, business_logo: url }))}
                           folder="businesses/logos"
                         />
                     </div>
@@ -1034,8 +1034,8 @@ export default function UserDashboard() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Primary Color</label>
                       <input
                         type="color"
-                        name="brandprimarycolor"
-                        value={editFormData.brandprimarycolor}
+                        name="brand_primary_color"
+                        value={editFormData.brand_primary_color}
                         onChange={handleEditFormChange}
                         className="w-full h-10 rounded-lg border border-gray-300"
                       />
@@ -1044,8 +1044,8 @@ export default function UserDashboard() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Secondary Color</label>
                       <input
                         type="color"
-                        name="brandsecondarycolor"
-                        value={editFormData.brandsecondarycolor}
+                        name="brand_secondary_color"
+                        value={editFormData.brand_secondary_color}
                         onChange={handleEditFormChange}
                         className="w-full h-10 rounded-lg border border-gray-300"
                       />
@@ -1157,8 +1157,8 @@ export default function UserDashboard() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Google Maps URL</label>
                       <input
                         type="url"
-                        name="googlemapurl"
-                        value={editFormData.googlemapurl}
+                        name="google_map_url"
+                        value={editFormData.google_map_url}
                         onChange={handleEditFormChange}
                         placeholder="https://maps.google.com/..."
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"

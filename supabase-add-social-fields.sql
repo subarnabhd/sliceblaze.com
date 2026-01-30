@@ -49,11 +49,11 @@ BEGIN
   END IF;
 END $$;
 
--- Add googlemapurl field
+-- Add google_map_url field
 DO $$ 
 BEGIN
-  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='businesses' AND column_name='googlemapurl') THEN
-    ALTER TABLE businesses ADD COLUMN googlemapurl TEXT DEFAULT '';
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='businesses' AND column_name='google_map_url') THEN
+    ALTER TABLE businesses ADD COLUMN google_map_url TEXT DEFAULT '';
   END IF;
 END $$;
 
@@ -73,19 +73,19 @@ BEGIN
   END IF;
 END $$;
 
--- Add brandprimarycolor field
+-- Add brand_primary_color field
 DO $$ 
 BEGIN
-  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='businesses' AND column_name='brandprimarycolor') THEN
-    ALTER TABLE businesses ADD COLUMN brandprimarycolor TEXT DEFAULT '#ED1D33';
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='businesses' AND column_name='brand_primary_color') THEN
+    ALTER TABLE businesses ADD COLUMN brand_primary_color TEXT DEFAULT '#ED1D33';
   END IF;
 END $$;
 
--- Add brandsecondarycolor field
+-- Add brand_secondary_color field
 DO $$ 
 BEGIN
-  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='businesses' AND column_name='brandsecondarycolor') THEN
-    ALTER TABLE businesses ADD COLUMN brandsecondarycolor TEXT DEFAULT '#C91828';
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='businesses' AND column_name='brand_secondary_color') THEN
+    ALTER TABLE businesses ADD COLUMN brand_secondary_color TEXT DEFAULT '#C91828';
   END IF;
 END $$;
 

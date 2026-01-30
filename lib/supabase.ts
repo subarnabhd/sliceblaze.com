@@ -85,12 +85,12 @@ export async function createBusiness(businessData: any) {
     facebook: businessData.facebook || '',
     instagram: businessData.instagram || '',
     tiktok: businessData.tiktok || '',
-    googlemapurl: businessData.googleMapUrl || businessData.googlemapurl || '',
+    google_map_url: businessData.google_map_url || businessData.google_map_url || '',
     direction: businessData.direction || '',
     menuurl: businessData.menuUrl || businessData.menuurl || '',
     wifiqrcode: businessData.wifiQrCode || businessData.wifiqrcode || '',
-    brandprimarycolor: businessData.brandPrimaryColor || businessData.brandprimarycolor || '',
-    brandsecondarycolor: businessData.brandSecondaryColor || businessData.brandsecondarycolor || '',
+    brand_primary_color: businessData.brand_primary_color || businessData.brand_primary_color || '',
+    brand_secondary_color: businessData.brand_secondary_color || businessData.brand_secondary_color || '',
     is_active: businessData.is_active !== false,
   }
 

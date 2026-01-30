@@ -5,7 +5,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 
 
-const Homebanner = () => {
+const HBanner = () => {
   const router = useRouter();
   return (
     <section className="flex flex-col items-center justify-center min-h-[50vh] w-full bg-white py-16 px-4">
@@ -52,4 +52,4 @@ const Homebanner = () => {
   );
 }
 
-export default Homebanner
+export default HBanner

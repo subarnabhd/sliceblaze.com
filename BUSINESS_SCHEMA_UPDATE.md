@@ -15,8 +15,8 @@ The admin business management form was using field names that didn't match the d
 - `facebook_url` → `facebook` (old)
 - `instagram_url` → `instagram` (old)
 - `twitter_url` → `twitter` (old)
-- `primary_color` → `brandPrimaryColor` (old)
-- `secondary_color` → `brandSecondaryColor` (old)
+- `primary_color` → `brand_primary_color` (old)
+- `secondary_color` → `brand_secondary_color` (old)
 
 ## Solution
 
