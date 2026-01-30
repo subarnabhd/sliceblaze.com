@@ -101,10 +101,10 @@ export default function ContactPage() {
                     Email
                   </h3>
                   <a
-                    href="mailto:support@sliceblaze.com"
+                    href="mailto:hello@sliceblaze.com"
                     className="text-gray-600 hover:text-[#ED1D33] transition-colors"
                   >
-                    support@sliceblaze.com
+                    hello@sliceblaze.com
                   </a>
                 </div>
               </div>
@@ -179,7 +179,7 @@ export default function ContactPage() {
                 </h3>
                 <div className="flex gap-3">
                   <a
-                    href="#"
+                    href="https://www.facebook.com/sliceblaze"
                     className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center hover:bg-[#ED1D33] transition-colors group"
                   >
                     <svg
@@ -191,7 +191,7 @@ export default function ContactPage() {
                     </svg>
                   </a>
                   <a
-                    href="#"
+                    href="https://www.instagram.com/sliceblaze"
                     className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center hover:bg-[#ED1D33] transition-colors group"
                   >
                     <svg
@@ -203,7 +203,7 @@ export default function ContactPage() {
                     </svg>
                   </a>
                   <a
-                    href="#"
+                    href="https://www.linkedin.com/company/sliceblaze"
                     className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center hover:bg-[#ED1D33] transition-colors group"
                   >
                     <svg
