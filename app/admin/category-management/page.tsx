@@ -240,9 +240,14 @@ export default function CategoryManagement() {
       setImageFile(null)
       setImagePreview('')
       fetchCategories()
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error saving category:', error)
-      const errorMsg = error?.message || error?.error_description || 'Unknown error occurred'
+      let errorMsg = 'Unknown error occurred'
+      if (error instanceof Error) {
+        errorMsg = error.message
+      } else if (typeof error === 'object' && error !== null && 'message' in error) {
+        errorMsg = (error as { message?: string }).message || errorMsg
+      }
       alert(`Error: ${errorMsg}. Make sure the categories table exists in Supabase with columns: id, name, description, icon, image_url, created_at`)
     }
   }
