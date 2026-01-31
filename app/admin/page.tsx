@@ -1,9 +1,5 @@
 
 'use client'
-export const metadata = {
-  title: "Admin Login | Sliceblaze",
-  description: "Admin login page for Sliceblaze business management platform.",
-};
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
