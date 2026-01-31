@@ -32,18 +32,30 @@ export default function UserManagement() {
     role: 'user'
   })
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    checkAuth()
-    fetchUsers()
-  }, [])
-
-  const checkAuth = () => {
+    // Inline checkAuth and fetchUsers to avoid missing dependency warning
     const session = localStorage.getItem('adminSession')
     if (!session) {
       router.push('/admin')
+      return
     }
-  }
+    (async () => {
+      try {
+        const { data, error } = await supabase
+          .from('users')
+          .select('*')
+          .order('created_at', { ascending: false })
+
+        if (error) throw error
+        setUsers(data || [])
+      } catch (error) {
+        console.error('Error fetching users:', error)
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [router])
+
 
   const fetchUsers = async () => {
     try {
