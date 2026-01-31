@@ -34,6 +34,7 @@ export default function Header() {
   const [userBusiness, setUserBusiness] = useState<UserBusiness | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [businessDropdownOpen, setBusinessDropdownOpen] = useState(false);
+  const businessDropdownTimeout = useRef<NodeJS.Timeout | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [categories, setCategories] = useState<CategoryWithCount[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -215,10 +216,10 @@ export default function Header() {
           </Link>
 
           {/* Middle - Navigation Menu */}
-          <nav className="hidden md:flex items-center justify-center gap-8">
+          <nav className="hidden md:flex items-center justify-center gap-2">
             <Link
               href="/"
-              className="text-gray-700 hover:text-[#ED1D33] font-medium transition-colors"
+              className="text-gray-700 hover:text-black hover:bg-[#f3f4f680]  px-3 py-1.5 rounded-lg font-normal transition-colors"
             >
               Home
             </Link>
@@ -227,10 +228,24 @@ export default function Header() {
             <div
               className="relative pointer-events-auto"
               ref={businessDropdownRef}
+              onMouseEnter={() => {
+                if (businessDropdownTimeout.current) {
+                  clearTimeout(businessDropdownTimeout.current);
+                  businessDropdownTimeout.current = null;
+                }
+                setBusinessDropdownOpen(true);
+              }}
+              onMouseLeave={() => {
+                businessDropdownTimeout.current = setTimeout(() => {
+                  setBusinessDropdownOpen(false);
+                }, 120); // 120ms delay for smoothness
+              }}
             >
               <button
                 onClick={() => setBusinessDropdownOpen(!businessDropdownOpen)}
-                className="flex items-center gap-1 text-gray-700 hover:text-[#ED1D33] font-medium transition-colors pointer-events-auto"
+                className="flex items-center gap-1 text-gray-700 hover:text-black hover:bg-[#f3f4f680]  px-3 py-1.5 rounded-lg cursor-pointer  font-normal transition-colors pointer-events-auto"
+                aria-haspopup="true"
+                aria-expanded={businessDropdownOpen}
               >
                 Business
                 <svg
@@ -248,81 +263,82 @@ export default function Header() {
                 </svg>
               </button>
 
-              {businessDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-60 pointer-events-auto">
-                  <div className="px-4 py-2 border-b border-gray-100">
-                    <p className="text-xs font-semibold text-gray-700">
-                      Browse by Category
-                    </p>
-                  </div>
-
-                  {categories.length > 0 ? (
-                    categories.map((category) => (
-                      <Link
-                        key={category.name}
-                        href={`/search?category=${encodeURIComponent(category.name)}`}
-                        onClick={() => setBusinessDropdownOpen(false)}
-                        className="flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition group"
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className="text-lg">{category.icon}</span>
-                          <span className="group-hover:text-[#ED1D33] transition-colors">
-                            {category.name}
-                          </span>
-                        </div>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs font-semibold group-hover:bg-[#ED1D33] group-hover:text-white transition-colors">
-                          {category.count}
-                        </span>
-                      </Link>
-                    ))
-                  ) : (
-                    <div className="px-4 py-3 text-sm text-gray-500 text-center">
-                      No categories available
-                    </div>
-                  )}
-
-                  <div className="border-t border-gray-100 mt-2 pt-2">
-                    <Link
-                      href="/search"
-                      onClick={() => setBusinessDropdownOpen(false)}
-                      className="flex items-center justify-center gap-2 px-4 py-2 text-sm text-[#ED1D33] hover:bg-red-50 transition font-medium"
-                    >
-                      View All Businesses
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M13 7l5 5m0 0l-5 5m5-5H6"
-                        />
-                      </svg>
-                    </Link>
-                  </div>
+              <div
+                className={`absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-60 pointer-events-auto transition-all duration-200 ease-in-out ${businessDropdownOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'}`}
+                style={{ pointerEvents: businessDropdownOpen ? 'auto' : 'none' }}
+              >
+                <div className="px-4 py-2 border-b border-gray-100">
+                  <p className="text-xs font-semibold text-gray-700">
+                    Browse by Category
+                  </p>
                 </div>
-              )}
+
+                {categories.length > 0 ? (
+                  categories.map((category) => (
+                    <Link
+                      key={category.name}
+                      href={`/search?category=${encodeURIComponent(category.name)}`}
+                      onClick={() => setBusinessDropdownOpen(false)}
+                      className="flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition group"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">{category.icon}</span>
+                        <span className="group-hover:text-[#ED1D33] transition-colors">
+                          {category.name}
+                        </span>
+                      </div>
+                      <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs font-semibold group-hover:bg-[#ED1D33] group-hover:text-white transition-colors">
+                        {category.count}
+                      </span>
+                    </Link>
+                  ))
+                ) : (
+                  <div className="px-4 py-3 text-sm text-gray-500 text-center">
+                    No categories available
+                  </div>
+                )}
+
+                <div className="border-t border-gray-100 mt-2 pt-2">
+                  <Link
+                    href="/search"
+                    onClick={() => setBusinessDropdownOpen(false)}
+                    className="flex items-center justify-center gap-2 px-4 py-2 text-sm text-[#ED1D33] hover:bg-red-50 transition font-medium"
+                  >
+                    View All Businesses
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
+                  </Link>
+                </div>
+              </div>
             </div>
             <Link
               href="/search"
-              className="text-gray-700 hover:text-[#ED1D33] font-medium transition-colors"
+              className="text-gray-700 hover:text-black hover:bg-[#f3f4f680]  px-3 py-1.5 rounded-lg font-normal transition-colors"
             >
               Explore
             </Link>
 
             <Link
               href="/features"
-              className="text-gray-700 hover:text-[#ED1D33] font-medium transition-colors"
+              className="text-gray-700 hover:text-black hover:bg-[#f3f4f680]  px-3 py-1.5 rounded-lg font-normal transition-colors"
             >
               Features
             </Link>
 
             <Link
               href="/contact"
-              className="text-gray-700 hover:text-[#ED1D33] font-medium transition-colors pointer-events-auto relative z-10"
+              className="text-gray-700 hover:text-black hover:bg-[#f3f4f680]  px-3 py-1.5 rounded-lg font-normal transition-colors pointer-events-auto relative z-10"
             >
               Contact
             </Link>
@@ -355,8 +371,9 @@ export default function Header() {
 
             {!mounted ? (
               <Link
-                className="hidden md:inline-block px-6 py-2.5 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-300 transition"
+                className="hidden md:inline-block px-6 py-2.5 bg-gray-200 bg-opacity-10 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-100 transition"
                 href="/login"
+                style={{ backgroundColor: "lab(92 -0.16 -2.27 / 0.5)" }}
               >
                 Login
               </Link>
@@ -577,7 +594,6 @@ export default function Header() {
               </div>
             ) : (
               <div className="flex gap-3">
-                
                 <Link
                   className="hidden md:inline-block px-6 py-2.5 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-300 transition"
                   href="/login"
