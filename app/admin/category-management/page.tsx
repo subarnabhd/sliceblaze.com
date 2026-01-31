@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
+import AdminSidebar from '@/components/AdminSidebar'
 
 interface Category {
   id: number
@@ -279,8 +280,6 @@ export default function CategoryManagement() {
             </button>
           </div>
         </div>
-import AdminSidebar from '@/components/AdminSidebar'
-
       {/* Main Content */}
       <div className="ml-64 flex-1 overflow-y-auto">
         <div className="p-8">
