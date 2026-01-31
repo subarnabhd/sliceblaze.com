@@ -1,8 +1,9 @@
+
+'use client'
 export const metadata = {
   title: "WiFi Management | Sliceblaze",
   description: "Manage your business WiFi networks, credentials, and QR codes with Sliceblaze.",
 };
-'use client'
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
