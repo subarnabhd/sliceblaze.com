@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import Link from 'next/link'
+import AdminSidebar from '@/components/AdminSidebar'
 import Image from "next/image";
 import CloudinaryUpload from '@/components/CloudinaryUpload'
 
@@ -12,16 +12,16 @@ interface Business {
   name: string
   username: string
   category: string
-  location: string
-  contact: string
+  address: string
+  mobile: string
   is_active: boolean
   created_at: string
   description?: string
   website?: string
   business_logo?: string
-  businesscover?: string
-  businessphotos?: string[]
-  openinghours?: string
+  business_cover?: string
+  business_photos?: string[]
+  opening_hours?: string
   facebook?: string
   instagram?: string
   twitter?: string
@@ -36,16 +36,11 @@ interface Business {
   image?: string
 }
 
-interface User {
-  id: number
-  username: string
-  email: string
-}
+
 
 export default function BusinessManagement() {
   const router = useRouter()
   const [businesses, setBusinesses] = useState<Business[]>([])
-  const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterActive, setFilterActive] = useState<'all' | 'active' | 'inactive'>('all')
@@ -56,15 +51,15 @@ export default function BusinessManagement() {
     name: '',
     username: '',
     category: '',
-    location: '',
-    contact: '',
+    address: '',
+    mobile: '',
     is_active: true,
     description: '',
     website: '',
     business_logo: '',
-    businesscover: '',
-    businessphotos: [] as string[],
-    openinghours: '',
+    business_cover: '',
+    business_photos: [] as string[],
+    opening_hours: '',
     facebook: '',
     instagram: '',
     twitter: '',
@@ -81,7 +76,6 @@ export default function BusinessManagement() {
   useEffect(() => {
     checkAuth()
     fetchBusinesses()
-    fetchUsers()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -108,19 +102,6 @@ export default function BusinessManagement() {
     }
   }
 
-  const fetchUsers = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('id, username, email')
-        .order('username', { ascending: true })
-
-      if (error) throw error
-      setUsers(data || [])
-    } catch (error) {
-      console.error('Error fetching users:', error)
-    }
-  }
 
   const toggleBusinessStatus = async (id: number, currentStatus: boolean) => {
     try {
@@ -155,30 +136,30 @@ export default function BusinessManagement() {
   const openCreateModal = () => {
     setModalMode('create')
     setFormData({
-      name: '',
-      username: '',
-      category: '',
-      location: '',
-      contact: '',
+      name: "",
+      username: "",
+      category: "",
+      address: "",
+      mobile: "",
       is_active: true,
-      description: '',
-      website: '',
-      business_logo: '',
-      businesscover: '',
-      businessphotos: [],
-      openinghours: '',
-      facebook: '',
-      instagram: '',
-      twitter: '',
-      tiktok: '',
-      whatsapp: '',
-      youtube: '',
-      linkedin: '',
-      threads: '',
-      google_map_url: '',
-      brand_primary_color: '#ED1D33',
-      brand_secondary_color: '#000000'
-    })
+      description: "",
+      website: "",
+      business_logo: "",
+      business_cover: "",
+      business_photos: [],
+      opening_hours: "",
+      facebook: "",
+      instagram: "",
+      twitter: "",
+      tiktok: "",
+      whatsapp: "",
+      youtube: "",
+      linkedin: "",
+      threads: "",
+      google_map_url: "",
+      brand_primary_color: "#ED1D33",
+      brand_secondary_color: "#000000",
+    });
     setShowModal(true)
   }
 
@@ -189,15 +170,15 @@ export default function BusinessManagement() {
       name: business.name,
       username: business.username,
       category: business.category,
-      location: business.location,
-      contact: business.contact,
+      address: business.address,
+      mobile: business.mobile,
       is_active: business.is_active,
       description: business.description || '',
       website: business.website || '',
       business_logo: business.business_logo || '',
-      businesscover: business.businesscover || '',
-      businessphotos: business.businessphotos || [],
-      openinghours: business.openinghours || '',
+      business_cover: business.business_cover || '',
+      business_photos: business.business_photos || [],
+      opening_hours: business.opening_hours || '',
       facebook: business.facebook || '',
       instagram: business.instagram || '',
       twitter: business.twitter || '',
@@ -230,15 +211,15 @@ export default function BusinessManagement() {
             name: formData.name,
             username: formData.username,
             category: formData.category,
-            location: formData.location,
-            contact: formData.contact,
+            address: formData.address,
+            mobile: formData.mobile,
             is_active: formData.is_active,
             description: formData.description || null,
             website: formData.website || null,
             business_logo: formData.business_logo || null,
-            businesscover: formData.businesscover || null,
-            businessphotos: formData.businessphotos || null,
-            openinghours: formData.openinghours || null,
+            business_cover: formData.business_cover || null,
+            business_photos: formData.business_photos || null,
+            opening_hours: formData.opening_hours || null,
             facebook: formData.facebook || null,
             instagram: formData.instagram || null,
             twitter: formData.twitter || null,
@@ -264,15 +245,15 @@ export default function BusinessManagement() {
             name: formData.name,
             username: formData.username,
             category: formData.category,
-            location: formData.location,
-            contact: formData.contact,
+            address: formData.address,
+            mobile: formData.mobile,
             is_active: formData.is_active,
             description: formData.description || null,
             website: formData.website || null,
             business_logo: formData.business_logo || null,
-            businesscover: formData.businesscover || null,
-            businessphotos: formData.businessphotos || null,
-            openinghours: formData.openinghours || null,
+            business_cover: formData.business_cover || null,
+            business_photos: formData.business_photos || null,
+            opening_hours: formData.opening_hours || null,
             facebook: formData.facebook || null,
             instagram: formData.instagram || null,
             twitter: formData.twitter || null,
@@ -333,48 +314,8 @@ export default function BusinessManagement() {
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-lg fixed h-full overflow-y-auto">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-[#ED1D33]">Admin Panel</h2>
-          <p className="text-gray-600 text-sm mt-1">Business Management</p>
-        </div>
-        <nav className="mt-6 px-4 space-y-2">
-          <Link
-            href="/admin/overview"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition"
-          >
-            <span className="text-lg">📊</span>
-            <span className="font-medium">Overview</span>
-          </Link>
-          <Link
-            href="/admin/business-management"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#ED1D33] text-white transition"
-          >
-            <span className="text-lg">🏢</span>
-            <span className="font-medium">Business Management</span>
-          </Link>
-          <Link
-            href="/admin/user-management"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition"
-          >
-            <span className="text-lg">👥</span>
-            <span className="font-medium">User Management</span>
-          </Link>
-          <Link
-            href="/admin/menu"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition"
-          >
-            <span className="text-lg">🍕</span>
-            <span className="font-medium">Menu Management</span>
-          </Link>
-          <Link
-            href="/admin/wifi"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition"
-          >
-            <span className="text-lg">📶</span>
-            <span className="font-medium">WiFi Management</span>
-          </Link>
-        </nav>
+      <div className="relative">
+        <AdminSidebar active="business-management" />
         <div className="absolute bottom-0 w-64 p-4 border-t border-gray-200 bg-white">
           <button
             onClick={handleLogout}
@@ -388,130 +329,153 @@ export default function BusinessManagement() {
       {/* Main Content */}
       <div className="ml-64 flex-1 overflow-y-auto">
         <div className="p-8">
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-gray-900">Business Management</h2>
-            <button
-              onClick={openCreateModal}
-              className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition flex items-center gap-2"
-            >
-              <span className="text-lg">➕</span>
-              Create New Business
-            </button>
-          </div>
-          
-          {/* Filters */}
-          <div className="flex gap-4 mb-4">
-            <input
-              type="text"
-              placeholder="Search businesses..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
-            />
-            <select
-              value={filterActive}
-              onChange={(e) => setFilterActive(e.target.value as 'all' | 'active' | 'inactive')}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
-            >
-              <option value="all">All Businesses</option>
-              <option value="active">Active Only</option>
-              <option value="inactive">Inactive Only</option>
-            </select>
-          </div>
-        </div>
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Business Management
+              </h2>
+              <button
+                onClick={openCreateModal}
+                className="px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition flex items-center gap-2"
+              >
+                <span className="text-lg">➕</span>
+                Create New Business
+              </button>
+            </div>
 
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#ED1D33] border-r-transparent"></div>
+            {/* Filters */}
+            <div className="flex gap-4 mb-4">
+              <input
+                type="text"
+                placeholder="Search businesses..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+              />
+              <select
+                value={filterActive}
+                onChange={(e) =>
+                  setFilterActive(
+                    e.target.value as "all" | "active" | "inactive",
+                  )
+                }
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
+              >
+                <option value="all">All Businesses</option>
+                <option value="active">Active Only</option>
+                <option value="inactive">Inactive Only</option>
+              </select>
+            </div>
           </div>
-        ) : (
-          <div className="bg-white shadow rounded-lg overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Business Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Username
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Category
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Contact
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredBusinesses.map((business) => (
-                  <tr key={business.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{business.name}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">@{business.username}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">{business.category}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">{business.contact}</div>
-                      <div className="text-sm text-gray-400">{business.location}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        business.is_active 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {business.is_active ? 'Active' : 'Inactive'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button
-                        onClick={() => openViewModal(business)}
-                        className="text-blue-600 hover:text-blue-900 mr-3"
-                      >
-                        View
-                      </button>
-                      <button
-                        onClick={() => openEditModal(business)}
-                        className="text-indigo-600 hover:text-indigo-900 mr-3"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => toggleBusinessStatus(business.id, business.is_active)}
-                        className="text-green-600 hover:text-green-900 mr-3"
-                      >
-                        {business.is_active ? 'Deactivate' : 'Activate'}
-                      </button>
-                      <button
-                        onClick={() => deleteBusiness(business.id)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        Delete
-                      </button>
-                    </td>
+
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#ED1D33] border-r-transparent"></div>
+            </div>
+          ) : (
+            <div className="bg-white shadow rounded-lg overflow-hidden">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Business Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Username
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Category
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Mobile
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            {filteredBusinesses.length === 0 && (
-              <div className="text-center py-12 text-gray-500">
-                No businesses found
-              </div>
-            )}
-          </div>
-        )}
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredBusinesses.map((business) => (
+                    <tr key={business.id}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">
+                          {business.name}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">
+                          @{business.username}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">
+                          {business.category}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">
+                          {business.mobile}
+                        </div>
+                        <div className="text-sm text-gray-400">
+                          {business.address}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            business.is_active
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
+                        >
+                          {business.is_active ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button
+                          onClick={() => openViewModal(business)}
+                          className="text-blue-600 hover:text-blue-900 mr-3"
+                        >
+                          View
+                        </button>
+                        <button
+                          onClick={() => openEditModal(business)}
+                          className="text-indigo-600 hover:text-indigo-900 mr-3"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() =>
+                            toggleBusinessStatus(
+                              business.id,
+                              business.is_active,
+                            )
+                          }
+                          className="text-green-600 hover:text-green-900 mr-3"
+                        >
+                          {business.is_active ? "Deactivate" : "Activate"}
+                        </button>
+                        <button
+                          onClick={() => deleteBusiness(business.id)}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {filteredBusinesses.length === 0 && (
+                <div className="text-center py-12 text-gray-500">
+                  No businesses found
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -521,9 +485,9 @@ export default function BusinessManagement() {
           <div className="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-2xl font-bold text-gray-900">
-                {modalMode === 'create' && 'Create New Business'}
-                {modalMode === 'edit' && 'Edit Business'}
-                {modalMode === 'view' && 'View Business Details'}
+                {modalMode === "create" && "Create New Business"}
+                {modalMode === "edit" && "Edit Business"}
+                {modalMode === "view" && "View Business Details"}
               </h3>
               <button
                 onClick={() => setShowModal(false)}
@@ -533,87 +497,145 @@ export default function BusinessManagement() {
               </button>
             </div>
 
-            {modalMode === 'view' && selectedBusiness ? (
+            {modalMode === "view" && selectedBusiness ? (
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Business Name</label>
-                    <p className="mt-1 text-gray-900">{selectedBusiness.name}</p>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Business Name
+                    </label>
+                    <p className="mt-1 text-gray-900">
+                      {selectedBusiness.name}
+                    </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Username</label>
-                    <p className="mt-1 text-gray-900">@{selectedBusiness.username}</p>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Username
+                    </label>
+                    <p className="mt-1 text-gray-900">
+                      @{selectedBusiness.username}
+                    </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Category</label>
-                    <p className="mt-1 text-gray-900">{selectedBusiness.category}</p>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Category
+                    </label>
+                    <p className="mt-1 text-gray-900">
+                      {selectedBusiness.category}
+                    </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Status</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Status
+                    </label>
                     <p className="mt-1">
-                      <span className={`px-3 py-1 inline-flex text-sm font-semibold rounded-full ${
-                        selectedBusiness.is_active 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {selectedBusiness.is_active ? 'Active' : 'Inactive'}
+                      <span
+                        className={`px-3 py-1 inline-flex text-sm font-semibold rounded-full ${
+                          selectedBusiness.is_active
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {selectedBusiness.is_active ? "Active" : "Inactive"}
                       </span>
                     </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Phone</label>
-                    <p className="mt-1 text-gray-900">{selectedBusiness.contact}</p>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Phone
+                    </label>
+                    <p className="mt-1 text-gray-900">
+                      {selectedBusiness.mobile}
+                    </p>
                   </div>
                   <div className="col-span-2">
-                    <label className="block text-sm font-medium text-gray-700">Address</label>
-                    <p className="mt-1 text-gray-900">{selectedBusiness.location}</p>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Address
+                    </label>
+                    <p className="mt-1 text-gray-900">
+                      {selectedBusiness.address}
+                    </p>
                   </div>
                   {selectedBusiness.description && (
                     <div className="col-span-2">
-                      <label className="block text-sm font-medium text-gray-700">Description</label>
-                      <p className="mt-1 text-gray-900">{selectedBusiness.description}</p>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Description
+                      </label>
+                      <p className="mt-1 text-gray-900">
+                        {selectedBusiness.description}
+                      </p>
                     </div>
                   )}
                   {selectedBusiness.website && (
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Website</label>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Website
+                      </label>
                       <p className="mt-1 text-gray-900">
-                        <a href={selectedBusiness.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                        <a
+                          href={selectedBusiness.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline"
+                        >
                           {selectedBusiness.website}
                         </a>
                       </p>
                     </div>
                   )}
-                  {selectedBusiness.openinghours && (
+                  {selectedBusiness.opening_hours && (
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Opening Hours</label>
-                      <p className="mt-1 text-gray-900">{selectedBusiness.openinghours}</p>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Opening Hours
+                      </label>
+                      <p className="mt-1 text-gray-900">
+                        {selectedBusiness.opening_hours}
+                      </p>
                     </div>
                   )}
-                  {(selectedBusiness.facebook || selectedBusiness.instagram || selectedBusiness.twitter) && (
+                  {(selectedBusiness.facebook ||
+                    selectedBusiness.instagram ||
+                    selectedBusiness.twitter) && (
                     <div className="col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Social Media</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Social Media
+                      </label>
                       <div className="space-y-1">
                         {selectedBusiness.facebook && (
                           <p className="text-gray-900">
-                            <span className="font-medium">Facebook:</span>{' '}
-                            <a href={selectedBusiness.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                            <span className="font-medium">Facebook:</span>{" "}
+                            <a
+                              href={selectedBusiness.facebook}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                            >
                               {selectedBusiness.facebook}
                             </a>
                           </p>
                         )}
                         {selectedBusiness.instagram && (
                           <p className="text-gray-900">
-                            <span className="font-medium">Instagram:</span>{' '}
-                            <a href={selectedBusiness.instagram} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                            <span className="font-medium">Instagram:</span>{" "}
+                            <a
+                              href={selectedBusiness.instagram}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                            >
                               {selectedBusiness.instagram}
                             </a>
                           </p>
                         )}
                         {selectedBusiness.twitter && (
                           <p className="text-gray-900">
-                            <span className="font-medium">Twitter:</span>{' '}
-                            <a href={selectedBusiness.twitter} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                            <span className="font-medium">Twitter:</span>{" "}
+                            <a
+                              href={selectedBusiness.twitter}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                            >
                               {selectedBusiness.twitter}
                             </a>
                           </p>
@@ -621,31 +643,44 @@ export default function BusinessManagement() {
                       </div>
                     </div>
                   )}
-                  {(selectedBusiness.brand_primary_color || selectedBusiness.brand_secondary_color) && (
+                  {(selectedBusiness.brand_primary_color ||
+                    selectedBusiness.brand_secondary_color) && (
                     <div className="col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Brand Colors</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Brand Colors
+                      </label>
                       <div className="flex gap-4">
                         {selectedBusiness.brand_primary_color && (
                           <div className="flex items-center gap-2">
-                            <div 
-                              className="w-10 h-10 rounded border border-gray-300" 
-                              style={{ backgroundColor: selectedBusiness.brand_primary_color }}
+                            <div
+                              className="w-10 h-10 rounded border border-gray-300"
+                              style={{
+                                backgroundColor:
+                                  selectedBusiness.brand_primary_color,
+                              }}
                             ></div>
                             <div>
                               <p className="text-xs text-gray-500">Primary</p>
-                              <p className="text-sm font-medium text-gray-900">{selectedBusiness.brand_primary_color}</p>
+                              <p className="text-sm font-medium text-gray-900">
+                                {selectedBusiness.brand_primary_color}
+                              </p>
                             </div>
                           </div>
                         )}
                         {selectedBusiness.brand_secondary_color && (
                           <div className="flex items-center gap-2">
-                            <div 
-                              className="w-10 h-10 rounded border border-gray-300" 
-                              style={{ backgroundColor: selectedBusiness.brand_secondary_color }}
+                            <div
+                              className="w-10 h-10 rounded border border-gray-300"
+                              style={{
+                                backgroundColor:
+                                  selectedBusiness.brand_secondary_color,
+                              }}
                             ></div>
                             <div>
                               <p className="text-xs text-gray-500">Secondary</p>
-                              <p className="text-sm font-medium text-gray-900">{selectedBusiness.brand_secondary_color}</p>
+                              <p className="text-sm font-medium text-gray-900">
+                                {selectedBusiness.brand_secondary_color}
+                              </p>
                             </div>
                           </div>
                         )}
@@ -653,8 +688,14 @@ export default function BusinessManagement() {
                     </div>
                   )}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Created Date</label>
-                    <p className="mt-1 text-gray-900">{new Date(selectedBusiness.created_at).toLocaleDateString()}</p>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Created Date
+                    </label>
+                    <p className="mt-1 text-gray-900">
+                      {new Date(
+                        selectedBusiness.created_at,
+                      ).toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
                 <button
@@ -674,8 +715,10 @@ export default function BusinessManagement() {
                     <input
                       type="text"
                       required
-                      value={formData.name || ''}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      value={formData.name || ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       placeholder="Pizza Paradise"
                     />
@@ -688,10 +731,12 @@ export default function BusinessManagement() {
                     <input
                       type="text"
                       required
-                      value={formData.username || ''}
-                      onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                      value={formData.username || ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, username: e.target.value })
+                      }
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
-                      placeholder="pizzaparadise"
+                      placeholder="pizza paradise"
                     />
                   </div>
 
@@ -701,8 +746,10 @@ export default function BusinessManagement() {
                     </label>
                     <select
                       required
-                      value={formData.category || ''}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      value={formData.category || ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, category: e.target.value })
+                      }
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                     >
                       <option value="">Select a category</option>
@@ -729,8 +776,10 @@ export default function BusinessManagement() {
                     <input
                       type="tel"
                       required
-                      value={formData.contact || ''}
-                      onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+                      value={formData.mobile || ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, mobile: e.target.value })
+                      }
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       placeholder="+1234567890"
                     />
@@ -742,8 +791,10 @@ export default function BusinessManagement() {
                     </label>
                     <textarea
                       required
-                      value={formData.location || ''}
-                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      value={formData.address || ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, address: e.target.value })
+                      }
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       placeholder="123 Main St, City, Country"
                       rows={2}
@@ -755,8 +806,13 @@ export default function BusinessManagement() {
                       Description
                     </label>
                     <textarea
-                      value={formData.description || ''}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      value={formData.description || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
+                      }
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       placeholder="Brief description of your business..."
                       rows={3}
@@ -769,8 +825,10 @@ export default function BusinessManagement() {
                     </label>
                     <input
                       type="url"
-                      value={formData.website || ''}
-                      onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                      value={formData.website || ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, website: e.target.value })
+                      }
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       placeholder="https://example.com"
                     />
@@ -782,8 +840,13 @@ export default function BusinessManagement() {
                     </label>
                     <input
                       type="text"
-                      value={formData.openinghours || ''}
-                      onChange={(e) => setFormData({ ...formData, openinghours: e.target.value })}
+                      value={formData.opening_hours || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          opening_hours: e.target.value,
+                        })
+                      }
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       placeholder="Mon-Fri 9AM-5PM"
                     />
@@ -795,7 +858,9 @@ export default function BusinessManagement() {
                     </label>
                     <CloudinaryUpload
                       currentImage={formData.business_logo}
-                      onUploadComplete={(url) => setFormData({ ...formData, business_logo: url })}
+                      onUploadComplete={(url) =>
+                        setFormData({ ...formData, business_logo: url })
+                      }
                       folder="businesses/logos"
                     />
                   </div>
@@ -805,8 +870,10 @@ export default function BusinessManagement() {
                       Cover Image
                     </label>
                     <CloudinaryUpload
-                      currentImage={formData.businesscover}
-                      onUploadComplete={(url) => setFormData({ ...formData, businesscover: url })}
+                      currentImage={formData.business_cover}
+                      onUploadComplete={(url) =>
+                        setFormData({ ...formData, business_cover: url })
+                      }
                       folder="businesses/covers"
                     />
                   </div>
@@ -816,14 +883,25 @@ export default function BusinessManagement() {
                       Business Photos (Max 10)
                     </label>
                     <div className="space-y-2">
-                      {formData.businessphotos.map((photo, index) => (
+                      {formData.business_photos.map((photo, index) => (
                         <div key={index} className="flex items-center gap-2">
-                          <Image src={photo} alt={`Photo ${index + 1}`} width={64} height={64} className="w-16 h-16 rounded object-cover" />
+                          <Image
+                            src={photo}
+                            alt={`Photo ${index + 1}`}
+                            width={64}
+                            height={64}
+                            className="w-16 h-16 rounded object-cover"
+                          />
                           <button
                             type="button"
                             onClick={() => {
-                              const newPhotos = formData.businessphotos.filter((_, i) => i !== index)
-                              setFormData({ ...formData, businessphotos: newPhotos })
+                              const newPhotos = formData.business_photos.filter(
+                                (_, i) => i !== index,
+                              );
+                              setFormData({
+                                ...formData,
+                                business_photos: newPhotos,
+                              });
                             }}
                             className="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded"
                           >
@@ -831,19 +909,27 @@ export default function BusinessManagement() {
                           </button>
                         </div>
                       ))}
-                      {formData.businessphotos.length < 10 && (
+                      {formData.business_photos.length < 10 && (
                         <CloudinaryUpload
                           currentImage=""
                           onUploadComplete={(url) => {
-                            if (formData.businessphotos.length < 10) {
-                              setFormData({ ...formData, businessphotos: [...formData.businessphotos, url] })
+                            if (formData.business_photos.length < 10) {
+                              setFormData({
+                                ...formData,
+                                business_photos: [
+                                  ...formData.business_photos,
+                                  url,
+                                ],
+                              });
                             }
                           }}
                           folder="businesses/photos"
                         />
                       )}
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">{formData.businessphotos.length}/10 photos uploaded</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {formData.business_photos.length}/10 photos uploaded
+                    </p>
                   </div>
 
                   <div className="col-span-2">
@@ -853,64 +939,88 @@ export default function BusinessManagement() {
                     <div className="grid grid-cols-1 gap-3">
                       <input
                         type="url"
-                        value={formData.facebook || ''}
-                        onChange={(e) => setFormData({ ...formData, facebook: e.target.value })}
+                        value={formData.facebook || ""}
+                        onChange={(e) =>
+                          setFormData({ ...formData, facebook: e.target.value })
+                        }
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="Facebook URL"
                       />
                       <input
                         type="url"
-                        value={formData.instagram || ''}
-                        onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
+                        value={formData.instagram || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            instagram: e.target.value,
+                          })
+                        }
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="Instagram URL"
                       />
                       <input
                         type="url"
-                        value={formData.twitter || ''}
-                        onChange={(e) => setFormData({ ...formData, twitter: e.target.value })}
+                        value={formData.twitter || ""}
+                        onChange={(e) =>
+                          setFormData({ ...formData, twitter: e.target.value })
+                        }
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="Twitter URL"
                       />
                       <input
                         type="url"
-                        value={formData.tiktok || ''}
-                        onChange={(e) => setFormData({ ...formData, tiktok: e.target.value })}
+                        value={formData.tiktok || ""}
+                        onChange={(e) =>
+                          setFormData({ ...formData, tiktok: e.target.value })
+                        }
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="TikTok URL"
                       />
                       <input
                         type="url"
-                        value={formData.youtube || ''}
-                        onChange={(e) => setFormData({ ...formData, youtube: e.target.value })}
+                        value={formData.youtube || ""}
+                        onChange={(e) =>
+                          setFormData({ ...formData, youtube: e.target.value })
+                        }
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="YouTube URL"
                       />
                       <input
                         type="url"
-                        value={formData.linkedin || ''}
-                        onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
+                        value={formData.linkedin || ""}
+                        onChange={(e) =>
+                          setFormData({ ...formData, linkedin: e.target.value })
+                        }
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="LinkedIn URL"
                       />
                       <input
                         type="url"
-                        value={formData.threads || ''}
-                        onChange={(e) => setFormData({ ...formData, threads: e.target.value })}
+                        value={formData.threads || ""}
+                        onChange={(e) =>
+                          setFormData({ ...formData, threads: e.target.value })
+                        }
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="Threads URL"
                       />
                       <input
                         type="tel"
-                        value={formData.whatsapp || ''}
-                        onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                        value={formData.whatsapp || ""}
+                        onChange={(e) =>
+                          setFormData({ ...formData, whatsapp: e.target.value })
+                        }
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="WhatsApp Number (e.g., 9851234567)"
                       />
                       <input
                         type="url"
-                        value={formData.google_map_url || ''}
-                        onChange={(e) => setFormData({ ...formData, google_map_url: e.target.value })}
+                        value={formData.google_map_url || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            google_map_url: e.target.value,
+                          })
+                        }
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="Google Maps URL"
                       />
@@ -924,14 +1034,24 @@ export default function BusinessManagement() {
                     <div className="flex items-center gap-3">
                       <input
                         type="color"
-                        value={formData.brand_primary_color || '#ED1D33'}
-                        onChange={(e) => setFormData({ ...formData, brand_primary_color: e.target.value })}
+                        value={formData.brand_primary_color || "#ED1D33"}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            brand_primary_color: e.target.value,
+                          })
+                        }
                         className="h-10 w-20 border border-gray-300 rounded cursor-pointer"
                       />
                       <input
                         type="text"
-                        value={formData.brand_primary_color || '#ED1D33'}
-                        onChange={(e) => setFormData({ ...formData, brand_primary_color: e.target.value })}
+                        value={formData.brand_primary_color || "#ED1D33"}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            brand_primary_color: e.target.value,
+                          })
+                        }
                         className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="#ED1D33"
                       />
@@ -945,14 +1065,24 @@ export default function BusinessManagement() {
                     <div className="flex items-center gap-3">
                       <input
                         type="color"
-                        value={formData.brand_secondary_color || '#000000'}
-                        onChange={(e) => setFormData({ ...formData, brand_secondary_color: e.target.value })}
+                        value={formData.brand_secondary_color || "#000000"}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            brand_secondary_color: e.target.value,
+                          })
+                        }
                         className="h-10 w-20 border border-gray-300 rounded cursor-pointer"
                       />
                       <input
                         type="text"
-                        value={formData.brand_secondary_color || '#000000'}
-                        onChange={(e) => setFormData({ ...formData, brand_secondary_color: e.target.value })}
+                        value={formData.brand_secondary_color || "#000000"}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            brand_secondary_color: e.target.value,
+                          })
+                        }
                         className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                         placeholder="#000000"
                       />
@@ -964,8 +1094,13 @@ export default function BusinessManagement() {
                       Status
                     </label>
                     <select
-                      value={formData.is_active ? 'active' : 'inactive'}
-                      onChange={(e) => setFormData({ ...formData, is_active: e.target.value === 'active' })}
+                      value={formData.is_active ? "active" : "inactive"}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          is_active: e.target.value === "active",
+                        })
+                      }
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                     >
                       <option value="active">Active</option>
@@ -979,7 +1114,9 @@ export default function BusinessManagement() {
                     type="submit"
                     className="flex-1 px-4 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition"
                   >
-                    {modalMode === 'create' ? 'Create Business' : 'Update Business'}
+                    {modalMode === "create"
+                      ? "Create Business"
+                      : "Update Business"}
                   </button>
                   <button
                     type="button"
@@ -995,5 +1132,5 @@ export default function BusinessManagement() {
         </div>
       )}
     </div>
-  )
+  );
 }

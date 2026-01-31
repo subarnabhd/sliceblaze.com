@@ -268,64 +268,18 @@ export default function CategoryManagement() {
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-lg fixed h-full overflow-y-auto">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-[#ED1D33]">Admin Panel</h2>
-          <p className="text-gray-600 text-sm mt-1">Category Management</p>
+        <div className="relative">
+          <AdminSidebar active="category-management" />
+          <div className="absolute bottom-0 w-64 p-4 border-t border-gray-200 bg-white">
+            <button
+              onClick={handleLogout}
+              className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            >
+              Logout
+            </button>
+          </div>
         </div>
-        <nav className="mt-6 px-4 space-y-2">
-          <Link
-            href="/admin/overview"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition"
-          >
-            <span className="text-lg">📊</span>
-            <span className="font-medium">Overview</span>
-          </Link>
-          <Link
-            href="/admin/business-management"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition"
-          >
-            <span className="text-lg">🏢</span>
-            <span className="font-medium">Business Management</span>
-          </Link>
-          <Link
-            href="/admin/user-management"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition"
-          >
-            <span className="text-lg">👥</span>
-            <span className="font-medium">User Management</span>
-          </Link>
-          <Link
-            href="/admin/menu"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition"
-          >
-            <span className="text-lg">🍕</span>
-            <span className="font-medium">Menu Management</span>
-          </Link>
-          <Link
-            href="/admin/wifi"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition"
-          >
-            <span className="text-lg">📶</span>
-            <span className="font-medium">WiFi Management</span>
-          </Link>
-          <Link
-            href="/admin/category-management"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#ED1D33] text-white transition"
-          >
-            <span className="text-lg">📂</span>
-            <span className="font-medium">Category Management</span>
-          </Link>
-        </nav>
-        <div className="absolute bottom-0 w-64 p-4 border-t border-gray-200 bg-white">
-          <button
-            onClick={handleLogout}
-            className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-          >
-            Logout
-          </button>
-        </div>
-      </div>
+import AdminSidebar from '@/components/AdminSidebar'
 
       {/* Main Content */}
       <div className="ml-64 flex-1 overflow-y-auto">

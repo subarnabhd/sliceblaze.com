@@ -40,6 +40,15 @@ export default function CloudinaryUpload({
     setUploading(true)
 
     try {
+      // Delete previous image if exists
+      if (preview && preview !== currentImage && currentImage) {
+        // Extract publicId from currentImage URL if possible
+        const publicIdMatch = currentImage.match(/\/([^/.]+)\.[a-zA-Z]+$/)
+        if (publicIdMatch && publicIdMatch[1]) {
+          await deleteFromCloudinary(publicIdMatch[1])
+        }
+      }
+
       // Create preview
       const reader = new FileReader()
       reader.onloadend = () => {
@@ -47,9 +56,13 @@ export default function CloudinaryUpload({
       }
       reader.readAsDataURL(file)
 
+      // Always upload with a unique name
+      const uniqueName = `${Date.now()}-${file.name}`
+      const renamedFile = new File([file], uniqueName, { type: file.type })
+
       // Upload to Cloudinary
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', renamedFile)
       formData.append('folder', folder)
 
       const response = await fetch('/api/upload', {
