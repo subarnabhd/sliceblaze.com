@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { deleteFromCloudinary } from '@/lib/cloudinary'
 
 interface CloudinaryUploadProps {
   onUploadComplete: (url: string) => void
@@ -46,7 +45,11 @@ export default function CloudinaryUpload({
         // Extract publicId from currentImage URL if possible
         const publicIdMatch = currentImage.match(/\/([^/.]+)\.[a-zA-Z]+$/)
         if (publicIdMatch && publicIdMatch[1]) {
-          await deleteFromCloudinary(publicIdMatch[1])
+          await fetch('/api/cloudinary-delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ publicId: publicIdMatch[1] })
+          })
         }
       }
 
@@ -66,7 +69,7 @@ export default function CloudinaryUpload({
       formData.append('file', renamedFile)
       formData.append('folder', folder)
 
-      const response = await fetch('/api/upload', {
+      const response = await fetch('/api/cloudinary-upload', {
         method: 'POST',
         body: formData,
       })
