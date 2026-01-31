@@ -102,7 +102,7 @@ export default function FeaturesPage() {
         <div className="absolute inset-0 bg-black opacity-10"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full filter blur-3xl opacity-10 translate-x-1/2 -translate-y-1/2"></div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm text-white text-sm font-bold rounded-full mb-6">
               <span className="text-lg">🚀</span>
@@ -134,7 +134,7 @@ export default function FeaturesPage() {
 
       {/* Main Features Section */}
       <div className="py-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
               Core Features
@@ -204,7 +204,7 @@ export default function FeaturesPage() {
 
       {/* Additional Features Grid */}
       <div className="py-24 bg-linear-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
               And Much More...

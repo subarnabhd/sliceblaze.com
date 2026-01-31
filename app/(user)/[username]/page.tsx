@@ -1,44 +1,4 @@
 "use client"
-
-
-interface BusinessProfile {
-  id: number;
-  username: string;
-  name: string;
-  address?: string;
-  category?: string;
-  business_logo?: string;
-  description?: string;
-  mobile?: string;
-  opening_hours?: string;
-  closing_hour?: string;
-  facebook?: string;
-  instagram?: string;
-  tiktok?: string;
-  google_map_url?: string;
-  brand_primary_color?: string;
-  brand_secondary_color?: string;
-  created_at?: string;
-  is_active?: boolean;
-  whatsapp?: string;
-  website?: string;
-  twitter?: string;
-  youtube?: string;
-  linkedin?: string;
-  threads?: string;
-  business_cover?: string;
-  business_photos?: string[];
-  pan_number?: string;
-  employees?: number;
-  country?: string;
-  district?: string;
-  city?: string;
-  payment_methods?: string[];
-  established_date?: string;
-  phone?: string;
-  email?: string;
-}
-
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { getBusinessByUsername, getBusinessWifi, getFullMenu } from '@/lib/supabase'

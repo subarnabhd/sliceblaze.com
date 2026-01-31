@@ -1,7 +1,6 @@
 ﻿"use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 
@@ -93,7 +92,7 @@ const CategoryCounter = () => {
   if (loading) {
     return (
       <div className="bg-linear-to-b from-white to-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="h-8 w-32 bg-gray-200 rounded-full mx-auto mb-4 animate-pulse"></div>
             <div className="h-12 w-64 bg-gray-200 rounded mx-auto mb-4 animate-pulse"></div>
@@ -119,7 +118,7 @@ const CategoryCounter = () => {
   if (CategoryCounters.length === 0) {
     return (
       <div className="bg-linear-to-b from-white to-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-12 bg-white rounded-2xl border-2 border-gray-200 shadow-sm">
             <div className="text-6xl mb-4">??</div>
             <p className="text-xl text-gray-500 font-medium">
@@ -136,7 +135,7 @@ const CategoryCounter = () => {
 
   return (
     <div className="bg-linear-to-b from-white to-gray-50 py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <span className="inline-block px-4 py-2 bg-red-100 text-[#ED1D33] text-sm font-semibold rounded-full mb-4">
             Categories
