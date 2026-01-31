@@ -194,11 +194,7 @@ function SearchPageContent() {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search for businesses, categories, descriptions, or locations..."
-<<<<<<< HEAD
                 className="w-full px-5 py-4 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent shadow-sm"
-=======
-                className="w-full px-5 p  y-4 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent shadow-sm"
->>>>>>> 630cfe8f0b505d95442d1aa1ee7c236272f4f7f4
               />
               <button
                 type={searchQuery ? "button" : "submit"}

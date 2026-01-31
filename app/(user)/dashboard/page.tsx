@@ -7,28 +7,21 @@ import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import Image from 'next/image'
 import CloudinaryUpload from '@/components/CloudinaryUpload'
-import { 
-  ListIcon, 
-  EditIcon, 
-  UserCircleIcon, 
-  BusinessIcon,
-  SearchIcon,
-  ContactIcon,
-  PlusIcon
-} from '@/icons/Icons'
-import { DashboardIcon, UserIcon } from '@/icons/AccountSectionIcons'
+
+import { ListIcon, EditIcon, PlusIcon, SearchIcon, ContactIcon, BusinessIcon } from '@/icons/Icons';
+import { UserIcon } from '@/icons/AccountSectionIcons';
 
 interface Business {
   id: number;
   name: string;
   username: string;
-  location: string;
+  address: string;
   category: string;
-  contact: string;
+  mobile: string;
   phone: string;
   description: string;
   website: string;
-  openinghours: string;
+  opening_hours: string;
   business_logo: string;
   business_cover: string;
   photos: string[];
@@ -84,13 +77,13 @@ export default function UserDashboard() {
   const [editFormData, setEditFormData] = useState({
     name: '',
     username: '',
-    location: '',
+    address: '',
     category: '',
-    contact: '',
+    mobile: '',
     phone: '',
     description: '',
     website: '',
-    openinghours: '',
+    opening_hours: '',
     business_logo: '',
     business_cover: '',
     business_photos: [] as string[],
@@ -130,13 +123,13 @@ export default function UserDashboard() {
         setEditFormData({
           name: businessData.name || '',
           username: businessData.username || '',
-          location: businessData.location || '',
+          address: businessData.address || '',
           category: businessData.category || '',
-          contact: businessData.contact || '',
+          mobile: businessData.mobile || '',
           phone: businessData.phone || '',
           description: businessData.description || '',
           website: businessData.website || '',
-          openinghours: businessData.openinghours || '',
+          opening_hours: businessData.opening_hours || '',
           business_logo: businessData.business_logo || '',
           business_cover: businessData.business_cover || '',
           business_photos: businessData.business_photos || [],
@@ -359,17 +352,17 @@ export default function UserDashboard() {
     setSaving(true)
     try {
       const { error } = await supabase
-        .from('businesses')
+        .from("businesses")
         .update({
           name: editFormData.name,
           username: editFormData.username,
-          location: editFormData.location,
+          address: editFormData.address,
           category: editFormData.category,
-          contact: editFormData.contact,
+          mobile: editFormData.mobile,
           phone: editFormData.phone,
           description: editFormData.description,
           website: editFormData.website,
-          openinghours: editFormData.openinghours,
+          opening_hours: editFormData.opening_hours,
           business_logo: editFormData.business_logo,
           business_cover: editFormData.business_cover,
           business_photos: editFormData.business_photos,
@@ -385,7 +378,7 @@ export default function UserDashboard() {
           brand_primary_color: editFormData.brand_primary_color,
           brand_secondary_color: editFormData.brand_secondary_color,
         })
-        .eq('id', business.id)
+        .eq("id", business.id);
 
       if (error) {
         alert('Error updating business: ' + error.message)
@@ -608,7 +601,7 @@ export default function UserDashboard() {
                         <span>{business.category}</span>
                       </div>
                     )}
-                    {business.location && (
+                    {business.address && (
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <svg
                           width="16"
@@ -629,10 +622,10 @@ export default function UserDashboard() {
                             strokeLinejoin="round"
                           />
                         </svg>
-                        <span>{business.location}</span>
+                        <span>{business.address}</span>
                       </div>
                     )}
-                    {business.contact && (
+                    {business.mobile && (
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <svg
                           width="16"
@@ -1168,12 +1161,12 @@ export default function UserDashboard() {
 
                   <div className="mt-4">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Location / Address
+                      address / Address
                     </label>
                     <input
                       type="text"
-                      name="location"
-                      value={editFormData.location}
+                      name="address"
+                      value={editFormData.address}
                       onChange={handleEditFormChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                     />
@@ -1198,8 +1191,8 @@ export default function UserDashboard() {
                     </label>
                     <input
                       type="text"
-                      name="openinghours"
-                      value={editFormData.openinghours}
+                      name="opening_hours"
+                      value={editFormData.opening_hours}
                       onChange={handleEditFormChange}
                       placeholder="e.g., Mon-Fri: 9AM-5PM"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
@@ -1235,15 +1228,15 @@ export default function UserDashboard() {
                         Cover Image
                       </label>
                       <CloudinaryUpload
-                          currentImage={editFormData.business_cover}
-                          onUploadComplete={(url) =>
-                            setEditFormData((prev) => ({
-                              ...prev,
-                              business_cover: url,
-                            }))
-                          }
-                          folder="businesses/covers"
-                        />
+                        currentImage={editFormData.business_cover}
+                        onUploadComplete={(url) =>
+                          setEditFormData((prev) => ({
+                            ...prev,
+                            business_cover: url,
+                          }))
+                        }
+                        folder="businesses/covers"
+                      />
                     </div>
 
                     <div>
@@ -1285,7 +1278,10 @@ export default function UserDashboard() {
                               if (editFormData.business_photos.length < 10) {
                                 setEditFormData((prev) => ({
                                   ...prev,
-                                  business_photos: [...prev.business_photos, url],
+                                  business_photos: [
+                                    ...prev.business_photos,
+                                    url,
+                                  ],
                                 }));
                               }
                             }}

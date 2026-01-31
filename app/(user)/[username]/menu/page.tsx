@@ -76,7 +76,7 @@ const MenuPage = () => {
           <aside className="w-full md:w-64 mb-4 md:mb-0 shrink-0">
             <div className="bg-white rounded-xl shadow p-2 md:p-4 sticky md:top-24 flex md:block overflow-x-auto">
               <ul className="flex md:block gap-2 md:gap-0 w-full">
-                <li key="all" className="min-w-[120px] md:min-w-0">
+                <li key="all" className="min-w-30 md:min-w-0">
                   <button
                     className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${
                       activeCategory === 'all'
@@ -90,7 +90,7 @@ const MenuPage = () => {
                   </button>
                 </li>
                 {menu.map((category) => (
-                  <li key={category.id} className="min-w-[120px] md:min-w-0">
+                  <li key={category.id} className="min-w-30 md:min-w-0">
                     <button
                       className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${
                         activeCategory === category.id

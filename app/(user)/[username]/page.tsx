@@ -4,8 +4,6 @@ import { useParams } from 'next/navigation'
 import { getBusinessByUsername, getBusinessWifi, getFullMenu } from '@/lib/supabase'
 import Image from 'next/image'
 import Link from 'next/link'
-import WifiConnect from '@/components/WifiConnect'
-import MenuDisplay from '@/components/MenuDisplay'
 import { generateBusinessJsonLd } from '@/lib/json-ld'
 
 interface Business {
@@ -46,46 +44,18 @@ interface Business {
   email?: string;
 }
 
-interface WifiNetwork {
-  id: number
-  ssid: string
-  password: string
-  security_type: string
-  is_hidden: boolean
-}
 
-interface MenuCategory {
-  id: number
-  name: string
-  display_order: number
-  is_active: boolean
-  menu_subcategories: MenuSubcategory[]
-}
 
-interface MenuItem {
-  id: number
-  name: string
-  description: string
-  price: number
-  image?: string
-  is_active: boolean
-  display_order: number
-}
 
-interface MenuSubcategory {
-  id: number
-  name: string
-  display_order: number
-  is_active: boolean
-  menu_items: MenuItem[]
-}
+
+
+
 
 export default function BusinessProfilePage() {
   const params = useParams()
   const username = params.username as string
   const [business, setBusiness] = useState<Business | null>(null)
-  const [wifiNetworks, setWifiNetworks] = useState<WifiNetwork[]>([])
-  const [menu, setMenu] = useState<MenuCategory[]>([])
+  // ...existing code...
   const [loading, setLoading] = useState(true)
   // const [imgSrc, setImgSrc] = useState('/sample.svg')
   const [copied, setCopied] = useState(false)
@@ -104,16 +74,10 @@ export default function BusinessProfilePage() {
         const data = await getBusinessByUsername(username)
           
           // Fetch menu for the business
-          const menuData = await getFullMenu(data.id)
-          setMenu(menuData)
-        console.log('Fetched business data:', data) // Debug log
+        await getFullMenu(data.id) // Call for side effect only
         setBusiness(data)
-        // Use new field name with fallback to old
-        // (imgSrc logic removed)
-        // Fetch WiFi networks for the business
         if (data?.id) {
-          const wifi = await getBusinessWifi(data.id)
-          setWifiNetworks(wifi)
+          await getBusinessWifi(data.id) // Call for side effect only
         }
         setLoading(false)
       }
@@ -589,41 +553,28 @@ export default function BusinessProfilePage() {
           {/* Social Links */}
         </div>
 
-        {/* WiFi Networks */}
-        {wifiNetworks && wifiNetworks.length > 0 && (
-          <div className="mt-4 md:mt-6">
-            <WifiConnect
-              wifiNetworks={wifiNetworks}
-              brandColor={
-                business.brand_primary_color ||
-                business.brand_primary_color ||
-                "#ED1D33"
-              }
-            />
-          </div>
-        )}
+       
 
         {/* Menu & WiFi Page Buttons */}
-        <div className="mt-4 md:mt-6 flex justify-center gap-4 flex-wrap">
+        <div className="mt-6 flex flex-col sm:flex-row justify-center gap-4 flex-wrap">
           <Link
             href={`/${business.username}/menu`}
-            className="inline-block px-10 py-6 bg-[#ED1D33] text-white rounded-2xl font-bold text-2xl shadow-lg hover:bg-[#C91828] transition-colors flex items-center gap-4"
+            className="flex-1 min-w-30 max-w-30 h-30 bg-white text-gray-900 border-2 border-gray-300 rounded-lg font-bold text-lg shadow-lg hover:bg-gray-100 hover:border-[#ED1D33] transition-all flex flex-col items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
           >
-            {/* Menu Icon */}
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            {/* Food/Menu Icon (utensils) */}
+            <svg className="w-8 h-8 mb-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 3v7a2 2 0 002 2h0a2 2 0 002-2V3m6 0v7a2 2 0 002 2h0a2 2 0 002-2V3M9 21v-6m6 6v-6" />
             </svg>
-            View Menu
+            <span>Menu</span>
           </Link>
           <Link
             href={`/${business.username}/wifi`}
-            className="inline-block px-10 py-6 bg-blue-600 text-white rounded-2xl font-bold text-2xl shadow-lg hover:bg-blue-700 transition-colors flex items-center gap-4"
+            className="flex-1 min-w-30 max-w-30 h-30 bg-white text-gray-900 border-2 border-gray-300 rounded-lg font-bold text-lg shadow-lg hover:bg-gray-100 hover:border-[#ED1D33] transition-all flex flex-col items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#ED1D33]"
           >
-            {/* WiFi Icon */}
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <svg className="w-8 h-8 mb-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.53 16.11a3.001 3.001 0 016.94 0M5.07 12.66a8.003 8.003 0 0113.86 0M1.64 9.21a13.003 13.003 0 0120.72 0" />
             </svg>
-            View WiFi
+            <span>WiFi</span>
           </Link>
         </div>
 
