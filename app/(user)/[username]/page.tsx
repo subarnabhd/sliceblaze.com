@@ -643,20 +643,29 @@ export default function BusinessProfilePage() {
           </div>
         )}
 
-        {/* Menu Display */}
-        {menu && menu.length > 0 && (
-          <div className="mt-4 md:mt-6">
-            <MenuDisplay
-              menu={menu}
-              brandColor={
-                business.brand_primary_color ||
-                business.brand_primary_color ||
-                "#ED1D33"
-              }
-              currencySymbol="$"
-            />
-          </div>
-        )}
+        {/* Menu & WiFi Page Buttons */}
+        <div className="mt-4 md:mt-6 flex justify-center gap-4 flex-wrap">
+          <Link
+            href={`/${business.username}/menu`}
+            className="inline-block px-10 py-6 bg-[#ED1D33] text-white rounded-2xl font-bold text-2xl shadow-lg hover:bg-[#C91828] transition-colors flex items-center gap-4"
+          >
+            {/* Menu Icon */}
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            View Menu
+          </Link>
+          <Link
+            href={`/${business.username}/wifi`}
+            className="inline-block px-10 py-6 bg-blue-600 text-white rounded-2xl font-bold text-2xl shadow-lg hover:bg-blue-700 transition-colors flex items-center gap-4"
+          >
+            {/* WiFi Icon */}
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.53 16.11a3.001 3.001 0 016.94 0M5.07 12.66a8.003 8.003 0 0113.86 0M1.64 9.21a13.003 13.003 0 0120.72 0" />
+            </svg>
+            View WiFi
+          </Link>
+        </div>
 
         
       </div>
