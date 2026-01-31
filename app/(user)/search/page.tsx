@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
@@ -330,7 +331,7 @@ function SearchPageContent() {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
                 {filteredBusinesses.map((business, idx) => (
                   <Link
                     key={business.id}
@@ -338,7 +339,7 @@ function SearchPageContent() {
                     className="group"
                   >
                     <div
-                      className="bg-white p-5 flex flex-col  border border-gray-200 rounded-lg  hover:shadow-lg transition overflow-hidden h-full"
+                      className="bg-white md:p-5 p-3 flex flex-col  border border-gray-200 rounded-lg  hover:shadow-lg transition overflow-hidden h-full"
                       onMouseEnter={() => setHoveredCard(idx)}
                       onMouseLeave={() => setHoveredCard(null)}
                     >
@@ -358,7 +359,7 @@ function SearchPageContent() {
                       <div className="">
                         <div className="flex items-start justify-between mb-2">
                           <h3
-                            className="text-lg font-bold transition"
+                            className="mn:text-lg text-md font-bold transition"
                             style={{
                               cursor: "pointer",
                               color:

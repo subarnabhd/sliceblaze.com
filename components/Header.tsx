@@ -104,17 +104,20 @@ export default function Header() {
   // Check if user has a business when user changes
   useEffect(() => {
     if (user?.id) {
-      checkUserBusiness(user.id);
+      const fetchBusiness = async () => {
+        await checkUserBusiness(user.id);
+      };
+      fetchBusiness();
     }
   }, [user?.id]);
 
   // Load user session from localStorage after component mounts (client-side only)
   useEffect(() => {
-    setMounted(true);
+    Promise.resolve().then(() => setMounted(true));
     const userSession = localStorage.getItem('userSession');
     if (userSession) {
       try {
-        setUser(JSON.parse(userSession));
+        Promise.resolve().then(() => setUser(JSON.parse(userSession)));
       } catch (error) {
         console.error('Error parsing user session:', error);
         localStorage.removeItem('userSession');
@@ -124,7 +127,10 @@ export default function Header() {
 
   // Fetch categories with business counts
   useEffect(() => {
-    fetchCategories();
+    const fetch = async () => {
+      await fetchCategories();
+    };
+    fetch();
   }, []);
 
   // Close dropdown when clicking outside
@@ -186,7 +192,7 @@ export default function Header() {
     >
       <div className="container justify-between w-full max-w-280">
         <div
-          className={`grid grid-cols-3 items-center w-full transition-all duration-200 ease-in-out border rounded-2xl ${
+          className={`grid grid-cols-2 md:grid-cols-3 items-center w-full transition-all duration-200 ease-in-out border rounded-2xl ${
             isScrolled
               ? "container border-gray-200 bg-white/70 drop-shadow-xl backdrop-blur-lg md:px-4 lg:px-4 px-4 lg:py-4 py-3"
               : "px-8 py-4 border-transparent"
@@ -327,7 +333,7 @@ export default function Header() {
             {/* Hamburger Menu - Mobile Only */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="md:hidden p-2 rounded-lg hover:bg-red-50 text-gray-700 hover:text-[#ED1D33] transition-all"
+              className="md:hidden p-2 rounded-lg hover:bg-red-50 text-gray-600 hover:text-[#ED1D33] transition-all"
               aria-label="Open menu"
             >
               <svg
@@ -339,7 +345,7 @@ export default function Header() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2.5}
+                  strokeWidth={1.5}
                   d="M4 8h16M4 16h16"
                 />
               </svg>
