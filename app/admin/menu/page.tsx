@@ -96,7 +96,7 @@ export default function AdminMenuManagement() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="bg-white rounded-lg shadow p-12 text-center">
           <svg
             className="w-16 h-16 text-gray-400 mx-auto mb-4"

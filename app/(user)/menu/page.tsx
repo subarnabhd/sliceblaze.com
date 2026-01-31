@@ -373,7 +373,7 @@ export default function UserMenuManagement() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Categories Sidebar */}
           <div className="lg:col-span-3">

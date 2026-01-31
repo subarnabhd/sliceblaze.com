@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
@@ -193,7 +194,11 @@ function SearchPageContent() {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search for businesses, categories, descriptions, or locations..."
+<<<<<<< HEAD
                 className="w-full px-5 py-4 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent shadow-sm"
+=======
+                className="w-full px-5 p  y-4 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent shadow-sm"
+>>>>>>> 630cfe8f0b505d95442d1aa1ee7c236272f4f7f4
               />
               <button
                 type={searchQuery ? "button" : "submit"}
@@ -330,7 +335,7 @@ function SearchPageContent() {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
                 {filteredBusinesses.map((business, idx) => (
                   <Link
                     key={business.id}
@@ -338,7 +343,7 @@ function SearchPageContent() {
                     className="group"
                   >
                     <div
-                      className="bg-white p-5 flex flex-col  border border-gray-200 rounded-lg  hover:shadow-lg transition overflow-hidden h-full"
+                      className="bg-white md:p-5 p-3 flex flex-col  border border-gray-200 rounded-lg  hover:shadow-lg transition overflow-hidden h-full"
                       onMouseEnter={() => setHoveredCard(idx)}
                       onMouseLeave={() => setHoveredCard(null)}
                     >
@@ -358,7 +363,7 @@ function SearchPageContent() {
                       <div className="">
                         <div className="flex items-start justify-between mb-2">
                           <h3
-                            className="text-lg font-bold transition"
+                            className="mn:text-lg text-md font-bold transition"
                             style={{
                               cursor: "pointer",
                               color:

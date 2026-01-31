@@ -8,11 +8,19 @@ import { useRouter } from 'next/navigation';
 const HBanner = () => {
   const router = useRouter();
   return (
-    <section className="flex flex-col items-center justify-center min-h-[50vh] w-full bg-white py-16 px-4">
+    <section
+      className="flex flex-col items-center justify-center min-h-[50vh] w-full py-16 px-4"
+      style={{
+        background:
+          "radial-gradient(ellipse at center left,#e0e5ff,transparent 30%)," +
+          "radial-gradient(ellipse at center right,#ffe7eb,transparent 30%)," +
+          "linear-gradient(180deg,transparent,#fff 60%)",
+      }}
+    >
       {/* Logo */}
 
       <Image
-        src="/sliceicon.svg"
+        src="/sliceblaze-logo-icon.svg"
         alt="SliceBlaze logo"
         width={150}
         height={40}
