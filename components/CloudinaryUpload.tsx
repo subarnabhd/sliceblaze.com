@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { deleteFromCloudinary } from '@/lib/cloudinary'
 
 interface CloudinaryUploadProps {
   onUploadComplete: (url: string) => void

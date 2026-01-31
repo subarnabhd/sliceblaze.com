@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import Link from 'next/link'
+import Image from 'next/image'
 import AdminSidebar from '@/components/AdminSidebar'
 
 interface Category {
@@ -47,6 +47,7 @@ export default function CategoryManagement() {
   useEffect(() => {
     checkAuth()
     fetchCategories()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const checkAuth = () => {
@@ -201,14 +202,9 @@ export default function CategoryManagement() {
       }
 
       if (modalMode === 'create') {
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from('categories')
-          .insert([{
-            name: formData.name,
-            description: formData.description,
-            icon: formData.icon,
-            image_url: imageUrl
-          }])
+          .insert([{ name: formData.name, description: formData.description, icon: formData.icon, image_url: imageUrl }])
           .select()
 
         if (error) {
@@ -218,14 +214,9 @@ export default function CategoryManagement() {
         }
         alert('Category created successfully!')
       } else if (modalMode === 'edit' && selectedCategory) {
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from('categories')
-          .update({
-            name: formData.name,
-            description: formData.description,
-            icon: formData.icon,
-            image_url: imageUrl
-          })
+          .update({ name: formData.name, description: formData.description, icon: formData.icon, image_url: imageUrl })
           .eq('id', selectedCategory.id)
           .select()
 
@@ -342,9 +333,11 @@ export default function CategoryManagement() {
                     <tr key={category.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {category.image_url ? (
-                          <img 
+                          <Image 
                             src={category.image_url} 
                             alt={category.name}
+                            width={64}
+                            height={64}
                             className="w-16 h-16 object-cover rounded-lg shadow-sm"
                           />
                         ) : (
@@ -425,9 +418,11 @@ export default function CategoryManagement() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Category Image</label>
                     <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
-                      <img 
+                      <Image 
                         src={selectedCategory.image_url} 
                         alt={selectedCategory.name}
+                        width={400}
+                        height={256}
                         className="w-full h-64 object-cover"
                       />
                     </div>
@@ -519,9 +514,11 @@ export default function CategoryManagement() {
                   />
                   {(imagePreview || formData.image_url) && (
                     <div className="mt-3 border-2 border-gray-200 rounded-lg overflow-hidden">
-                      <img 
+                      <Image 
                         src={imagePreview || formData.image_url} 
                         alt="Category preview" 
+                        width={400}
+                        height={192}
                         className="w-full h-48 object-cover"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23f0f0f0" width="200" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EInvalid Image%3C/text%3E%3C/svg%3E'
