@@ -155,12 +155,12 @@ const CategoryCounter = () => {
             <Link
               key={item.category}
               href={`/search?category=${encodeURIComponent(item.category)}`}
-              className="group relative bg-white rounded-2xl shadow-sm border-2 border-gray-100 hover:border-[#ED1D33] hover:shadow-xl transition-all duration-300 overflow-hidden"
+              className="group relative bg-white rounded-2xl shadow-sm border-2 border-gray-100 hover:border-[#ED1D33]  hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
               {/* Category Image Background */}
               {item.image_url ? (
                 <div className="relative h-32 w-full overflow-hidden">
-                  <Image
+                  <img
                     src={item.image_url}
                     alt={item.category}
                     width={400}

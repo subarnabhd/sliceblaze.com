@@ -19,30 +19,31 @@ import {
 import { DashboardIcon, UserIcon } from '@/icons/AccountSectionIcons'
 
 interface Business {
-  id: number
-  name: string
-  username: string
-  location: string
-  category: string
-  contact: string
-  description: string
-  website: string
-  openinghours: string
-  logo: string
-  cover_image: string
-  photos: string[]
-  facebook: string
-  instagram: string
-  twitter: string
-  tiktok?: string
-  youtube?: string
-  linkedin?: string
-  threads?: string
-  whatsapp?: string
-  google_map_url?: string
-  brand_primary_color: string
-  brand_secondary_color: string
-  is_active: boolean
+  id: number;
+  name: string;
+  username: string;
+  location: string;
+  category: string;
+  contact: string;
+  phone: string;
+  description: string;
+  website: string;
+  openinghours: string;
+  business_logo: string;
+  business_cover: string;
+  photos: string[];
+  facebook: string;
+  instagram: string;
+  twitter: string;
+  tiktok?: string;
+  youtube?: string;
+  linkedin?: string;
+  threads?: string;
+  whatsapp?: string;
+  google_map_url?: string;
+  brand_primary_color: string;
+  brand_secondary_color: string;
+  is_active: boolean;
 }
 
 interface User {
@@ -86,12 +87,13 @@ export default function UserDashboard() {
     location: '',
     category: '',
     contact: '',
+    phone: '',
     description: '',
     website: '',
     openinghours: '',
     business_logo: '',
-    businesscover: '',
-    businessphotos: [] as string[],
+    business_cover: '',
+    business_photos: [] as string[],
     facebook: '',
     instagram: '',
     twitter: '',
@@ -131,12 +133,13 @@ export default function UserDashboard() {
           location: businessData.location || '',
           category: businessData.category || '',
           contact: businessData.contact || '',
+          phone: businessData.phone || '',
           description: businessData.description || '',
           website: businessData.website || '',
           openinghours: businessData.openinghours || '',
           business_logo: businessData.business_logo || '',
-          businesscover: businessData.businesscover || '',
-          businessphotos: businessData.businessphotos || [],
+          business_cover: businessData.business_cover || '',
+          business_photos: businessData.business_photos || [],
           facebook: businessData.facebook || '',
           instagram: businessData.instagram || '',
           twitter: businessData.twitter || '',
@@ -363,12 +366,13 @@ export default function UserDashboard() {
           location: editFormData.location,
           category: editFormData.category,
           contact: editFormData.contact,
+          phone: editFormData.phone,
           description: editFormData.description,
           website: editFormData.website,
           openinghours: editFormData.openinghours,
           business_logo: editFormData.business_logo,
-          businesscover: editFormData.businesscover,
-          businessphotos: editFormData.businessphotos,
+          business_cover: editFormData.business_cover,
+          business_photos: editFormData.business_photos,
           facebook: editFormData.facebook,
           instagram: editFormData.instagram,
           twitter: editFormData.twitter,
@@ -423,7 +427,8 @@ export default function UserDashboard() {
             <div className="flex justify-between items-center">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">
-                  Welcome back, {user.full_name?.split(' ')[0] || user.username}!
+                  Welcome back, {user.full_name?.split(" ")[0] || user.username}
+                  !
                 </h1>
                 <p className="text-gray-600 mt-1">Business Owner Dashboard</p>
               </div>
@@ -451,9 +456,15 @@ export default function UserDashboard() {
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Menu Items</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalMenuItems}</p>
-                  <p className="text-sm text-green-600 mt-1">{stats.activeMenuItems} active</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Menu Items
+                  </p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">
+                    {stats.totalMenuItems}
+                  </p>
+                  <p className="text-sm text-green-600 mt-1">
+                    {stats.activeMenuItems} active
+                  </p>
                 </div>
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                   <div className="scale-[2]">
@@ -466,13 +477,29 @@ export default function UserDashboard() {
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">WiFi Networks</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalWifiNetworks}</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    WiFi Networks
+                  </p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">
+                    {stats.totalWifiNetworks}
+                  </p>
                   <p className="text-sm text-gray-500 mt-1">Configured</p>
                 </div>
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 18h.01M8.929 14.928c.834-.834 1.963-1.308 3.071-1.308 1.108 0 2.237.474 3.071 1.308m-8.485-3.536c2.259-2.259 5.888-2.259 8.147 0m-11.314-3.536c3.898-3.898 10.243-3.898 14.142 0" stroke="#9333EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 18h.01M8.929 14.928c.834-.834 1.963-1.308 3.071-1.308 1.108 0 2.237.474 3.071 1.308m-8.485-3.536c2.259-2.259 5.888-2.259 8.147 0m-11.314-3.536c3.898-3.898 10.243-3.898 14.142 0"
+                      stroke="#9333EA"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </div>
               </div>
@@ -481,11 +508,15 @@ export default function UserDashboard() {
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Business Status</p>
-                  <p className="text-xl font-bold text-gray-900 mt-2">
-                    {business?.is_active ? 'Active' : 'Inactive'}
+                  <p className="text-sm font-medium text-gray-600">
+                    Business Status
                   </p>
-                  <p className="text-sm text-gray-500 mt-1">{business?.category || 'N/A'}</p>
+                  <p className="text-xl font-bold text-gray-900 mt-2">
+                    {business?.is_active ? "Active" : "Inactive"}
+                  </p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {business?.category || "N/A"}
+                  </p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                   <div className="scale-[2]">
@@ -498,14 +529,30 @@ export default function UserDashboard() {
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Profile Views</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">{stats.businessViews}</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Profile Views
+                  </p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">
+                    {stats.businessViews}
+                  </p>
                   <p className="text-sm text-gray-500 mt-1">This month</p>
                 </div>
                 <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="#F97316"/>
-                    <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke="#F97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="#F97316" />
+                    <path
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      stroke="#F97316"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </div>
               </div>
@@ -515,11 +562,13 @@ export default function UserDashboard() {
           {/* Business Overview */}
           {business && (
             <div className="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-200">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Your Business</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Your Business
+              </h2>
               <div className="flex items-start gap-6">
-                {business.logo ? (
+                {business.business_logo ? (
                   <Image
-                    src={business.logo}
+                    src={business.business_logo}
                     alt={business.name}
                     width={96}
                     height={96}
@@ -533,33 +582,74 @@ export default function UserDashboard() {
                   </div>
                 )}
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-gray-900">{business.name}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900">
+                    {business.name}
+                  </h3>
                   <p className="text-gray-600 mt-1">@{business.username}</p>
                   <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
                     {business.category && (
                       <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M2 4.5A2.5 2.5 0 014.5 2H5.879a2.5 2.5 0 011.767.732l5.622 5.622a2.5 2.5 0 010 3.536l-1.586 1.586a2.5 2.5 0 01-3.536 0L2.732 8.054A2.5 2.5 0 012 6.287V4.5z" stroke="#596D66" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                          <circle cx="5.5" cy="5.5" r=".5" fill="#596D66"/>
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M2 4.5A2.5 2.5 0 014.5 2H5.879a2.5 2.5 0 011.767.732l5.622 5.622a2.5 2.5 0 010 3.536l-1.586 1.586a2.5 2.5 0 01-3.536 0L2.732 8.054A2.5 2.5 0 012 6.287V4.5z"
+                            stroke="#596D66"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <circle cx="5.5" cy="5.5" r=".5" fill="#596D66" />
                         </svg>
                         <span>{business.category}</span>
                       </div>
                     )}
                     {business.location && (
                       <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M8 8.667a1.333 1.333 0 100-2.667 1.333 1.333 0 000 2.667z" fill="#596D66"/>
-                          <path d="M8 1.333c-2.577 0-4.667 2.09-4.667 4.667 0 3.5 4.667 8.667 4.667 8.667s4.667-5.167 4.667-8.667c0-2.577-2.09-4.667-4.667-4.667z" stroke="#596D66" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8 8.667a1.333 1.333 0 100-2.667 1.333 1.333 0 000 2.667z"
+                            fill="#596D66"
+                          />
+                          <path
+                            d="M8 1.333c-2.577 0-4.667 2.09-4.667 4.667 0 3.5 4.667 8.667 4.667 8.667s4.667-5.167 4.667-8.667c0-2.577-2.09-4.667-4.667-4.667z"
+                            stroke="#596D66"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
                         </svg>
                         <span>{business.location}</span>
                       </div>
                     )}
                     {business.contact && (
                       <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M14.667 11.28v2a1.333 1.333 0 01-1.454 1.333 13.194 13.194 0 01-5.753-2.046 13 13 0 01-4-4A13.194 13.194 0 011.414 2.787 1.333 1.333 0 012.74 1.333h2A1.333 1.333 0 016.073 2.5c.085.638.242 1.266.467 1.874a1.333 1.333 0 01-.3 1.406l-.847.847a10.667 10.667 0 004 4l.847-.847a1.333 1.333 0 011.406-.3c.608.225 1.236.382 1.874.467a1.333 1.333 0 011.167 1.353z" stroke="#596D66" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M14.667 11.28v2a1.333 1.333 0 01-1.454 1.333 13.194 13.194 0 01-5.753-2.046 13 13 0 01-4-4A13.194 13.194 0 011.414 2.787 1.333 1.333 0 012.74 1.333h2A1.333 1.333 0 016.073 2.5c.085.638.242 1.266.467 1.874a1.333 1.333 0 01-.3 1.406l-.847.847a10.667 10.667 0 004 4l.847-.847a1.333 1.333 0 011.406-.3c.608.225 1.236.382 1.874.467a1.333 1.333 0 011.167 1.353z"
+                            stroke="#596D66"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
                         </svg>
-                        <span>{business.contact}</span>
+                        <span>{business.phone}</span>
                       </div>
                     )}
                   </div>
@@ -570,7 +660,9 @@ export default function UserDashboard() {
 
           {/* Quick Actions */}
           <div className="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Quick Actions
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {business ? (
                 <>
@@ -582,8 +674,12 @@ export default function UserDashboard() {
                       <EditIcon />
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">Edit Business Profile</p>
-                      <p className="text-sm text-gray-600">Update business information</p>
+                      <p className="font-semibold text-gray-900">
+                        Edit Business Profile
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Update business information
+                      </p>
                     </div>
                   </button>
 
@@ -596,7 +692,9 @@ export default function UserDashboard() {
                     </div>
                     <div>
                       <p className="font-semibold text-gray-900">Manage Menu</p>
-                      <p className="text-sm text-gray-600">Add, edit, or remove menu items</p>
+                      <p className="text-sm text-gray-600">
+                        Add, edit, or remove menu items
+                      </p>
                     </div>
                   </Link>
 
@@ -605,13 +703,27 @@ export default function UserDashboard() {
                     className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
                   >
                     <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 18h.01M8.929 14.928c.834-.834 1.963-1.308 3.071-1.308 1.108 0 2.237.474 3.071 1.308m-8.485-3.536c2.259-2.259 5.888-2.259 8.147 0m-11.314-3.536c3.898-3.898 10.243-3.898 14.142 0" stroke="#9333EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 18h.01M8.929 14.928c.834-.834 1.963-1.308 3.071-1.308 1.108 0 2.237.474 3.071 1.308m-8.485-3.536c2.259-2.259 5.888-2.259 8.147 0m-11.314-3.536c3.898-3.898 10.243-3.898 14.142 0"
+                          stroke="#9333EA"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </div>
                     <div>
                       <p className="font-semibold text-gray-900">Manage WiFi</p>
-                      <p className="text-sm text-gray-600">Configure WiFi networks</p>
+                      <p className="text-sm text-gray-600">
+                        Configure WiFi networks
+                      </p>
                     </div>
                   </Link>
 
@@ -620,14 +732,33 @@ export default function UserDashboard() {
                     className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
                   >
                     <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="#F97316"/>
-                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke="#F97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          fill="#F97316"
+                        />
+                        <path
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          stroke="#F97316"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">View Business Profile</p>
-                      <p className="text-sm text-gray-600">See how customers see your business</p>
+                      <p className="font-semibold text-gray-900">
+                        View Business Profile
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        See how customers see your business
+                      </p>
                     </div>
                   </Link>
                 </>
@@ -638,14 +769,33 @@ export default function UserDashboard() {
                     className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-[#ED1D33] hover:bg-red-50 transition group"
                   >
                     <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="#F97316"/>
-                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke="#F97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          fill="#F97316"
+                        />
+                        <path
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          stroke="#F97316"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">View My Profile</p>
-                      <p className="text-sm text-gray-600">See your public profile</p>
+                      <p className="font-semibold text-gray-900">
+                        View My Profile
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        See your public profile
+                      </p>
                     </div>
                   </Link>
 
@@ -657,8 +807,12 @@ export default function UserDashboard() {
                       <PlusIcon />
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">Add Business</p>
-                      <p className="text-sm text-gray-600">Register your business on Sliceblaze</p>
+                      <p className="font-semibold text-gray-900">
+                        Add Business
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Register your business on Sliceblaze
+                      </p>
                     </div>
                   </Link>
                 </>
@@ -672,8 +826,12 @@ export default function UserDashboard() {
                   <UserIcon />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900">Edit Personal Profile</p>
-                  <p className="text-sm text-gray-600">Update your account details</p>
+                  <p className="font-semibold text-gray-900">
+                    Edit Personal Profile
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Update your account details
+                  </p>
                 </div>
               </button>
             </div>
@@ -681,18 +839,26 @@ export default function UserDashboard() {
 
           {/* Account Information */}
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Account Information</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Account Information
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Full Name</p>
-                <p className="text-gray-900 font-medium">{user.full_name || 'Not set'}</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Full Name
+                </p>
+                <p className="text-gray-900 font-medium">
+                  {user.full_name || "Not set"}
+                </p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-600 mb-1">Email</p>
                 <p className="text-gray-900 font-medium">{user.email}</p>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Username</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Username
+                </p>
                 <p className="text-gray-900 font-medium">@{user.username}</p>
               </div>
             </div>
@@ -704,13 +870,25 @@ export default function UserDashboard() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Edit Personal Profile</h2>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Edit Personal Profile
+                </h2>
                 <button
                   onClick={() => setShowEditProfile(false)}
                   className="text-gray-400 hover:text-gray-600 transition"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               </div>
@@ -718,10 +896,14 @@ export default function UserDashboard() {
               <div className="p-6 space-y-6">
                 {/* Profile Information Form */}
                 <form onSubmit={handleSaveProfile}>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Information</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Profile Information
+                  </h3>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Full Name
+                      </label>
                       <input
                         type="text"
                         name="full_name"
@@ -732,7 +914,9 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Email *
+                      </label>
                       <input
                         type="email"
                         name="email"
@@ -744,7 +928,9 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Username *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Username *
+                      </label>
                       <input
                         type="text"
                         name="username"
@@ -762,7 +948,7 @@ export default function UserDashboard() {
                       disabled={saving}
                       className="px-6 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {saving ? 'Saving...' : 'Save Profile'}
+                      {saving ? "Saving..." : "Save Profile"}
                     </button>
                   </div>
                 </form>
@@ -776,13 +962,25 @@ export default function UserDashboard() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-2xl max-w-md w-full">
               <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Change Password</h2>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Change Password
+                </h2>
                 <button
                   onClick={() => setShowChangePassword(false)}
                   className="text-gray-400 hover:text-gray-600 transition"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               </div>
@@ -791,7 +989,9 @@ export default function UserDashboard() {
                 <form onSubmit={handleChangePassword}>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Current Password *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Current Password *
+                      </label>
                       <input
                         type="password"
                         name="current_password"
@@ -803,7 +1003,9 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">New Password *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        New Password *
+                      </label>
                       <input
                         type="password"
                         name="new_password"
@@ -813,11 +1015,15 @@ export default function UserDashboard() {
                         minLength={6}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       />
-                      <p className="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Minimum 6 characters
+                      </p>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Confirm New Password *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Confirm New Password *
+                      </label>
                       <input
                         type="password"
                         name="confirm_password"
@@ -843,7 +1049,7 @@ export default function UserDashboard() {
                       disabled={saving}
                       className="px-6 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {saving ? 'Changing...' : 'Change Password'}
+                      {saving ? "Changing..." : "Change Password"}
                     </button>
                   </div>
                 </form>
@@ -857,24 +1063,43 @@ export default function UserDashboard() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
               <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Edit Business Details</h2>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Edit Business Details
+                </h2>
                 <button
                   onClick={() => setShowEditForm(false)}
                   className="text-gray-400 hover:text-gray-600 transition"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               </div>
 
-              <form onSubmit={handleSaveBusinessDetails} className="p-6 space-y-6">
+              <form
+                onSubmit={handleSaveBusinessDetails}
+                className="p-6 space-y-6"
+              >
                 {/* Basic Information */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Basic Information
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Business Name *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Business Name *
+                      </label>
                       <input
                         type="text"
                         name="name"
@@ -886,7 +1111,9 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Username *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Username *
+                      </label>
                       <input
                         type="text"
                         name="username"
@@ -898,7 +1125,9 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Category *
+                      </label>
                       <input
                         type="text"
                         name="category"
@@ -910,18 +1139,22 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Contact Phone</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Mobile
+                      </label>
                       <input
                         type="tel"
-                        name="contact"
-                        value={editFormData.contact}
+                        name="phone"
+                        value={editFormData.phone}
                         onChange={handleEditFormChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED1D33] focus:border-transparent"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Website</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Website
+                      </label>
                       <input
                         type="url"
                         name="website"
@@ -934,7 +1167,9 @@ export default function UserDashboard() {
                   </div>
 
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Location / Address</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Location / Address
+                    </label>
                     <input
                       type="text"
                       name="location"
@@ -945,7 +1180,9 @@ export default function UserDashboard() {
                   </div>
 
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Description
+                    </label>
                     <textarea
                       name="description"
                       value={editFormData.description}
@@ -956,7 +1193,9 @@ export default function UserDashboard() {
                   </div>
 
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Opening Hours</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Opening Hours
+                    </label>
                     <input
                       type="text"
                       name="openinghours"
@@ -970,38 +1209,68 @@ export default function UserDashboard() {
 
                 {/* Images */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Business Images</h3>
-                  
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Business Images
+                  </h3>
+
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Business Logo *</label>
-                        <CloudinaryUpload
-                          currentImage={editFormData.business_logo}
-                          onUploadComplete={(url) => setEditFormData(prev => ({ ...prev, business_logo: url }))}
-                          folder="businesses/logos"
-                        />
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Business Logo *
+                      </label>
+                      <CloudinaryUpload
+                        currentImage={editFormData.business_logo}
+                        onUploadComplete={(url) =>
+                          setEditFormData((prev) => ({
+                            ...prev,
+                            business_logo: url,
+                          }))
+                        }
+                        folder="businesses/logos"
+                      />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Cover Image</label>
-                        <CloudinaryUpload
-                          currentImage={editFormData.businesscover}
-                          onUploadComplete={(url) => setEditFormData(prev => ({ ...prev, businesscover: url }))}
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Cover Image
+                      </label>
+                      <CloudinaryUpload
+                          currentImage={editFormData.business_cover}
+                          onUploadComplete={(url) =>
+                            setEditFormData((prev) => ({
+                              ...prev,
+                              business_cover: url,
+                            }))
+                          }
                           folder="businesses/covers"
                         />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Business Photos (Max 10)</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Business Photos (Max 10)
+                      </label>
                       <div className="space-y-2">
-                        {editFormData.businessphotos.map((photo, index) => (
+                        {editFormData.business_photos.map((photo, index) => (
                           <div key={index} className="flex items-center gap-2">
-                            <Image src={photo} alt={`Photo ${index + 1}`} width={60} height={60} className="rounded object-cover" />
+                            <Image
+                              src={photo}
+                              alt={`Photo ${index + 1}`}
+                              width={60}
+                              height={60}
+                              className="rounded object-cover"
+                            />
                             <button
                               type="button"
                               onClick={() => {
-                                const newPhotos = editFormData.businessphotos.filter((_, i) => i !== index)
-                                setEditFormData(prev => ({ ...prev, businessphotos: newPhotos }))
+                                const newPhotos =
+                                  editFormData.business_photos.filter(
+                                    (_, i) => i !== index,
+                                  );
+                                setEditFormData((prev) => ({
+                                  ...prev,
+                                  business_photos: newPhotos,
+                                }));
                               }}
                               className="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded"
                             >
@@ -1009,29 +1278,38 @@ export default function UserDashboard() {
                             </button>
                           </div>
                         ))}
-                        {editFormData.businessphotos.length < 10 && (
+                        {editFormData.business_photos.length < 10 && (
                           <CloudinaryUpload
                             currentImage=""
                             onUploadComplete={(url) => {
-                              if (editFormData.businessphotos.length < 10) {
-                                setEditFormData(prev => ({ ...prev, businessphotos: [...prev.businessphotos, url] }))
+                              if (editFormData.business_photos.length < 10) {
+                                setEditFormData((prev) => ({
+                                  ...prev,
+                                  business_photos: [...prev.business_photos, url],
+                                }));
                               }
                             }}
                             folder="businesses/photos"
                           />
                         )}
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">{editFormData.businessphotos.length}/10 photos uploaded</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {editFormData.business_photos.length}/10 photos uploaded
+                      </p>
                     </div>
                   </div>
                 </div>
 
                 {/* Branding */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Brand Colors</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Brand Colors
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Primary Color</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Primary Color
+                      </label>
                       <input
                         type="color"
                         name="brand_primary_color"
@@ -1041,7 +1319,9 @@ export default function UserDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Secondary Color</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Secondary Color
+                      </label>
                       <input
                         type="color"
                         name="brand_secondary_color"
@@ -1055,10 +1335,14 @@ export default function UserDashboard() {
 
                 {/* Social Media */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Social Media & Links</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Social Media & Links
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Facebook</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Facebook
+                      </label>
                       <input
                         type="url"
                         name="facebook"
@@ -1070,7 +1354,9 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Instagram</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Instagram
+                      </label>
                       <input
                         type="url"
                         name="instagram"
@@ -1082,7 +1368,9 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Twitter</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Twitter
+                      </label>
                       <input
                         type="url"
                         name="twitter"
@@ -1094,7 +1382,9 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">TikTok</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        TikTok
+                      </label>
                       <input
                         type="url"
                         name="tiktok"
@@ -1106,7 +1396,9 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">YouTube</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        YouTube
+                      </label>
                       <input
                         type="url"
                         name="youtube"
@@ -1118,7 +1410,9 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">LinkedIn</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        LinkedIn
+                      </label>
                       <input
                         type="url"
                         name="linkedin"
@@ -1130,7 +1424,9 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Threads</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Threads
+                      </label>
                       <input
                         type="url"
                         name="threads"
@@ -1142,7 +1438,9 @@ export default function UserDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">WhatsApp</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        WhatsApp
+                      </label>
                       <input
                         type="tel"
                         name="whatsapp"
@@ -1154,7 +1452,9 @@ export default function UserDashboard() {
                     </div>
 
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Google Maps URL</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Google Maps URL
+                      </label>
                       <input
                         type="url"
                         name="google_map_url"
@@ -1182,7 +1482,7 @@ export default function UserDashboard() {
                     disabled={saving}
                     className="px-6 py-2 bg-[#ED1D33] text-white rounded-lg hover:bg-red-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {saving ? 'Saving...' : 'Save Changes'}
+                    {saving ? "Saving..." : "Save Changes"}
                   </button>
                 </div>
               </form>
@@ -1190,7 +1490,7 @@ export default function UserDashboard() {
           </div>
         )}
       </div>
-    )
+    );
   }
 
   // Render Normal User Dashboard

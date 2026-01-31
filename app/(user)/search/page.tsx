@@ -105,10 +105,12 @@ function SearchPageContent() {
     fetchCategories()
   }, [])
 
-  // Initialize search query from URL params
+  // Initialize search query and category from URL params
   useEffect(() => {
     setSearchQuery(searchParams.get('query') || '')
-    
+    const urlCategory = searchParams.get('category') || '';
+    setSelectedCategory(urlCategory);
+
     // Auto-focus search input if focus parameter is present
     if (searchParams.get('focus') === 'true') {
       setTimeout(() => {
@@ -147,19 +149,20 @@ function SearchPageContent() {
   }, [searchQuery, selectedCategory, businesses])
 
   const clearFilters = () => {
-    setSelectedCategory('')
+    setSelectedCategory('');
+    // Remove category param from URL
+    router.push('/search', { scroll: false });
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setSearchQuery(value)
-    
-    // Update URL query parameter
-    if (value.trim()) {
-      router.push(`/search?query=${encodeURIComponent(value)}`, { scroll: false })
-    } else {
-      router.push('/search', { scroll: false })
-    }
+    // Update URL query parameter, preserve category if set
+    const params = [];
+    if (value.trim()) params.push(`query=${encodeURIComponent(value)}`);
+    if (selectedCategory) params.push(`category=${encodeURIComponent(selectedCategory)}`);
+    const url = params.length ? `/search?${params.join('&')}` : '/search';
+    router.push(url, { scroll: false });
   }
 
   const handleSearch = (e: React.FormEvent) => {
@@ -217,11 +220,14 @@ function SearchPageContent() {
           </h2>
           <div className="flex flex-wrap gap-3">
             <button
-              onClick={() => setSelectedCategory("")}
-              className={`px-5 py-2.5 rounded-full font-medium transition-all ${
+              onClick={() => {
+                setSelectedCategory("");
+                router.push("/search", { scroll: false });
+              }}
+              className={`px-5 py-2.5 rounded-full font-medium transition-all cursor-pointer ${
                 selectedCategory === ""
-                  ? "bg-[#ED1D33] text-white shadow-md"
-                  : "bg-white text-gray-700 border border-gray-300 hover:border-[#ED1D33] hover:text-[#ED1D33]"
+                  ? "bg-[#ED1D33] text-white shadow-md cursor-pointer"
+                  : "bg-white text-gray-700 border border-gray-300 hover:border-[#ED1D33] cursor-pointer hover:text-[#ED1D33]"
               }`}
             >
               All Categories
@@ -229,8 +235,17 @@ function SearchPageContent() {
             {categories.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => setSelectedCategory(cat.name)}
-                className={`px-5 py-2.5 rounded-full font-medium transition-all ${
+                onClick={() => {
+                  setSelectedCategory(cat.name);
+                  // Update URL with category param, preserve search query if set
+                  const params = [];
+                  if (searchQuery)
+                    params.push(`query=${encodeURIComponent(searchQuery)}`);
+                  params.push(`category=${encodeURIComponent(cat.name)}`);
+                  const url = `/search?${params.join("&")}`;
+                  router.push(url, { scroll: false });
+                }}
+                className={`px-5 py-2.5 rounded-full font-medium transition-all cursor-pointer ${
                   selectedCategory === cat.name
                     ? "bg-[#ED1D33] text-white shadow-md"
                     : "bg-white text-gray-700 border border-gray-300 hover:border-[#ED1D33] hover:text-[#ED1D33]"
@@ -346,7 +361,10 @@ function SearchPageContent() {
                             className="text-lg font-bold transition"
                             style={{
                               cursor: "pointer",
-                              color: hoveredCard === idx ? (business.brand_primary_color || "#ED1D33") : "#1F2937",
+                              color:
+                                hoveredCard === idx
+                                  ? business.brand_primary_color || "#ED1D33"
+                                  : "#1F2937",
                             }}
                           >
                             {business.name}
@@ -355,33 +373,49 @@ function SearchPageContent() {
 
                         {/* Category Badge */}
                         <div className="mb-3">
-                          {typeof business.category === 'string' && business.category.includes(',') ? (
+                          {typeof business.category === "string" &&
+                          business.category.includes(",") ? (
                             <>
-                              {business.category.split(',').map((cat, i) => (
-                                <span key={`badge-${i}`} className="inline-block px-3 py-1 rounded-full text-xs mr-1 last:mr-0" style={{
-                                  color: business.brand_primary_color || "#ED1D33",
-                                  backgroundColor: business.brand_primary_color
-                                    ? `${business.brand_primary_color}1F` // 12% opacity in hex
-                                    : "#ED1D331F",
-                                }}>
+                              {business.category.split(",").map((cat, i) => (
+                                <span
+                                  key={`badge-${i}`}
+                                  className="inline-block px-3 py-1 rounded-full text-xs mr-1 last:mr-0"
+                                  style={{
+                                    color:
+                                      business.brand_primary_color || "#ED1D33",
+                                    backgroundColor:
+                                      business.brand_primary_color
+                                        ? `${business.brand_primary_color}1F` // 12% opacity in hex
+                                        : "#ED1D331F",
+                                  }}
+                                >
                                   {cat.trim()}
                                 </span>
                               ))}
-                              {business.category.split(',').length > 1 && business.category.split(',').map((_, i, arr) => (
-                                i < arr.length - 1 ? <span key={`bullet-${i}`} className="mx-1 align-middle">&bull;</span> : null
-                              ))}
+                              {business.category.split(",").length > 1 &&
+                                business.category.split(",").map((_, i, arr) =>
+                                  i < arr.length - 1 ? (
+                                    <span
+                                      key={`bullet-${i}`}
+                                      className="mx-1 align-middle"
+                                    >
+                                      &bull;
+                                    </span>
+                                  ) : null,
+                                )}
                             </>
                           ) : (
                             <span
                               className="inline-block px-3 py-1 rounded-full text-xs "
                               style={{
-                                color: business.brand_primary_color || "#ED1D33",
+                                color:
+                                  business.brand_primary_color || "#ED1D33",
                                 backgroundColor: business.brand_primary_color
                                   ? `${business.brand_primary_color}1F` // 12% opacity in hex
                                   : "#ED1D331F",
                               }}
                             >
-                              {business.category || ''}
+                              {business.category || ""}
                             </span>
                           )}
                         </div>
@@ -440,7 +474,7 @@ function SearchPageContent() {
 
                       <button
                         className="w-full px-4 py-2 mt-2 cursor-pointer group-hover:bg-[#ED1D33] rounded-lg  group-hover:text-white group-hover:border-[#ED1D33rounded-lg transition-colors text-gray-600   border border-gray-300  font-medium text-sm group-hover:text-white  group-hover:border-white   "
-                        onClick={e => {
+                        onClick={(e) => {
                           e.preventDefault();
                           router.push(`/${business.username}`);
                         }}
